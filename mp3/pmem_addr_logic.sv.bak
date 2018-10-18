@@ -1,0 +1,13 @@
+module pmem_addr_logic
+(
+	input [31:0] mem_address,
+	input LRU,
+	input [2:0] set,
+	input [23:0] tag_1,
+	input [23:0] tag_2,
+	input pmem_addr_select,
+	output pmem_addr
+);
+
+
+endmodule : pmem_addr_logic

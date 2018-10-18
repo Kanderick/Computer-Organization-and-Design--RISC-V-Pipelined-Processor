@@ -1,0 +1,15 @@
+import rv32i_types::*;
+
+module CMP 
+(
+		input branch_funct3_t cmpop,
+		input [31:0] a,
+		input [31:0] b,
+		output logic br_en
+);
+always_comb
+begin
+
+
+end
+endmodule : CMP 

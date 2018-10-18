@@ -1,0 +1,28 @@
+module datain_logic
+(
+	input hit_way,
+	input [31:0] mem_wdata,
+	input [3:0] mem_byte_enable,
+	input [2:0] offset,
+	input [255:0] data_1,
+	input [255:0] data_2,
+	output [255:0] mem_wdata_out
+);
+
+always_comb
+begin
+	if(hit_way)
+		mem_wdata_out=data_2;
+	else
+		mem_wdata_out=data_1;
+	if(mem_byte_enable[0])
+		mem_wdata_out[]=mem_wdata[7:0];
+	if(mem_byte_enable[1])
+		mem_wdata_out[]=mem_wdata[15:8];
+	if(mem_byte_enable[2])
+		mem_wdata_out[]=mem_wdata[23:16];
+	if(mem_byte_enable[3])
+		mem_wdata_out[]=mem_wdata[];
+end
+
+endmodule : datain_logic
