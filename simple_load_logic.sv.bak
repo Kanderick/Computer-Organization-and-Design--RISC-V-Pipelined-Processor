@@ -1,7 +1,0 @@
-module simple_load_logic #(width=24)
-(
-
-);
-
-
-endmodule
