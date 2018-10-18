@@ -1,9 +1,9 @@
 import rv32i_types::*; /* Import types defined in rv32i_types.sv */
 
 module rdata_out_logic(
-	input [2:0] funct3;
-	input [31:0] data_in;
-	output logic [31:0] data_out;
+	input [2:0] funct3,
+	input [31:0] data_in,
+	output logic [31:0] data_out
 );
 
 load_funct3_t load_op;
