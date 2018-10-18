@@ -1,5 +1,0 @@
-module dirty_load_logic
-(
-);
-
-endmodule : dirty_load_logic
