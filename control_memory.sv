@@ -31,7 +31,7 @@ always_comb begin
     ctrl.mem_read = 1'b0;
     ctrl.mem_write = 1'b0;
     ctrl.mem_byte_enable = 4'b1111;
-    ctrl.jb_sel = 2'b0;
+    ctrl.jb_sel = 2'b11;
     /* Assign control signals based on opcode */
     case(opcode)
         op_auipc: begin
