@@ -18,4 +18,5 @@
  end
  
  assign control_signal_out = control_signal_reg;
- endmodule
+ endmodule : control_word_reg
+ 

@@ -63,6 +63,7 @@ typedef logic [4:0] rv32i_reg;
 typedef logic [3:0] rv32i_mem_wmask;
 
 typedef struct packed {
+<<<<<<< HEAD
     rv32i_opcode opcode;
     /*ID stage*/
     rv32i_reg rs1;
@@ -88,6 +89,29 @@ typedef struct packed {
     /*WB stage*/
     logic load_regfile;
     logic [2:0] funct3;   
+=======
+	rv32i_opcode opcode;
+	/*ID stage*/
+	rv32i_reg rs1;
+	rv32i_reg rs2;
+	/*EX stage*/
+	logic alumux1_sel;
+	alu_ops aluop;
+	logic [2:0] alumux2_sel;
+	logic cmpmux_sel;
+	rv32i_reg rd;
+	rv32i_word u_imm;
+	logic [2:0] regfilemux_sel;
+	branch_funct3_t cmpop;
+	/*MEM stage*/
+	logic mem_read;
+	logic mem_write;
+	logic [3:0] mem_byte_enable;
+	//rd
+	/*WB stage*/
+	//regfilemux_sel
+	logic load_regfile;
+>>>>>>> d2fa57e799b8a368bcc6664e10efd2ab82c74522
 } rv32i_control_word;
 
 endpackage : rv32i_types

@@ -5,7 +5,7 @@ module MEM_stage
 	output [31:0] MEM_addr,
 	output [31:0] MEM_data
 
-);	input EX_cmp_out,
+);	
 
 assign MEM_addr = MEM_alu_out;
 
