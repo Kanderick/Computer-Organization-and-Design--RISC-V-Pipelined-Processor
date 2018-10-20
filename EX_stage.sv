@@ -94,4 +94,4 @@ CMP CMP
 );
 
 assign EX_cmp_out = {31'h0,br_en};
-endmodule
+endmodule : EX_stage
