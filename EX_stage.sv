@@ -55,7 +55,7 @@ mux2 cmpmux
 .f(cmpmux_out)
 );
 
-rv32i_word fowarding_mux1_out, control_word_regfowarding_mux2_out;
+rv32i_word fowarding_mux1_out, fowarding_mux2_out;
 mux4 fowarding_mux1
 (
 .sel(EX_forwarding_sel1),
