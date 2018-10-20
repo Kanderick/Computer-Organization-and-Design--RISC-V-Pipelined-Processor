@@ -9,7 +9,7 @@ module ID_stage
 		input [31:0] ID_pc,
 		input [31:0] ID_b_imm,
 		input [31:0] ID_j_imm,
-		input jb_sel,
+		input [31:0] ID_i_imm,
 		
 		output logic [31:0] ID_rs1_out,
 		output logic [31:0] ID_rs2_out,
@@ -18,14 +18,25 @@ module ID_stage
 );
 
 logic [31:0] imm;
+logic [1:0] jb_sel;
+logic [31:0] pc_rs1_add_rst;
 
-assign ID_jmp_pc = imm + ID_pc;
+assign ID_jmp_pc = imm + pc_rs1_add_rst;
 
-mux2 jb_mux(
+mux4 imm_mux(
 	.sel(jb_sel),
 	.a(ID_b_imm),
 	.b(ID_j_imm),
+	.c(ID_i_imm),
+	.d(ID_i_imm),
 	.f(imm)
+);
+
+mux2 pc_rs1_mux(
+	.sel({jb_sel[1]}),
+	.a(ID_pc),
+	.b(ID_rs1_out),
+	.f(pc_rs1_add_rst)
 );
 
 regfile ID_regfile
