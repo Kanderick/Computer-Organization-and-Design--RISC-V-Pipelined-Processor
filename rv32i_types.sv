@@ -67,7 +67,7 @@ typedef struct packed {
     /*ID stage*/
     rv32i_reg rs1;
     rv32i_reg rs2;
-    logic jb_sel;
+    logic [1:0] jb_sel;
     /*EX stage*/
     logic alumux1_sel;
     alu_ops aluop;
