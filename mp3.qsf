@@ -62,6 +62,7 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE MEM_pipe.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rdata_out_logic.sv
 set_global_assignment -name SYSTEMVERILOG_FILE add4.sv
 set_global_assignment -name SYSTEMVERILOG_FILE WB_stage.sv
@@ -87,3 +88,5 @@ set_global_assignment -name SYSTEMVERILOG_FILE MEM_stage.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ID_stage.sv
 set_global_assignment -name SYSTEMVERILOG_FILE IF_stage.sv
 set_global_assignment -name SYSTEMVERILOG_FILE WB_pipe.sv
+set_global_assignment -name SYSTEMVERILOG_FILE EX_pipe.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ID_pipe.sv
