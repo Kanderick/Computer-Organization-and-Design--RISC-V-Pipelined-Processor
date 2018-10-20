@@ -10,7 +10,7 @@ module WB_pipe
 	output logic [31:0] WB_pc,
 	/*other signals*/
 	input clk,
-	input load,
+	//input load,
 	input reset
 );
 
@@ -20,12 +20,14 @@ always_ff @(posedge clk) begin
 	WB_alu_out<=0;
 	WB_rdata<=0;
 	WB_pc<=0;
+	WB_cmp_out<=0;
 	end
 
 	else begin
 	WB_alu_out<=MEM_alu_out;
 	WB_rdata<=MEM_rdata;
 	WB_pc<=MEM_pc;
+	WB_cmp_out<=MEM_cmp_out;
 	end
 end
 
