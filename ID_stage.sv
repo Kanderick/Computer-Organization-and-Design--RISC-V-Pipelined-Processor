@@ -10,6 +10,7 @@ module ID_stage
 		input [31:0] ID_b_imm,
 		input [31:0] ID_j_imm,
 		input [31:0] ID_i_imm,
+		input [1:0] jb_sel;
 		
 		output logic [31:0] ID_rs1_out,
 		output logic [31:0] ID_rs2_out,
@@ -18,7 +19,6 @@ module ID_stage
 );
 
 logic [31:0] imm;
-logic [1:0] jb_sel;
 logic [31:0] pc_rs1_add_rst;
 
 assign ID_jmp_pc = imm + pc_rs1_add_rst;
