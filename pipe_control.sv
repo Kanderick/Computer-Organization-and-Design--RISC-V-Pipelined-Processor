@@ -1,8 +1,13 @@
 module pipe_control
 (
+	/*add NOP*/
    input flush,
    output logic IF_ID_flush,
-   input clk
+   /*freeze the pipes*/
+	input read_intr_stall,
+	input mem_access_stall,
+	output logic load,
+	input clk
 );
 
 enum int unsigned {
@@ -23,6 +28,7 @@ always_comb begin
             flush_next_states = no_flush;
         default: ;    
     endcase
+	 load = (read_intr_stall|mem_access_stall)? 0: 1;
 end
 
 always_comb begin

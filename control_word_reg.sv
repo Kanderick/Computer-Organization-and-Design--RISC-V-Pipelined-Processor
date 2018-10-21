@@ -13,7 +13,7 @@
  always_ff @ (posedge clk) begin
     if(reset)
         control_signal_reg <= 0;  
-    else
+    else if(load_control_word)
         control_signal_reg <=  control_signal_in;
  end
  
