@@ -26,13 +26,13 @@ module mp3_cpu
 /*IF_stage signal*/
 logic [31:0] IF_addr;
 assign address_a = IF_addr;
-logic {31:0} instr;
+logic [31:0] instr;
 
 /*ID_stage signal*/
 logic [31:0] ID_pc;
 logic ID_pc_mux_sel;
 rv32i_word ID_rs1_out;
-rv32i_word ID_rs1_out;
+rv32i_word ID_rs2_out;
 rv32i_word ID_jmp_pc;
 
 /*EX_stage signal*/
@@ -51,7 +51,7 @@ logic EX_forwarding_sel2;
 logic MEM_cmp_out;
 rv32i_word MEM_alu_out;
 rv32i_word MEM_pc;
-rv32i_word MEM_rs2_out
+rv32i_word MEM_rs2_out;
 
 
 /*WB_stage signal*/
@@ -105,8 +105,8 @@ control_word_reg ID_ctrl
  (
     .clk,
     .reset(IF_ID_flush),
-    .rv32i_control_word control_signal_in(control_memory_out),
-    .rv32i_control_word control_signal_out(ID_ctrl_word), 
+    .control_signal_in(control_memory_out),
+    .control_signal_out(ID_ctrl_word), 
     .load_control_word(load) 
  );
  
@@ -115,7 +115,7 @@ ID_pipe ID_pipe
 	.IF_pc(IF_addr),
 	.ID_pc,
 	.clk,
-    .load,
+   .load,
 	.reset(IF_ID_flush)
 );
 
@@ -177,7 +177,6 @@ EX_stage EX_stage
     .EX_cmpmux_sel(EX_ctrl_word.cmpmux_sel),
     .EX_aluop(EX_ctrl_word.aluop),
     .EX_cmpop(EX_ctrl_word.cmpop),
-    .EX_loadop(EX_ctrl_word.loadop),
     /* input data*/
     .EX_pc,
     .EX_rs1_out,
@@ -199,7 +198,7 @@ EX_stage EX_stage
     .EX_forwarding_sel2
 );
 
- module control_word_reg
+control_word_reg MEM_ctrl
  (
     .clk,
     .reset(1'b0),
@@ -208,7 +207,8 @@ EX_stage EX_stage
     .load_control_word(load)
  );
  
-module MEM_pipe(
+MEM_pipe MEM_pipe
+(
 	.clk,
 	.reset(1'b0),
 	.load(load),
@@ -224,7 +224,7 @@ module MEM_pipe(
 	.MEM_cmp_out
 );
 
-module MEM_stage
+MEM_stage MEM_stage
 (
 	.MEM_rs2_out,
 	.MEM_alu_out,
@@ -242,7 +242,7 @@ control_word_reg WB_ctrl
     .load_control_word(load)
  );
  
-module WB_pipe
+WB_pipe WB_pipe
 (
 	.MEM_cmp_out,
 	.MEM_alu_out,
@@ -258,7 +258,8 @@ module WB_pipe
 	.reset(1'b0)
 );
 
-module WB_stage(
+WB_stage WB_stage
+(
 	.WB_pc,
 	.WB_funct3(WB_ctrl_word.funct3),
 	.WB_rdata,
