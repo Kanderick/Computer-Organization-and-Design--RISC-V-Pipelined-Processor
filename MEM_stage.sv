@@ -2,8 +2,8 @@ module MEM_stage
 (
 	input [31:0] MEM_rs2_out,
 	input [31:0] MEM_alu_out,
-	output [31:0] MEM_addr,
-	output [31:0] MEM_data
+	output logic [31:0] MEM_addr,
+	output logic [31:0] MEM_data
 
 );	
 

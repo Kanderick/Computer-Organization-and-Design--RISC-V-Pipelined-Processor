@@ -44,15 +44,17 @@ logic EX_pc_mux_sel;
 
 /*MEM_stage signal*/
 logic MEM_cmp_out;
-logic [31:0] MEM_alu_out;
-logic [31:0] MEM_pc;
+rv32i_word MEM_alu_out;
+rv32i_word MEM_pc;
+rv32i_word MEM_rs2_out
+
 
 /*WB_stage signal*/
 logic WB_cmp_out;
-logic [31:0] WB_alu_out;
-logic [31:0] WB_rdata;
-logic [31:0] WB_pc;
-logic [31:0] WB_in;
+rv32i_word WB_alu_out;
+rv32i_word WB_rdata;
+rv32i_word WB_pc;
+rv32i_word WB_in;
 
 
 /*control word*/
@@ -187,35 +189,35 @@ module EX_stage
 
  module control_word_reg
  (
-    input clk,
-    input reset,
-    input rv32i_control_word control_signal_in,
-    output rv32i_control_word control_signal_out, 
-    input load_control_word 
+    .clk,
+    .reset(1'b0),
+    .control_signal_in(EX_ctrl_word),
+    .control_signal_out(MEM_ctrl_word), 
+    .load_control_word(load)
  );
  
 module MEM_pipe(
-	input clk,
-	input reset,
-	// input load,
+	.clk,
+	.reset(1'b0),
+	.load(load),
 	
-	input [31:0] EX_pc,
-	input [31:0] EX_alu_out,
-	input [31:0] EX_rs2_out,
-	input EX_cmp_out,
+	.EX_pc,
+	.EX_alu_out,
+	.EX_rs2_out,
+	.EX_cmp_out,
 	
 	.MEM_pc,
 	.MEM_alu_out,
-	output logic [31:0] MEM_rs2_out,
+	.MEM_rs2_out,
 	.MEM_cmp_out
 );
 
 module MEM_stage
 (
-	input [31:0] MEM_rs2_out,
+	.MEM_rs2_out,
 	.MEM_alu_out,
-	output [31:0] MEM_addr,
-	output [31:0] MEM_dataoutput rv32i_control_word 
+	.MEM_addr(address_b),
+	.MEM_dataoutput(wdata_b)
 
 );	
 
