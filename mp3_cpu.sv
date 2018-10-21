@@ -25,9 +25,12 @@ module mp3_cpu
 
 /*IF_stage signal*/
 logic [31:0] IF_addr;
+assign address_a = IF_addr;
 logic {31:0} instr;
 
 /*ID_stage signal*/
+logic [31:0] ID_pc;
+
 
 /*EX_stage signal*/
 
@@ -36,10 +39,30 @@ logic {31:0} instr;
 /*WB_stage signal*/
 
 /*control word*/
-rv32i_control_word ID_ctrl;
-rv32i_control_word EX_ctrl;
-rv32i_control_word MEM_ctrl;
-rv32i_control_word WB_ctrl;
+rv32i_control_word control_memory_out;
+rv32i_control_word ID_ctrl_word;
+rv32i_control_word EX_ctrl_word;
+rv32i_control_word MEM_ctrl_word;
+rv32i_control_word WB_ctrl_word;
+
+/*pipe control signal*/
+logic flush;
+logic IF_ID_flush;
+logic read_intr_stall;
+logic mem_access_stall;
+logic load;
+
+pipe_control pipe_control
+(
+	/*add NOP*/
+    .flush,
+    .IF_ID_flush,
+   /*freeze the pipes*/
+	.read_intr_stall,
+	.mem_access_stall,
+	.load,
+	.clk
+);
 
 IF_stage IF_stage
 (
@@ -50,45 +73,47 @@ IF_stage IF_stage
 
 control_memory control_memory
 (
-    .instr,
-    .ctrl
+    .instr(rdata_a),
+    .ctrl(control_memory_out)
 );
 
- module control_word_reg
+control_word_reg ID_ctrl
  (
     .clk,
-    .reset,
-    .rv32i_control_word control_signal_in,
-    output rv32i_control_word control_signal_out, 
-    input load_control_word 
+    .reset(IF_ID_flush),
+    .rv32i_control_word control_signal_in(control_memory_out),
+    .rv32i_control_word control_signal_out(ID_ctrl_word), 
+    .load_control_word(load) 
  );
  
-module ID_pipe
+ID_pipe ID_pipe
 (
-	input [31:0] IF_pc,
-	output logic [31:0] ID_pc,
-	input clk,
-	input reset
+	.IF_pc(IF_addr),
+	.ID_pc,
+	.clk,
+    .load,
+	.reset(IF_ID_flush)
 );
 
-module ID_stage
+ID_stage ID_stage
 (
-		input clk,
-		input [4:0] ID_rs1,
-		input [4:0] ID_rs2,
-		input [31:0] WB_in,
-		input [4:0] ID_rd,
-		input ID_load_regfile,
-		input [31:0] ID_pc,
-		input [31:0] ID_b_imm,
-		input [31:0] ID_j_imm,
-		input [31:0] ID_i_imm,
-		input [1:0] jb_sel,
-		
+		.clk,
+		.ID_rs1(ID_ctrl_word.rs1),
+		.ID_rs2(ID_ctrl_word.rs2),
+		.WB_in(),
+		.ID_rd(ID_ctrl_word.rd),
+		.ID_load_regfile(ID_ctrl_word.load_regfile),
+		.ID_pc,
+		.ID_b_imm(ID_ctrl_word.b_imm),
+		.ID_j_imm(ID_ctrl_word.j_imm),
+		.ID_i_imm(ID_ctrl_word.i_imm),
+		.jb_sel(ID_ctrl_word.jb_sel),
+		.cmpop(ID_ctrl_word.cmpop),
+		.ID_pc_mux_sel(),
+		output logic flush,
 		output logic [31:0] ID_rs1_out,
 		output logic [31:0] ID_rs2_out,
-		output logic [31:0] ID_jmp_pc,
-		output logic [31:0] ID_pc_out
+		output logic [31:0] ID_jmp_pc
 );
 
  module control_word_reg
