@@ -35,8 +35,17 @@ logic [31:0] ID_pc;
 /*EX_stage signal*/
 
 /*MEM_stage signal*/
+logic MEM_cmp_out;
+logic [31:0] MEM_alu_out;
+logic [31:0] MEM_pc;
 
 /*WB_stage signal*/
+logic WB_cmp_out;
+logic [31:0] WB_alu_out;
+logic [31:0] WB_rdata;
+logic [31:0] WB_pc;
+logic [31:0] WB_in;
+
 
 /*control word*/
 rv32i_control_word control_memory_out;
@@ -100,7 +109,7 @@ ID_stage ID_stage
 		.clk,
 		.ID_rs1(ID_ctrl_word.rs1),
 		.ID_rs2(ID_ctrl_word.rs2),
-		.WB_in(),
+		.WB_in,
 		.ID_rd(ID_ctrl_word.rd),
 		.ID_load_regfile(ID_ctrl_word.load_regfile),
 		.ID_pc,
@@ -187,55 +196,55 @@ module MEM_pipe(
 	input [31:0] EX_rs2_out,
 	input EX_cmp_out,
 	
-	output logic [31:0] MEM_pc,
-	output logic [31:0] MEM_alu_out,
+	.MEM_pc,
+	.MEM_alu_out,
 	output logic [31:0] MEM_rs2_out,
-	output MEM_cmp_out
+	.MEM_cmp_out
 );
 
 module MEM_stage
 (
 	input [31:0] MEM_rs2_out,
-	input [31:0] MEM_alu_out,
+	.MEM_alu_out,
 	output [31:0] MEM_addr,
-	output [31:0] MEM_data
+	output [31:0] MEM_dataoutput rv32i_control_word 
 
 );	
 
- module control_word_reg
+control_word_reg WB_ctrl
  (
-    input clk,
-    input reset,
-    input rv32i_control_word control_signal_in,
-    output rv32i_control_word control_signal_out, 
-    input load_control_word 
+    .clk,
+    .reset(1'b0),
+    .control_signal_in(MEM_ctrl_word),
+    .control_signal_out(WB_ctrl_word), 
+    .load_control_word(load)
  );
  
 module WB_pipe
 (
-	input MEM_cmp_out,
-	input [31:0] MEM_alu_out,
-	input [31:0] MEM_rdata,	/*read from data cache*/
-	input [31:0] MEM_pc,
-	output logic WB_cmp_out,
-	output logic [31:0] WB_alu_out,
-	output logic [31:0] WB_rdata,
-	output logic [31:0] WB_pc,
+	.MEM_cmp_out,
+	.MEM_alu_out,
+	.MEM_rdata(rdata_b),	/*read from data cache*/
+	.MEM_pc,
+	.WB_cmp_out,
+	.WB_alu_out,
+	.WB_rdata,
+	.WB_pc,
 	/*other signals*/
-	input clk,
-	//input load,
-	input reset
+	.clk,
+	.load,
+	.reset(1'b0)
 );
 
 module WB_stage(
-	input [31:0] WB_pc,
-	input [2:0] WB_funct3,
-	input [31:0] WB_rdata,
-	input WB_cmp_out,
-	input [31:0] WB_alu_out,
-	input [31:0] WB_u_imm,
-	input [3:0] WB_regfilemux_sel,
-	output logic [31:0] WB_in
+	.WB_pc,
+	.WB_funct3(WB_ctrl_word.funct3),
+	.WB_rdata,
+	.WB_cmp_out,
+	.WB_alu_out,
+	.WB_u_imm(WB_ctrl_word.u_imm),
+	.WB_regfilemux_sel(WB_ctrl_word.regfilemux_sel),
+	.WB_in
 );
 
 
