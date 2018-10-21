@@ -11,11 +11,14 @@ module ID_stage
 		input [31:0] ID_j_imm,
 		input [31:0] ID_i_imm,
 		input [1:0] jb_sel,
+		input branch_funct3_t cmpop,
 		
+		
+		output logic ID_pc_mux_sel,
+		output logic flush,
 		output logic [31:0] ID_rs1_out,
 		output logic [31:0] ID_rs2_out,
-		output logic [31:0] ID_jmp_pc,
-		output logic [31:0] ID_pc_out
+		output logic [31:0] ID_jmp_pc
 );
 
 logic [31:0] imm;
@@ -37,6 +40,16 @@ mux2 pc_rs1_mux(
 	.a(ID_pc),
 	.b(ID_rs1_out),
 	.f(pc_rs1_add_rst)
+);
+
+JB_hazard_detection_unit ID_JB_unit
+(
+	.jb_sel,
+	.cmpop,
+	.ID_rs1_out,
+	.ID_rs2_out,
+	.pcmux_sel(ID_pc_mux_sel),
+	.flush
 );
 
 regfile ID_regfile

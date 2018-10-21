@@ -13,7 +13,8 @@ module EX_pipe
 	output logic EX_pc_mux_sel,
 	/*other signals*/
 	input clk,
-	input reset
+	input reset,
+	input load
 );
 
 always_ff @ (posedge clk) begin
@@ -24,7 +25,7 @@ always_ff @ (posedge clk) begin
 	EX_jmp_pc<=0;
 	EX_pc_mux_sel<=0;
 	end
-	else begin
+	else if(load) begin
 	EX_pc<=ID_pc;
 	EX_rs1_out<=ID_rs1_out;
 	EX_rs2_out<=ID_rs2_out;

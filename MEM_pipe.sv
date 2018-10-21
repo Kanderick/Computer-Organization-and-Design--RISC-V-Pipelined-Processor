@@ -1,7 +1,7 @@
 module MEM_pipe(
 	input clk,
 	input reset,
-	// input load,
+	input load,
 	
 	input [31:0] EX_pc,
 	input [31:0] EX_alu_out,
@@ -24,7 +24,7 @@ begin
 		MEM_cmp_out <= 0;
 	end
 	
-	else
+	else if(load)
 	begin
 		MEM_pc <= EX_pc;
 		MEM_alu_out <= EX_alu_out;
