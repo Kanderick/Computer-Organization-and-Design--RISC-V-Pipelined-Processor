@@ -9,7 +9,6 @@ module EX_stage
     input logic EX_cmpmux_sel,
     input alu_ops EX_aluop,
     input branch_funct3_t EX_cmpop,
-    input load_funct3_t EX_loadop,
     /* input data*/
     input rv32i_word EX_pc,
     input rv32i_word EX_rs1_out, EX_rs2_out,
