@@ -1,21 +1,21 @@
 module pipe_control
 (
-    input flush,
-    output IF_ID_flush,
-   
+   input flush,
+   output logic IF_ID_flush,
+   input clk
 );
 
 enum int unsigned {
 	 no_flush,
 	 flush_1,
-     flush_2,
+    flush_2
 } flush_state, flush_next_states;
 
 always_comb begin
-    flush_next_states = flush_state
+    flush_next_states = flush_state;
     case(flush_state)
         no_flush: 
-            if (flush):
+            if (flush)
                 flush_next_states = flush_1;
         flush_1:
             flush_next_states = flush_2;
@@ -37,7 +37,7 @@ always_comb begin
 end
 
 always_ff @ (posedge clk) begin
-    flush_state <= flush_next_states
+    flush_state <= flush_next_states;
 end
 
 endmodule

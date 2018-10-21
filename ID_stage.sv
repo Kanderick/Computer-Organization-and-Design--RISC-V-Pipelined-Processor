@@ -10,7 +10,7 @@ module ID_stage
 		input [31:0] ID_b_imm,
 		input [31:0] ID_j_imm,
 		input [31:0] ID_i_imm,
-		input [1:0] jb_sel;
+		input [1:0] jb_sel,
 		
 		output logic [31:0] ID_rs1_out,
 		output logic [31:0] ID_rs2_out,
@@ -28,7 +28,7 @@ mux4 imm_mux(
 	.a(ID_b_imm),
 	.b(ID_j_imm),
 	.c(ID_i_imm),
-	.d(ID_i_imm),
+	.d(0),
 	.f(imm)
 );
 
@@ -51,5 +51,4 @@ regfile ID_regfile
 	.reg_b(ID_rs2_out)
 );
 
-mux2
 endmodule : ID_stage
