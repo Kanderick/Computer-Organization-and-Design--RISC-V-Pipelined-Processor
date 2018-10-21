@@ -30,9 +30,17 @@ logic {31:0} instr;
 
 /*ID_stage signal*/
 logic [31:0] ID_pc;
-
+logic ID_pc_mux_sel;
+rv32i_word ID_rs1_out;
+rv32i_word ID_rs1_out;
+rv32i_word ID_jmp_pc;
 
 /*EX_stage signal*/
+rv32i_word EX_pc;
+rv32i_word EX_rs1_out;
+rv32i_word EX_rs2_out;
+rv32i_word EX_jmp_pc;
+logic EX_pc_mux_sel;
 
 /*MEM_stage signal*/
 
@@ -109,38 +117,38 @@ ID_stage ID_stage
 		.ID_i_imm(ID_ctrl_word.i_imm),
 		.jb_sel(ID_ctrl_word.jb_sel),
 		.cmpop(ID_ctrl_word.cmpop),
-		.ID_pc_mux_sel(),
-		output logic flush,
-		output logic [31:0] ID_rs1_out,
-		output logic [31:0] ID_rs2_out,
-		output logic [31:0] ID_jmp_pc
+		.ID_pc_mux_sel,
+		.flush,
+		.ID_rs1_out,
+		.ID_rs2_out,
+		.ID_jmp_pc
 );
 
- module control_word_reg
+ control_word_reg EX_ctrl
  (
-    input clk,
-    input reset,
-    input rv32i_control_word control_signal_in,
-    output rv32i_control_word control_signal_out, 
-    input load_control_word 
+    .clk,
+    .reset(0),
+    .control_signal_in(ID_ctrl_word),
+    .control_signal_out(IF_ctrl_word), 
+    .load_control_word(load)
  );
 
-module EX_pipe
+EX_pipe EX_pipe
 (
-	input [31:0] ID_pc,
-	input [31:0] ID_rs1_out,
-	input [31:0] ID_rs2_out,
-	input [31:0] ID_jmp_pc,
-	input ID_pc_mux_sel,
+	.ID_pc,
+	.ID_rs1_out,
+	.ID_rs2_out,
+	.ID_jmp_pc,
+	.ID_pc_mux_sel,
 	
-	output logic [31:0] EX_pc,
-	output logic [31:0] EX_rs1_out,
-	output logic [31:0] EX_rs2_out,
-	output logic [31:0] EX_jmp_pc,
-	output logic EX_pc_mux_sel,
+	.EX_pc,
+	.EX_rs1_out,
+	.EX_rs2_out,
+	.EX_jmp_pc,
+	.EX_pc_mux_sel,
 	/*other signals*/
-	input clk,
-	input reset
+	.clk,
+	.reset(0)
 );
 
 module EX_stage
