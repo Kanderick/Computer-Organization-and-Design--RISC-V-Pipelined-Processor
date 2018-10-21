@@ -41,7 +41,12 @@ rv32i_word EX_rs1_out;
 rv32i_word EX_rs2_out;
 rv32i_word EX_jmp_pc;
 logic EX_pc_mux_sel;
-
+rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB;
+rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM;    
+rv32i_word EX_alu_out;
+rv32i_word EX_cmp_out;
+logic EX_forwarding_sel1;
+logic EX_forwarding_sel2;
 /*MEM_stage signal*/
 logic MEM_cmp_out;
 logic [31:0] MEM_alu_out;
@@ -138,7 +143,7 @@ ID_stage ID_stage
     .clk,
     .reset(0),
     .control_signal_in(ID_ctrl_word),
-    .control_signal_out(IF_ctrl_word), 
+    .control_signal_out(EX_ctrl_word), 
     .load_control_word(load)
  );
 
@@ -160,29 +165,36 @@ EX_pipe EX_pipe
 	.reset(0)
 );
 
-module EX_stage
+EX_stage EX_stage
 (
-    input clk,
+    .clk,
     /* control signals */
-    input logic EX_alumux1_sel,
-    input logic [2:0] EX_alumux2_sel,
-    input logic [2:0] EX_regfilemux_sel,
-    input logic EX_cmpmux_sel,
-    input alu_ops EX_aluop,
-    input branch_funct3_t EX_cmpop,
-    input load_funct3_t EX_loadop,
+    .EX_alumux1_sel(EX_ctrl_word.alumux1_sel),
+    .EX_alumux2_sel(EX_ctrl_word.alumux2_sel),
+    .EX_regfilemux_sel(EX_ctrl_word.regfilemux_sel),
+    .EX_cmpmux_sel(EX_ctrl_word.cmpmux_sel),
+    .EX_aluop(EX_ctrl_word.aluop),
+    .EX_cmpop(EX_ctrl_word.cmpop),
+    .EX_loadop(EX_ctrl_word.loadop),
     /* input data*/
-    input rv32i_word EX_pc,
-    input rv32i_word EX_rs1_out, EX_rs2_out,
-    input rv32i_word EX_i_imm, EX_u_imm, EX_b_imm, EX_s_imm, EX_j_imm,
-    input rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB,
-    input rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM,    
+    .EX_pc,
+    .EX_rs1_out,
+    .EX_rs2_out,
+    .EX_i_imm(EX_ctrl_word.i_imm),
+    .EX_u_imm(EX_ctrl_word.u_imm),
+    .EX_b_imm(EX_ctrl_word.b_imm),
+    .EX_s_imm(EX_ctrl_word.s_imm),
+    .EX_j_imm(EX_ctrl_word.j_imm),
+    .EX_rs1_forwarded_WB,
+    .EX_rs2_forwarded_WB,
+    .EX_rs1_forwarded_MEM,
+    .EX_rs2_forwarded_MEM,    
     /*output data*/
-    output rv32i_word EX_alu_out,
-    output rv32i_word EX_cmp_out,
+    .EX_alu_out,
+    .EX_cmp_out,
     /*to do*/
-    input logic EX_forwarding_sel1,
-    input logic EX_forwarding_sel2
+    .EX_forwarding_sel1,
+    .EX_forwarding_sel2
 );
 
  module control_word_reg
