@@ -1,87 +1,60 @@
 module mp3
 (
-	/*physical memory*/
-	input pmem_resp,
-	input [255:0] pmem_rdata,
-	output logic pmem_read,
-	output logic pmem_write,
-	output logic [31:0] pmem_address,
-	output logic [255:0] pmem_wdata,
-
 	/*other signals*/
 	input clk
 );
-logic mem_resp;
-logic [31:0] mem_rdata;
-logic mem_read;
-logic mem_write;
-logic [3:0] mem_byte_enable;
-logic [31:0] mem_address;
-logic [31:0] mem_wdata;
-/*
-module mp3_cpu
-(
-    input clk,
+logic read_a;
+logic write_a;
+logic [3:0] wmask_a;
+logic [31:0] address_a;
+logic [31:0] wdata_a;
+logic resp_a;
+logic [31:0] rdata_a;
+logic read_b;
+logic write_b;
+logic [3:0] wmask_b;
+logic [31:0] address_b;
+logic [31:0] wdata_b;
+logic resp_b;
+logic [31:0] rdata_b;
 
-Memory signals
-    input mem_resp,
-    input [31:0] mem_rdata,
-    output mem_read,
-    output mem_write,
-    output [3:0] mem_byte_enable,
-    output [31:0] mem_address,
-    output [31:0] mem_wdata
-);
-*/
-mp3_cpu cpu
+
+mp3_cpu mp3_cpu
 (
-	.clk,
-	.mem_resp,
-   .mem_rdata,
-   .mem_read,
-   .mem_write,
-   .mem_byte_enable,
-   .mem_address,
-   .mem_wdata
+    .clk,
+    .read_a,
+    .write_a,
+    .wmask_a,
+    .address_a,
+    .wdata_a,
+    .resp_a,
+    .rdata_a,
+    .read_b,
+    .write_b,
+    .wmask_b,
+    .address_b,
+    .wdata_b,
+    .resp_b,
+    .rdata_b
 );
-/*
-module cache
+
+magic_memory_dp magic_memory_dp
 (
-cpu signals
-	input mem_read,
-   input mem_write,
-   input [3:0] mem_byte_enable,
-   input [31:0] mem_address,
-   output logic mem_resp,
-   output logic [31:0] mem_rdata,
-   output [31:0] mem_wdata
-	
-pmem signals
-	input pmem_resp,
-	input [255:0] pmem_rdata,
-	output logic pmem_read,
-	output logic pmem_write,
-	output logic [31:0] pmem_address,
-	output logic [255:0] pmem_wdata
+	 .clk,
+    .read_a,
+    .write_a,
+    .wmask_a,
+    .address_a,
+    .wdata_a,
+    .resp_a,
+    .rdata_a,
+    .read_b,
+    .write_b,
+    .wmask_b,
+    .address_b,
+    .wdata_b,
+    .resp_b,
+    .rdata_b
 );
-*/
-cache cache
-(
-	.mem_read,
-   .mem_write,
-   .mem_byte_enable,
-   .mem_address,
-   .mem_resp,
-   .mem_rdata,
-   .mem_wdata,
-	
-	.pmem_resp,
-	.pmem_rdata,
-	.pmem_read,
-	.pmem_write,
-	.pmem_address,
-	.pmem_wdata,
-	
-	.clk
-);
+
 endmodule : mp3

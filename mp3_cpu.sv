@@ -44,7 +44,7 @@ logic EX_pc_mux_sel;
 rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB;
 rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM;    
 rv32i_word EX_alu_out;
-rv32i_word EX_cmp_out;
+logic EX_cmp_out;
 logic EX_forwarding_sel1;
 logic EX_forwarding_sel2;
 /*MEM_stage signal*/
@@ -76,6 +76,15 @@ logic read_intr_stall;
 logic mem_access_stall;
 logic load;
 
+assign read_intr_stall = (read_a|write_a)&(!resp_a);
+assign mem_access_stall = (read_b|write_b)&(!resp_b);
+assign read_a = 1'b1;
+assign write_a = 1'b0;
+assign read_b=MEM_ctrl_word.mem_read;
+assign write_b=MEM_ctrl_word.mem_write;
+assign wdata_a=32'b0;
+assign wmask_b=MEM_ctrl_word.mem_byte_enable;
+assign wmask_a=4'b0;
 pipe_control pipe_control
 (
 	/*add NOP*/
@@ -229,7 +238,7 @@ MEM_stage MEM_stage
 	.MEM_rs2_out,
 	.MEM_alu_out,
 	.MEM_addr(address_b),
-	.MEM_dataoutput(wdata_b)
+	.MEM_data(wdata_b)
 
 );	
 

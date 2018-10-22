@@ -18,7 +18,7 @@ module EX_stage
     input rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM,    
     /*output data*/
     output rv32i_word EX_alu_out,
-    output rv32i_word EX_cmp_out,
+    output logic EX_cmp_out,
     /*to do*/
     input logic EX_forwarding_sel1,
     input logic EX_forwarding_sel2
@@ -93,5 +93,5 @@ CMP CMP
     .br_en(br_en)
 );
 
-assign EX_cmp_out = {31'h0,br_en};
+assign EX_cmp_out = br_en;
 endmodule : EX_stage

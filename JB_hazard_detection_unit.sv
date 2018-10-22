@@ -6,8 +6,8 @@ module JB_hazard_detection_unit
 	input branch_funct3_t cmpop,
 	input [31:0] ID_rs1_out,
 	input [31:0] ID_rs2_out,
-	output pcmux_sel,
-	output flush
+	output logic pcmux_sel,
+	output logic flush
 );
 
 logic br_out;
@@ -21,13 +21,16 @@ CMP JB_CMP
 );
 
 always_comb begin
+	flush=1'b0;
 	if(jb_sel==3'b11)
 		pcmux_sel=0;
 	else if(jb_sel) begin
 		pcmux_sel=1;
+		flush=1;
 	end
 	else begin
 		pcmux_sel=br_out;
+		flush=br_out;
 	end
 
 end

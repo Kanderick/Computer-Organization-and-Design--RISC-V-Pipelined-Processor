@@ -88,7 +88,6 @@ typedef struct packed {
     /*WB stage*/
     logic load_regfile;
     logic [2:0] funct3;   
-
 } rv32i_control_word;
 
 endpackage : rv32i_types

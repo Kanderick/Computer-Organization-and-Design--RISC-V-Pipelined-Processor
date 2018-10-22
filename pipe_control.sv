@@ -28,7 +28,7 @@ always_comb begin
             flush_next_states = no_flush;
         default: ;    
     endcase
-	 load = (read_intr_stall|mem_access_stall)? 0: 1;
+	 load = (read_intr_stall|mem_access_stall)? 1'b0: 1'b1;
 end
 
 always_comb begin

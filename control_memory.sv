@@ -5,21 +5,24 @@ module control_memory
     output rv32i_control_word ctrl
 );
 
-assign ctrl.opcode = rv32i_opcode'(instr[6:0]);
-assign ctrl.i_imm = {{21{instr[31]}}, instr[30:20]};
-assign ctrl.s_imm = {{21{instr[31]}}, instr[30:25], instr[11:7]};
-assign ctrl.b_imm = {{20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0};
-assign ctrl.u_imm = {instr[31:12], 12'h000};
-assign ctrl.j_imm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0};
-assign ctrl.rs1 = instr[19:15];
-assign ctrl.rs2 = instr[24:20];
-assign ctrl.rd = instr[11:7];
-assign ctrl.funct3 = instr[14:12];  
-
 logic bit30;
-assign bit30 = instr[30];
 
 always_comb begin
+
+
+    ctrl.opcode = rv32i_opcode'(instr[6:0]);
+    ctrl.i_imm = {{21{instr[31]}}, instr[30:20]};
+    ctrl.s_imm = {{21{instr[31]}}, instr[30:25], instr[11:7]};
+    ctrl.b_imm = {{20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0};
+    ctrl.u_imm = {instr[31:12], 12'h000};
+    ctrl.j_imm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0};
+    ctrl.rs1 = instr[19:15];
+    ctrl.rs2 = instr[24:20];
+    ctrl.rd = instr[11:7];
+    ctrl.funct3 = instr[14:12];      
+    bit30 = instr[30];
+
+
     /* Default assignments */
     ctrl.load_regfile = 1'b0;
     ctrl.alumux1_sel = 1'b0;
