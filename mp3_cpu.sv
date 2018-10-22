@@ -171,7 +171,7 @@ EX_pipe EX_pipe
 	.EX_rs2_out,
 	.EX_jmp_pc,
 	.EX_pc_mux_sel,
-	/*other signals*/
+	.load,
 	.clk,
 	.reset(0)
 );
