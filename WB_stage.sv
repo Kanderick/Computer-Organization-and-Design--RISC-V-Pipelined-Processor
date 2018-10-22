@@ -5,7 +5,7 @@ module WB_stage(
 	input WB_cmp_out,
 	input [31:0] WB_alu_out,
 	input [31:0] WB_u_imm,
-	input [3:0] WB_regfilemux_sel,
+	input [2:0] WB_regfilemux_sel,
 	output logic [31:0] WB_in
 );
 
