@@ -45,8 +45,8 @@ rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB;
 rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM;    
 rv32i_word EX_alu_out;
 logic EX_cmp_out;
-logic EX_forwarding_sel1;
-logic EX_forwarding_sel2;
+logic [1:0] EX_forwarding_sel1;
+logic [1:0] EX_forwarding_sel2;
 /*MEM_stage signal*/
 logic MEM_cmp_out;
 rv32i_word MEM_alu_out;
@@ -85,6 +85,9 @@ assign write_b=MEM_ctrl_word.mem_write;
 assign wdata_a=32'b0;
 assign wmask_b=MEM_ctrl_word.mem_byte_enable;
 assign wmask_a=4'b0;
+assign EX_forwarding_sel1=0;
+assign EX_forwarding_sel2=0;
+
 pipe_control pipe_control
 (
 	/*add NOP*/
@@ -182,7 +185,6 @@ EX_stage EX_stage
     /* control signals */
     .EX_alumux1_sel(EX_ctrl_word.alumux1_sel),
     .EX_alumux2_sel(EX_ctrl_word.alumux2_sel),
-    .EX_regfilemux_sel(EX_ctrl_word.regfilemux_sel),
     .EX_cmpmux_sel(EX_ctrl_word.cmpmux_sel),
     .EX_aluop(EX_ctrl_word.aluop),
     .EX_cmpop(EX_ctrl_word.cmpop),

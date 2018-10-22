@@ -5,7 +5,6 @@ module EX_stage
     /* control signals */
     input logic EX_alumux1_sel,
     input logic [2:0] EX_alumux2_sel,
-    input logic [2:0] EX_regfilemux_sel,
     input logic EX_cmpmux_sel,
     input alu_ops EX_aluop,
     input branch_funct3_t EX_cmpop,
@@ -19,8 +18,8 @@ module EX_stage
     output rv32i_word EX_alu_out,
     output logic EX_cmp_out,
     /*to do*/
-    input logic EX_forwarding_sel1,
-    input logic EX_forwarding_sel2
+    input [1:0] EX_forwarding_sel1,
+    input [1:0] EX_forwarding_sel2
 );
 
 rv32i_word alumux1_out, alumux2_out, cmpmux_out;
