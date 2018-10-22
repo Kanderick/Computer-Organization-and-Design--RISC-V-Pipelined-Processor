@@ -11,7 +11,7 @@ module MEM_pipe(
 	output logic [31:0] MEM_pc,
 	output logic [31:0] MEM_alu_out,
 	output logic [31:0] MEM_rs2_out,
-	output MEM_cmp_out
+	output logic MEM_cmp_out
 );
 
 always_ff @ (posedge clk)
