@@ -22,9 +22,9 @@ CMP JB_CMP
 
 always_comb begin
 	flush=1'b0;
-	if(jb_sel==3'b11)
+	if(jb_sel==0)
 		pcmux_sel=0;
-	else if(jb_sel) begin
+	else if(jb_sel!=2'b11) begin
 		pcmux_sel=1;
 		flush=1;
 	end

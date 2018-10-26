@@ -34,7 +34,7 @@ always_comb begin
     ctrl.mem_read = 1'b0;
     ctrl.mem_write = 1'b0;
     ctrl.mem_byte_enable = 4'b1111;
-    ctrl.jb_sel = 2'b11;
+    ctrl.jb_sel = 2'b00;
     /* Assign control signals based on opcode */
     case(ctrl.opcode)
         op_auipc: begin
@@ -48,7 +48,7 @@ always_comb begin
             ctrl.regfilemux_sel = 2;            
         end
         op_br   : begin
-				ctrl.jb_sel = 2'b00;
+				ctrl.jb_sel = 2'b11;
             ctrl.alumux1_sel = 1;
             ctrl.alumux2_sel = 2;
         end
