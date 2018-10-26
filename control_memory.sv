@@ -48,6 +48,7 @@ always_comb begin
             ctrl.regfilemux_sel = 2;            
         end
         op_br   : begin
+				ctrl.jb_sel = 2'b00;
             ctrl.alumux1_sel = 1;
             ctrl.alumux2_sel = 2;
         end
