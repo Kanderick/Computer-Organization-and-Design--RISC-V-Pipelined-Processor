@@ -75,6 +75,7 @@ logic IF_ID_flush;
 logic read_intr_stall;
 logic mem_access_stall;
 logic load;
+logic pcmux_sel;
 
 assign read_intr_stall = (read_a|write_a)&(!resp_a);
 assign mem_access_stall = (read_b|write_b)&(!resp_b);
@@ -104,6 +105,7 @@ IF_stage IF_stage
 (
 		.clk,
 		.EX_jmp_pc,
+		.pcmux_sel,
 		.IF_addr
 );
 
@@ -145,7 +147,7 @@ ID_stage ID_stage
 		.ID_i_imm(ID_ctrl_word.i_imm),
 		.jb_sel(ID_ctrl_word.jb_sel),
 		.cmpop(ID_ctrl_word.cmpop),
-		.ID_pc_mux_sel,
+		.ID_pc_mux_sel(pcmux_sel),
 		.flush,
 		.ID_rs1_out,
 		.ID_rs2_out,
