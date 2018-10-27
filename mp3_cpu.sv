@@ -138,7 +138,7 @@ ID_stage ID_stage
 		.ID_rs2(ID_ctrl_word.rs2),
 		.WB_in,
 		.ID_rd(WB_ctrl_word.rd),
-		.ID_load_regfile(ID_ctrl_word.load_regfile),
+		.ID_load_regfile(WB_ctrl_word.load_regfile),
 		.ID_pc,
 		.ID_b_imm(ID_ctrl_word.b_imm),
 		.ID_j_imm(ID_ctrl_word.j_imm),
