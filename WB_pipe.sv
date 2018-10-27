@@ -13,7 +13,13 @@ module WB_pipe
 	input load,
 	input reset
 );
-
+initial
+begin
+	WB_cmp_out=0;
+	WB_alu_out=0;
+	WB_rdata=0;
+	WB_pc=0;
+end
 always_ff @(posedge clk) begin
 
 	if(reset) begin

@@ -3,7 +3,7 @@ module IF_stage
 		input clk,
 		input [31:0] EX_jmp_pc,
 		input pcmux_sel,
-		output [31:0] IF_addr
+		output logic [31:0] IF_addr
 );
 
 logic [31:0] ID_pc_mux_out;

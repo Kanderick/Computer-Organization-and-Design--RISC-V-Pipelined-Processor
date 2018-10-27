@@ -7,6 +7,10 @@ module ID_pipe
 	input load
 );
 
+initial
+begin
+	ID_pc=0;
+end
 always_ff @ (posedge clk) begin
 
 	if(reset) begin

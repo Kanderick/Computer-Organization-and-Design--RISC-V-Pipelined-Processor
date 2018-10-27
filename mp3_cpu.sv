@@ -40,13 +40,15 @@ rv32i_word EX_pc;
 rv32i_word EX_rs1_out;
 rv32i_word EX_rs2_out;
 rv32i_word EX_jmp_pc;
-logic EX_pc_mux_sel;
 rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB;
 rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM;    
 rv32i_word EX_alu_out;
 logic EX_cmp_out;
 logic [1:0] EX_forwarding_sel1;
 logic [1:0] EX_forwarding_sel2;
+logic ID_flush;
+
+
 /*MEM_stage signal*/
 logic MEM_cmp_out;
 rv32i_word MEM_alu_out;
@@ -147,8 +149,8 @@ ID_stage ID_stage
 		.ID_i_imm(ID_ctrl_word.i_imm),
 		.jb_sel(ID_ctrl_word.jb_sel),
 		.cmpop(ID_ctrl_word.cmpop),
-		.ID_pc_mux_sel(pcmux_sel),
-		.flush,
+		.ID_pc_mux_sel,
+		.flush(ID_flush),
 		.ID_rs1_out,
 		.ID_rs2_out,
 		.ID_jmp_pc
@@ -157,7 +159,7 @@ ID_stage ID_stage
  control_word_reg EX_ctrl
  (
     .clk,
-    .reset(0),
+    .reset(IF_ID_flush),
     .control_signal_in(ID_ctrl_word),
     .control_signal_out(EX_ctrl_word), 
     .load_control_word(load)
@@ -170,15 +172,17 @@ EX_pipe EX_pipe
 	.ID_rs2_out,
 	.ID_jmp_pc,
 	.ID_pc_mux_sel,
+	.ID_flush,
 	
 	.EX_pc,
 	.EX_rs1_out,
 	.EX_rs2_out,
 	.EX_jmp_pc,
-	.EX_pc_mux_sel,
+	.EX_pc_mux_sel(pcmux_sel),
+	.flush,
 	.load,
 	.clk,
-	.reset(0)
+	.reset(IF_ID_flush)
 );
 
 EX_stage EX_stage

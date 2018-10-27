@@ -14,6 +14,13 @@ module MEM_pipe(
 	output logic MEM_cmp_out
 );
 
+initial
+begin
+	MEM_pc=0;
+	MEM_alu_out=0;
+	MEM_rs2_out=0;
+	MEM_cmp_out=0;
+end
 always_ff @ (posedge clk)
 begin
 	if (reset)
