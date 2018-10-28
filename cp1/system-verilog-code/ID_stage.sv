@@ -24,9 +24,9 @@ module ID_stage
 
 logic [31:0] imm;
 logic [31:0] pc_rs1_add_rst;
-logic jb_mux;
+//logic jb_mux;
 
-assign jb_mux = (jb_sel==2'b11)?1'b0:1'b1;
+//assign jb_mux = (jb_sel==2'b11)?1'b0:1'b1;
 assign ID_jmp_pc = imm + pc_rs1_add_rst;
 
 mux4 imm_mux(
@@ -39,9 +39,9 @@ mux4 imm_mux(
 );
 
 mux2 pc_rs1_mux(
-	.sel(jb_mux),
-	.a(ID_pc),
-	.b(ID_rs1_out),
+	.sel(jb_sel[0]),
+	.a(ID_rs1_out),
+	.b(ID_pc),
 	.f(pc_rs1_add_rst)
 );
 
