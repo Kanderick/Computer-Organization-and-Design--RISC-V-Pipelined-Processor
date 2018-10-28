@@ -1,0 +1,851 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/simulation/modelsim
+vadd4
+Z1 DXx6 sv_std 3 std 0 22 F[19LRNL:5;XmIFh[XOPn1
+INYZzH@aH=8WA_V5GggbAl2
+VUc9?SV_P^F8`;kFkTYU]@3
+S1
+Z2 d/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/simulation/modelsim
+w1539837109
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/add4.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/add4.sv
+L0 1
+Z3 OV;L;10.1d;51
+r1
+31
+Z4 o-sv -work work -O0
+Z5 !s92 -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code -O0
+!i10b 1
+!s100 4eeD4G4SKl5QO>XOFU_3W0
+!s105 add4_sv_unit
+!s85 0
+!s108 1540693561.856584
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/add4.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/add4.sv|
+!s101 -O0
+valu
+R1
+Z6 DXx4 work 11 rv32i_types 0 22 H:BU490BA5m75R`7z]GjA3
+DXx4 work 11 alu_sv_unit 0 22 d=LIz4Mbn:coIWiG:8cPm3
+VFhWQodO82z9]K]Ug^`@j:2
+r1
+31
+I7I0IUec]LnQLIKk_3IO`<3
+S1
+R2
+Z7 w1537646838
+Z8 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/alu.sv
+Z9 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/alu.sv
+L0 3
+R3
+Z10 !s108 1540693562.904855
+Z11 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/alu.sv|
+Z12 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/alu.sv|
+R4
+R5
+!s85 0
+!i10b 1
+!s100 Rkf`7kOCz73YJio:mB^_N3
+!s105 alu_sv_unit
+!s101 -O0
+Xalu_sv_unit
+R1
+R6
+Vd=LIz4Mbn:coIWiG:8cPm3
+r1
+31
+Id=LIz4Mbn:coIWiG:8cPm3
+S1
+R2
+R7
+R8
+R9
+L0 1
+R3
+R10
+R11
+R12
+R4
+R5
+!s85 0
+!i10b 1
+!s100 m[`o_7<BE8Dh<N6z]@c1A3
+!i103 1
+!s101 -O0
+vCMP
+R1
+R6
+DXx4 work 11 CMP_sv_unit 0 22 kS[H]@7SB=S>6UKjaJQK>1
+VnV]2?Hzb]o;5GaA4GP2io3
+r1
+31
+I?:KVflWOGoOkG7e3bT:mA0
+S1
+R2
+Z13 w1537646845
+Z14 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/CMP.sv
+Z15 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/CMP.sv
+L0 3
+R3
+Z16 !s108 1540693562.741336
+Z17 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/CMP.sv|
+Z18 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/CMP.sv|
+R4
+R5
+n@c@m@p
+!s85 0
+!i10b 1
+!s100 a>5Ng2N]6?HWzoAD6hhT:2
+!s105 CMP_sv_unit
+!s101 -O0
+XCMP_sv_unit
+R1
+R6
+VkS[H]@7SB=S>6UKjaJQK>1
+r1
+31
+IkS[H]@7SB=S>6UKjaJQK>1
+S1
+R2
+R13
+R14
+R15
+L0 1
+R3
+R16
+R17
+R18
+R4
+R5
+n@c@m@p_sv_unit
+!s85 0
+!i10b 1
+!s100 JU3la=RG6:7QP@a2I[nll1
+!i103 1
+!s101 -O0
+vcontrol_memory
+R1
+R6
+DXx4 work 22 control_memory_sv_unit 0 22 ZB6<J;3`CO2X4Q9XSKIc_3
+VHnCMHK5WM79acL]1o9[CT0
+r1
+31
+I_G5`PcZb<cBV0fL0JWKO^2
+S1
+R2
+Z19 w1540592116
+Z20 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_memory.sv
+Z21 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_memory.sv
+L0 2
+R3
+Z22 !s108 1540693562.585369
+Z23 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_memory.sv|
+Z24 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_memory.sv|
+R4
+R5
+!s85 0
+!i10b 1
+!s100 FC@Hz^TTk04>1B38dcZhQ0
+!s105 control_memory_sv_unit
+!s101 -O0
+Xcontrol_memory_sv_unit
+R1
+R6
+VZB6<J;3`CO2X4Q9XSKIc_3
+r1
+31
+IZB6<J;3`CO2X4Q9XSKIc_3
+S1
+R2
+R19
+R20
+R21
+L0 1
+R3
+R22
+R23
+R24
+R4
+R5
+!s85 0
+!i10b 1
+!s100 G6;]2J]VO3:_UlP0lAFa82
+!i103 1
+!s101 -O0
+vcontrol_word_reg
+R1
+R6
+DXx4 work 24 control_word_reg_sv_unit 0 22 7V[C<KIEjnNbPG>TJJ;eY3
+VVO;O1lL]T^YGiRiP0nMT80
+r1
+31
+I35Q_Mm_BD0NHZ:_]emCIH1
+S1
+R2
+Z25 w1540603365
+Z26 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_word_reg.sv
+Z27 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_word_reg.sv
+L0 3
+R3
+Z28 !s108 1540693562.473780
+Z29 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_word_reg.sv|
+Z30 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_word_reg.sv|
+R4
+R5
+!s85 0
+!i10b 1
+!s100 5:UF1gcn:j=Yk:S^8a`n70
+!s105 control_word_reg_sv_unit
+!s101 -O0
+Xcontrol_word_reg_sv_unit
+R1
+R6
+V7V[C<KIEjnNbPG>TJJ;eY3
+r1
+31
+I7V[C<KIEjnNbPG>TJJ;eY3
+S1
+R2
+R25
+R26
+R27
+L0 1
+R3
+R28
+R29
+R30
+R4
+R5
+!s85 0
+!i10b 1
+!s100 :Oh3o1@DQ`_4UI:lP4J_91
+!i103 1
+!s101 -O0
+vEX_pipe
+R1
+I?]X]f:cF6TElURV@;=7690
+VE5oN<SAMUQf]EC4<cZ8YK0
+S1
+R2
+w1540607383
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_pipe.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_pipe.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+n@e@x_pipe
+!i10b 1
+!s100 1STBFGl36aO>8on66SdAG1
+!s105 EX_pipe_sv_unit
+!s85 0
+!s108 1540693561.765869
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_pipe.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_pipe.sv|
+!s101 -O0
+vEX_stage
+R1
+R6
+DXx4 work 16 EX_stage_sv_unit 0 22 =7]BEJFCb[`Vf`YFGGd0n3
+V]6nVgPeNG_>WW=^8mEeR^0
+r1
+31
+I875Y=zFWcmW5:jIi`e@A93
+S1
+R2
+Z31 w1540182949
+Z32 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_stage.sv
+Z33 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_stage.sv
+L0 2
+R3
+Z34 !s108 1540693562.297051
+Z35 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_stage.sv|
+Z36 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_stage.sv|
+R4
+R5
+n@e@x_stage
+!s85 0
+!i10b 1
+!s100 @z7PVC`P;EoQWN^5@5R=m3
+!s105 EX_stage_sv_unit
+!s101 -O0
+XEX_stage_sv_unit
+R1
+R6
+V=7]BEJFCb[`Vf`YFGGd0n3
+r1
+31
+I=7]BEJFCb[`Vf`YFGGd0n3
+S1
+R2
+R31
+R32
+R33
+L0 1
+R3
+R34
+R35
+R36
+R4
+R5
+n@e@x_stage_sv_unit
+!s85 0
+!i10b 1
+!s100 =dfDXlEbeY;c5<[cJcW6W3
+!i103 1
+!s101 -O0
+vID_pipe
+R1
+I]>ZGR5fdoTTkbePlZ>nVO3
+VIRC5Bjg4PC^Pg]mjKW2I<0
+S1
+R2
+w1540603146
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_pipe.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_pipe.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+n@i@d_pipe
+!i10b 1
+!s100 8Xd3iammJ:SWAIVei04<K0
+!s105 ID_pipe_sv_unit
+!s85 0
+!s108 1540693561.676990
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_pipe.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_pipe.sv|
+!s101 -O0
+vID_stage
+R1
+R6
+DXx4 work 16 ID_stage_sv_unit 0 22 OfC]ldId0Td7iSg_z>><83
+VGa??FC9mG[`^QnVBi8RTG3
+r1
+31
+IjlmM2PLUB<k?I91N_YD[92
+S1
+R2
+Z37 w1540594652
+Z38 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_stage.sv
+Z39 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_stage.sv
+L0 2
+R3
+Z40 !s108 1540693563.156103
+Z41 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_stage.sv|
+Z42 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_stage.sv|
+R4
+R5
+n@i@d_stage
+!s85 0
+!i10b 1
+!s100 ho:K0dFOgIR0^>EgQ9]di2
+!s105 ID_stage_sv_unit
+!s101 -O0
+XID_stage_sv_unit
+R1
+R6
+VOfC]ldId0Td7iSg_z>><83
+r1
+31
+IOfC]ldId0Td7iSg_z>><83
+S1
+R2
+R37
+R38
+R39
+L0 1
+R3
+R40
+R41
+R42
+R4
+R5
+n@i@d_stage_sv_unit
+!s85 0
+!i10b 1
+!s100 94gZ?keE^boW4ZiGlJ<Zb2
+!i103 1
+!s101 -O0
+vIF_stage
+R1
+IhGCgl^=USdVhPn56=hX>P0
+V`3g]nJX4`jFQjLhZH_oK>2
+S1
+R2
+w1540607079
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/IF_stage.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/IF_stage.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+n@i@f_stage
+!i10b 1
+!s100 iW3Q=?F7e>KdgYGa=7VG40
+!s105 IF_stage_sv_unit
+!s85 0
+!s108 1540693562.119274
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/IF_stage.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/IF_stage.sv|
+!s101 -O0
+vJB_hazard_detection_unit
+R1
+R6
+DXx4 work 32 JB_hazard_detection_unit_sv_unit 0 22 LBNM85EeEnO5eO4Y>5jG?2
+VBfLUEmATbE=lSgG9WNea00
+r1
+31
+IHfG>kCRLbjbF_NN^_>KO20
+S1
+R2
+Z43 w1540601850
+Z44 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/JB_hazard_detection_unit.sv
+Z45 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/JB_hazard_detection_unit.sv
+L0 3
+R3
+Z46 !s108 1540693563.029503
+Z47 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/JB_hazard_detection_unit.sv|
+Z48 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/JB_hazard_detection_unit.sv|
+R4
+R5
+n@j@b_hazard_detection_unit
+!s85 0
+!i10b 1
+!s100 Pz3fm]D[R<39Ydg<`Vk8b3
+!s105 JB_hazard_detection_unit_sv_unit
+!s101 -O0
+XJB_hazard_detection_unit_sv_unit
+R1
+R6
+VLBNM85EeEnO5eO4Y>5jG?2
+r1
+31
+ILBNM85EeEnO5eO4Y>5jG?2
+S1
+R2
+R43
+R44
+R45
+L0 1
+R3
+R46
+R47
+R48
+R4
+R5
+n@j@b_hazard_detection_unit_sv_unit
+!s85 0
+!i10b 1
+!s100 ;KJ09<<h:iImOXa;ZRjC92
+!i103 1
+!s101 -O0
+vmagic_memory_dp
+R1
+!i10b 1
+!s100 Mckbg3ImVeofcPe<DUgBY1
+IW@5gM2Ig8^PD:NWER5nSP3
+V<g9nOQ9mTgjSj@_oL@9z52
+!s105 magic_memory_dual_port_sv_unit
+S1
+R2
+w1539398015
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/magic_memory_dual_port.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/magic_memory_dual_port.sv
+L0 7
+R3
+r1
+!s85 0
+31
+!s108 1540693563.792859
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/magic_memory_dual_port.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/magic_memory_dual_port.sv|
+!s101 -O0
+R4
+R5
+vMEM_pipe
+R1
+INegHFQik`UWO=Q^lZgzKb2
+VHjOoj4?98h][YBa;O5Pb`1
+S1
+R2
+w1540603250
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_pipe.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_pipe.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+n@m@e@m_pipe
+!i10b 1
+!s100 ;oZj^YbdT9H<:ec=CSZCO1
+!s105 MEM_pipe_sv_unit
+!s85 0
+!s108 1540693561.585299
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_pipe.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_pipe.sv|
+!s101 -O0
+vMEM_stage
+R1
+IkBTH`Lh293<PS=;:mEoZj2
+VenJAd?i3RH>P_ifCHDW=D3
+S1
+R2
+w1540099050
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_stage.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_stage.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+n@m@e@m_stage
+!i10b 1
+!s100 c1gNU7o0PA]6Q0`1BBdQ30
+!s105 MEM_stage_sv_unit
+!s85 0
+!s108 1540693561.252577
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_stage.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_stage.sv|
+!s101 -O0
+vmp3_cpu
+R1
+R6
+DXx4 work 15 mp3_cpu_sv_unit 0 22 zzO@Ag[i9g;DinC]OYHY>1
+V:kkl:5@6;RK1D@95HUFcR3
+r1
+31
+I8IQYzk[>]Z864nA52FbIG1
+S1
+R2
+Z49 w1540607470
+Z50 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_cpu.sv
+Z51 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_cpu.sv
+L0 3
+R3
+Z52 !s108 1540693563.327496
+Z53 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_cpu.sv|
+Z54 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_cpu.sv|
+R4
+R5
+!s85 0
+!i10b 1
+!s100 QgIDI1TKU?Z_Mc5XN7gO=2
+!s105 mp3_cpu_sv_unit
+!s101 -O0
+Xmp3_cpu_sv_unit
+R1
+R6
+VzzO@Ag[i9g;DinC]OYHY>1
+r1
+31
+IzzO@Ag[i9g;DinC]OYHY>1
+S1
+R2
+R49
+R50
+R51
+L0 1
+R3
+R52
+R53
+R54
+R4
+R5
+!s85 0
+!i10b 1
+!s100 LQLAm>k=]V]HePj[zm?JN1
+!i103 1
+!s101 -O0
+vmp3_tb
+R1
+I_?HD1o>4m2Wm=IGkg6C062
+VGRaNXc@:Z3jVCaTT0F9jW2
+S1
+R2
+w1540601977
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_tb.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_tb.sv
+L0 2
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 ESaF1]k6KJX^_dR?9`Y=F1
+!s105 mp3_tb_sv_unit
+!s85 0
+!s108 1540693563.621378
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_tb.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_tb.sv|
+!s101 -O0
+vmux2
+R1
+ILh[k0DfYABShLSB9H?fhe2
+Vm:h1@_?d9XDk^V?Kb1omM1
+S1
+R2
+R13
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux2.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux2.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 k00^bNRgKRVkGTQ`Rc:4e1
+!s105 mux2_sv_unit
+!s85 0
+!s108 1540693561.158633
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux2.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux2.sv|
+!s101 -O0
+vmux4
+R1
+IK40XI@[NgDa^??TjglT_P3
+VUaW18l>Tii>0Y18DoZkUg0
+S1
+R2
+R13
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux4.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux4.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 7OogjERIOXj]G>0n0_d@31
+!s105 mux4_sv_unit
+!s85 0
+!s108 1540693561.059599
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux4.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux4.sv|
+!s101 -O0
+vmux8
+R1
+ISN?af53E@n01HSm5;iJiS3
+Ve6S]BFP^05HLlUDnZ]VNW2
+S1
+R2
+R7
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux8.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux8.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 PmGnGCK9mK:ZQoY>G;Gd03
+!s105 mux8_sv_unit
+!s85 0
+!s108 1540693560.958944
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux8.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux8.sv|
+!s101 -O0
+vpc_register
+R1
+Ik?<BP<[Lm::dFK053Vd]U3
+VklRD>XzTggk8KSC9SP52K1
+S1
+R2
+R7
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pc_reg.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pc_reg.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 i]Z8a34?EiV6NE14R1]i21
+!s105 pc_reg_sv_unit
+!s85 0
+!s108 1540693560.823242
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pc_reg.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pc_reg.sv|
+!s101 -O0
+vpipe_control
+R1
+ITl]?WkYPWRIf11SBVo9F`0
+Va_nS]52jWODfY1eeb5CAZ0
+S1
+R2
+w1540606813
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pipe_control.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pipe_control.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 4gaGEfF?nP]CJWdEAaAl`2
+!s105 pipe_control_sv_unit
+!s85 0
+!s108 1540693560.696178
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pipe_control.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pipe_control.sv|
+!s101 -O0
+vrdata_out_logic
+R1
+R6
+DXx4 work 23 rdata_out_logic_sv_unit 0 22 EO3To1hmLWW9JhIfKB2hW1
+V3M3A9^=F;en_bhUWDigI^3
+r1
+31
+InJ5B0gH[E[WB814IJ=M]V0
+S1
+R2
+Z55 w1539837165
+Z56 8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rdata_out_logic.sv
+Z57 F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rdata_out_logic.sv
+L0 3
+R3
+Z58 !s108 1540693562.002086
+Z59 !s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rdata_out_logic.sv|
+Z60 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rdata_out_logic.sv|
+R4
+R5
+!s85 0
+!i10b 1
+!s100 iW^:h7<=jzMi?4A_bm]HP3
+!s105 rdata_out_logic_sv_unit
+!s101 -O0
+Xrdata_out_logic_sv_unit
+R1
+R6
+VEO3To1hmLWW9JhIfKB2hW1
+r1
+31
+IEO3To1hmLWW9JhIfKB2hW1
+S1
+R2
+R55
+R56
+R57
+L0 1
+R3
+R58
+R59
+R60
+R4
+R5
+!s85 0
+!i10b 1
+!s100 W>[l7XDbWJzljl]AR28:G2
+!i103 1
+!s101 -O0
+vregfile
+R1
+IIl:IBg]deBa9nOmbkMO_D0
+VGW?iBdZdblFljzF;>DX>>2
+S1
+R2
+R7
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/regfile.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/regfile.sv
+L0 2
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 E3EnCT7h:2no@YV@Yi7Za3
+!s105 regfile_sv_unit
+!s85 0
+!s108 1540693560.573665
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/regfile.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/regfile.sv|
+!s101 -O0
+Xrv32i_types
+R1
+IH:BU490BA5m75R`7z]GjA3
+VH:BU490BA5m75R`7z]GjA3
+S1
+R2
+w1540175839
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rv32i_types.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rv32i_types.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+!i10b 1
+!s100 >a^8?aRTDkk`Rm;LkhX0C1
+!s85 0
+!s108 1540693560.494404
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rv32i_types.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rv32i_types.sv|
+!s101 -O0
+vWB_pipe
+R1
+IFhg8UL7KXWKJGoEIVm:>k1
+V@CGGSB9Qko:NSlbzGfbF;1
+S1
+R2
+w1540603125
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_pipe.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_pipe.sv
+L0 1
+R3
+r1
+31
+R4
+R5
+n@w@b_pipe
+!i10b 1
+!s100 2oC6o4>86AmLel]UTY8H<0
+!s105 WB_pipe_sv_unit
+!s85 0
+!s108 1540693560.385332
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_pipe.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_pipe.sv|
+!s101 -O0
+vWB_stage
+R1
+I9?]B8d2`B_RJLfgA3l]I`2
+VIVQ[i@N;^PBT<eWBSXDaj3
+S1
+R2
+w1540184237
+8/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_stage.sv
+F/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_stage.sv
+L0 1
+R3
+r1
+31
+R4
+n@w@b_stage
+R5
+!i10b 1
+!s100 eoZDLO<CUPeaD:i0G7cPE2
+!s105 WB_stage_sv_unit
+!s85 0
+!s108 1540693560.273487
+!s107 /home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_stage.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code|/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_stage.sv|
+!s101 -O0
