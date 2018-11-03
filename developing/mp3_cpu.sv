@@ -141,8 +141,8 @@ ID_stage ID_stage
 		.ID_rs1(ID_ctrl_word.rs1),
 		.ID_rs2(ID_ctrl_word.rs2),
 		.WB_in,
-		.ID_rd(WB_ctrl_word.rd),
-		.ID_load_regfile(WB_ctrl_word.load_regfile),
+		.WB_rd(WB_ctrl_word.rd),
+		.WB_load_regfile(WB_ctrl_word.load_regfile),
 		.ID_pc,
 		.ID_b_imm(ID_ctrl_word.b_imm),
 		.ID_j_imm(ID_ctrl_word.j_imm),
@@ -245,6 +245,9 @@ MEM_stage MEM_stage
 (
 	.MEM_rs2_out,
 	.MEM_alu_out,
+	.MEM_rs2(MEM_ctrl_word.rs2),
+	.WB_rd(WB_ctrl_word.rd),
+	.WB_in,
 	.MEM_addr(address_b),
 	.MEM_data(wdata_b)
 

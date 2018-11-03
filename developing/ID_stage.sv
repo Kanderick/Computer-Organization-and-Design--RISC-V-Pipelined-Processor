@@ -5,8 +5,8 @@ module ID_stage
 		input [4:0] ID_rs1,
 		input [4:0] ID_rs2,
 		input [31:0] WB_in,
-		input [4:0] ID_rd,
-		input ID_load_regfile,
+		input [4:0] WB_rd,
+		input WB_load_regfile,
 		input [31:0] ID_pc,
 		input [31:0] ID_b_imm,
 		input [31:0] ID_j_imm,
@@ -24,10 +24,23 @@ module ID_stage
 
 logic [31:0] imm;
 logic [31:0] pc_rs1_add_rst;
+logic [31:0] regfile_rs1_out;
+logic [31:0] regfile_rs2_out;
 //logic jb_mux;
 
 //assign jb_mux = (jb_sel==2'b11)?1'b0:1'b1;
 assign ID_jmp_pc = imm + pc_rs1_add_rst;
+WB_IF_forwarding WB_IF_forwarding(
+	.ID_rs1,
+	.ID_rs2,
+	.WB_rd,
+	.WB_load_regfile,
+	.regfile_rs1_out,
+	.regfile_rs2_out,
+	.WB_in,
+	.ID_rs1_out,
+	.ID_rs2_out
+);
 
 mux4 imm_mux(
 	.sel(jb_sel),
@@ -58,13 +71,13 @@ JB_hazard_detection_unit ID_JB_unit
 regfile ID_regfile
 (
 	.clk,
-	.load(ID_load_regfile),
+	.load(WB_load_regfile),
 	.in(WB_in),
 	.src_a(ID_rs1),
 	.src_b(ID_rs2),
-	.dest(ID_rd),
-	.reg_a(ID_rs1_out),
-	.reg_b(ID_rs2_out)
+	.dest(WB_rd),
+	.reg_a(regfile_rs1_out),
+	.reg_b(regfile_rs2_out)
 );
 
 endmodule : ID_stage

@@ -1,4 +1,4 @@
-## Generated SDC file "mp3.out.sdc"
+## Generated SDC file "mp3_160MHz.out.sdc"
 
 ## Copyright (C) 1991-2014 Altera Corporation
 ## Your use of Altera Corporation's design tools, logic functions 
@@ -19,7 +19,7 @@
 ## PROGRAM "Quartus II"
 ## VERSION "Version 13.1.4 Build 182 03/12/2014 SJ Full Version"
 
-## DATE    "Mon Oct 29 22:26:40 2018"
+## DATE    "Mon Oct 29 22:04:17 2018"
 
 ##
 ## DEVICE  "EP3SE80F1152C2"
@@ -38,7 +38,7 @@ set_time_format -unit ns -decimal_places 3
 # Create Clock
 #**************************************************************
 
-create_clock -name {clk} -period 10.000 -waveform { 0.000 5.000 } [get_ports {clk}]
+create_clock -name {clk} -period 6.250 -waveform { 0.000 3.125 } [get_ports {clk}]
 
 
 #**************************************************************
