@@ -58,8 +58,8 @@ mux4 fowarding_mux1
 (
     .sel(EX_forwarding_sel1),
     .a(alumux1_out),
-    .b(EX_rs1_forwarded_WB),
-    .c(EX_rs1_forwarded_MEM), 
+    .c(EX_rs1_forwarded_WB),
+    .b(EX_rs1_forwarded_MEM), 
     .d(0),
     .f(fowarding_mux1_out)
 );
@@ -68,8 +68,8 @@ mux4 fowarding_mux2
 (
     .sel(EX_forwarding_sel2),
     .a(alumux2_out),
-    .b(EX_rs2_forwarded_WB),
-    .c(EX_rs2_forwarded_MEM),
+    .c(EX_rs2_forwarded_WB),
+    .b(EX_rs2_forwarded_MEM),
     .d(0),
     .f(fowarding_mux2_out)
 );
