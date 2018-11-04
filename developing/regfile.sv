@@ -31,8 +31,31 @@ end
 
 always_comb
 begin
-    reg_a = src_a ? data[src_a] : 0;
-    reg_b = src_b ? data[src_b] : 0;
+	 if(src_a==0)
+	 begin
+		reg_a=0;
+	 end
+	 else if(src_a==dest)
+	 begin
+		reg_a=in;
+	 end
+	 else
+	 begin
+		reg_a=data[src_a];
+	 end
+	 
+	 if(src_b==0)
+	 begin
+		reg_b=0;
+	 end
+	 else if(src_b==dest)
+	 begin
+		reg_b=in;
+	 end
+	 else
+	 begin
+		reg_b=data[src_b];
+	 end
 end
 
 endmodule : regfile
