@@ -3,6 +3,7 @@ module IF_stage
 		input clk,
 		input [31:0] EX_jmp_pc,
 		input pcmux_sel,
+        input load_pc,
 		output logic [31:0] IF_addr
 );
 
@@ -12,7 +13,7 @@ assign ID_p4_pc = IF_addr+4;
 pc_register IF_pc
 (
 	.clk,
-	.load(1'b1),
+	.load(load_pc),
 	.in(ID_pc_mux_out),
 	.out(IF_addr)
 	

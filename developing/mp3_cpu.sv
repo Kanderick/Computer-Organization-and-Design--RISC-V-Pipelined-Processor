@@ -71,6 +71,16 @@ rv32i_control_word EX_ctrl_word;
 rv32i_control_word MEM_ctrl_word;
 rv32i_control_word WB_ctrl_word;
 
+//memory access proxy signal
+rv32i_word instr_rdata;
+logic instr_resp;
+
+logic MEM_read;
+logic MEM_write;
+logic MEM_resp;
+rv32i_word MEM_rdata;
+
+
 /*pipe control signal*/
 logic flush;
 logic IF_ID_flush;
@@ -78,18 +88,45 @@ logic read_intr_stall;
 logic mem_access_stall;
 logic load;
 logic pcmux_sel;
-
-assign read_intr_stall = (read_a|write_a)&(!resp_a);
-assign mem_access_stall = (read_b|write_b)&(!resp_b);
-assign read_a = 1'b1;
-assign write_a = 1'b0;
-assign read_b=MEM_ctrl_word.mem_read;
-assign write_b=MEM_ctrl_word.mem_write;
+assign read_intr_stall = 1'b1 &(!instr_resp);
+assign mem_access_stall = (MEM_ctrl_word.mem_read|MEM_ctrl_word.mem_write)&(!MEM_resp);
+//assign read_a = 1'b1;
+//assign write_a = 1'b0;
+//assign read_b=MEM_ctrl_word.mem_read;
+//assign write_b=MEM_ctrl_word.mem_write;
 assign wdata_a=32'b0;
 assign wmask_b=MEM_ctrl_word.mem_byte_enable;
 assign wmask_a=4'b0;
 assign EX_forwarding_sel1=0;
 assign EX_forwarding_sel2=0;
+ 
+mem_access_proxy icache_access_proxy
+(
+    .clk,
+    .stage_read(1'b1),
+    .stage_write(1'b0),
+    .mem_read(read_a),
+    .mem_write(write_a),
+    .mem_resp(resp_a),
+    .mem_rdata(rdata_a),
+    .pipe_load(load),
+    .stage_rdata(instr_rdata),
+    .stage_resp(instr_resp) 
+);
+
+mem_access_proxy dcache_access_proxy
+(
+    .clk,
+    .stage_read(MEM_ctrl_word.mem_read),
+    .stage_write(MEM_ctrl_word.mem_write),
+    .mem_read(read_b),
+    .mem_write(write_b),
+    .mem_resp(resp_b),
+    .mem_rdata(rdata_b),    
+    .pipe_load(load),
+    .stage_rdata(MEM_rdata),
+    .stage_resp(MEM_resp) 
+);
 
 pipe_control pipe_control
 (
@@ -108,12 +145,13 @@ IF_stage IF_stage
 		.clk,
 		.EX_jmp_pc,
 		.pcmux_sel,
+        .load_pc(load),
 		.IF_addr
 );
 
 control_memory control_memory
 (
-    .instr(rdata_a),
+    .instr(instr_rdata),
     .ctrl(control_memory_out)
 );
 
@@ -266,7 +304,7 @@ WB_pipe WB_pipe
 (
 	.MEM_cmp_out,
 	.MEM_alu_out,
-	.MEM_rdata(rdata_b),	/*read from data cache*/
+	.MEM_rdata(MEM_rdata),	/*read from data cache*/
 	.MEM_pc,
 	.WB_cmp_out,
 	.WB_alu_out,
