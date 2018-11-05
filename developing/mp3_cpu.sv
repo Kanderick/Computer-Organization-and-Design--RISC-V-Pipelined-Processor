@@ -300,6 +300,7 @@ MEM_stage MEM_stage
 	.MEM_rs2(MEM_ctrl_word.rs2),
 	.WB_rd(WB_ctrl_word.rd),
 	.WB_in,
+	.WB_writeback(WB_ctrl_word.load_regfile),
 	.MEM_addr(address_b),
 	.MEM_data(wdata_b),
 	.MEM_cmp_out,

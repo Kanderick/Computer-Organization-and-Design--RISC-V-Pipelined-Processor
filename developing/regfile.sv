@@ -35,7 +35,7 @@ begin
 	 begin
 		reg_a=0;
 	 end
-	 else if(src_a==dest)
+	 else if(src_a==dest && load)
 	 begin
 		reg_a=in;
 	 end
@@ -48,7 +48,7 @@ begin
 	 begin
 		reg_b=0;
 	 end
-	 else if(src_b==dest)
+	 else if(src_b==dest && load)
 	 begin
 		reg_b=in;
 	 end
