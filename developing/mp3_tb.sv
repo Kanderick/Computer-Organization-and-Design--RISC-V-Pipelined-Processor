@@ -1,6 +1,6 @@
+import rv32i_types::*;
 
 module mp3_tb;
-
 timeunit 1ns;
 timeprecision 1ns;
 logic clk;
@@ -11,62 +11,38 @@ initial clk = 0;
 always #5 clk = ~clk;
 
 
-assign halt = ((mp3_cpu.rdata_a == 32'h00000063) | (mp3_cpu.rdata_a == 32'h0000006F));
+assign halt = ((mp3.mp3_cpu.rdata_a == 32'h00000063) | (mp3.mp3_cpu.rdata_a == 32'h0000006F));
 
-
-
-logic read_a;
-logic write_a;
-logic [3:0] wmask_a;
-logic [31:0] address_a;
-logic [31:0] wdata_a;
-logic resp_a;
-logic [31:0] rdata_a;
-logic read_b;
-logic write_b;
-logic [3:0] wmask_b;
-logic [31:0] address_b;
-logic [31:0] wdata_b;
-logic resp_b;
-logic [31:0] rdata_b;
-
-
-mp3_cpu mp3_cpu
+logic read;
+logic write;
+logic [3:0] wmask;
+logic [31:0] address;
+logic [31:0] wdata;
+logic resp;
+logic [31:0] rdata;
+     
+mp3 mp3
 (
     .clk,
-    .read_a,
-    .write_a,
-    .wmask_a,
-    .address_a,
-    .wdata_a,
-    .resp_a,
-    .rdata_a,
-    .read_b,
-    .write_b,
-    .wmask_b,
-    .address_b,
-    .wdata_b,
-    .resp_b,
-    .rdata_b
+    .read,
+    .write,
+    .wmask,
+    .address,
+    .wdata,
+    .resp,
+    .rdata
 );
 
-magic_memory_dp magic_memory_dp
+magic_memory magic_memory
 (
-	 .clk,
-    .read_a,
-    .write_a,
-    .wmask_a,
-    .address_a,
-    .wdata_a,
-    .resp_a,
-    .rdata_a,
-    .read_b,
-    .write_b,
-    .wmask_b,
-    .address_b,
-    .wdata_b,
-    .resp_b,
-    .rdata_b
+    .clk,
+    .read,
+    .write,
+    .wmask,
+    .address,
+    .wdata,
+    .resp,
+    .rdata
 );
 
 endmodule : mp3_tb
