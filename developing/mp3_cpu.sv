@@ -41,7 +41,7 @@ rv32i_word EX_rs1_out;
 rv32i_word EX_rs2_out;
 rv32i_word EX_jmp_pc;
 rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB;
-rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM;    
+rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM, forwarded_MEM;    
 rv32i_word EX_alu_out;
 logic EX_cmp_out;
 logic [1:0] EX_forwarding_sel1;
@@ -86,20 +86,26 @@ logic flush;
 logic IF_ID_flush;
 logic read_intr_stall;
 logic mem_access_stall;
-logic load;
+logic MEM_flush;
+logic pc_load;
+logic ID_load;
+logic EX_load;
+logic MEM_load;
+logic WB_load;
 logic pcmux_sel;
+logic MEM_EX_rdata_hazard;
+
 assign read_intr_stall = 1'b1 &(!instr_resp);
 assign mem_access_stall = (MEM_ctrl_word.mem_read|MEM_ctrl_word.mem_write)&(!MEM_resp);
-//assign read_a = 1'b1;
-//assign write_a = 1'b0;
-//assign read_b=MEM_ctrl_word.mem_read;
-//assign write_b=MEM_ctrl_word.mem_write;
 assign wdata_a=32'b0;
 assign wmask_b=MEM_ctrl_word.mem_byte_enable;
 assign wmask_a=4'b0;
-assign EX_forwarding_sel1=0;
-assign EX_forwarding_sel2=0;
- 
+
+assign EX_rs1_forwarded_WB=WB_in;
+assign EX_rs2_forwarded_WB=WB_in;
+assign EX_rs1_forwarded_MEM=forwarded_MEM;
+assign EX_rs2_forwarded_MEM=forwarded_MEM;
+
 mem_access_proxy icache_access_proxy
 (
     .clk,
@@ -109,7 +115,7 @@ mem_access_proxy icache_access_proxy
     .mem_write(write_a),
     .mem_resp(resp_a),
     .mem_rdata(rdata_a),
-    .pipe_load(load),
+    .pipe_load(ID_load),
     .stage_rdata(instr_rdata),
     .stage_resp(instr_resp) 
 );
@@ -123,29 +129,37 @@ mem_access_proxy dcache_access_proxy
     .mem_write(write_b),
     .mem_resp(resp_b),
     .mem_rdata(rdata_b),    
-    .pipe_load(load),
+    .pipe_load(WB_load),
     .stage_rdata(MEM_rdata),
     .stage_resp(MEM_resp) 
 );
+
 
 pipe_control pipe_control
 (
 	/*add NOP*/
     .flush,
     .IF_ID_flush,
+	 .MEM_flush,
+	 
    /*freeze the pipes*/
+	.pc_load,
+	.ID_load,
+	.EX_load,
+	.MEM_load,
+	.WB_load,
+	.MEM_EX_rdata_hazard,
 	.read_intr_stall,
 	.mem_access_stall,
-	.load,
 	.clk
 );
 
 IF_stage IF_stage
 (
 		.clk,
+		.pc_load,
 		.EX_jmp_pc,
 		.pcmux_sel,
-        .load_pc(load),
 		.IF_addr
 );
 
@@ -161,7 +175,7 @@ control_word_reg ID_ctrl
     .reset(IF_ID_flush),
     .control_signal_in(control_memory_out),
     .control_signal_out(ID_ctrl_word), 
-    .load_control_word(load) 
+    .load_control_word(ID_load) 
  );
  
 ID_pipe ID_pipe
@@ -169,7 +183,7 @@ ID_pipe ID_pipe
 	.IF_pc(IF_addr),
 	.ID_pc,
 	.clk,
-   .load,
+   .load(ID_load),
 	.reset(IF_ID_flush)
 );
 
@@ -200,7 +214,7 @@ ID_stage ID_stage
     .reset(IF_ID_flush),
     .control_signal_in(ID_ctrl_word),
     .control_signal_out(EX_ctrl_word), 
-    .load_control_word(load)
+    .load_control_word(EX_load)
  );
 
 EX_pipe EX_pipe
@@ -218,7 +232,7 @@ EX_pipe EX_pipe
 	.EX_jmp_pc,
 	.EX_pc_mux_sel(pcmux_sel),
 	.flush,
-	.load,
+	.load(EX_load),
 	.clk,
 	.reset(IF_ID_flush)
 );
@@ -256,17 +270,17 @@ EX_stage EX_stage
 control_word_reg MEM_ctrl
  (
     .clk,
-    .reset(1'b0),
+    .reset(MEM_flush),
     .control_signal_in(EX_ctrl_word),
     .control_signal_out(MEM_ctrl_word), 
-    .load_control_word(load)
+    .load_control_word(MEM_load)
  );
  
 MEM_pipe MEM_pipe
 (
 	.clk,
-	.reset(1'b0),
-	.load(load),
+	.reset(MEM_flush),
+	.load(MEM_load),
 	
 	.EX_pc,
 	.EX_alu_out,
@@ -287,7 +301,12 @@ MEM_stage MEM_stage
 	.WB_rd(WB_ctrl_word.rd),
 	.WB_in,
 	.MEM_addr(address_b),
-	.MEM_data(wdata_b)
+	.MEM_data(wdata_b),
+	.MEM_cmp_out,
+	.u_imm(MEM_ctrl_word.u_imm),
+	.pc(MEM_pc),
+	.regfilemux_sel(MEM_ctrl_word.regfilemux_sel),
+	.forwarding_out(forwarded_MEM)
 
 );	
 
@@ -297,7 +316,7 @@ control_word_reg WB_ctrl
     .reset(1'b0),
     .control_signal_in(MEM_ctrl_word),
     .control_signal_out(WB_ctrl_word), 
-    .load_control_word(load)
+    .load_control_word(WB_load)
  );
  
 WB_pipe WB_pipe
@@ -312,7 +331,7 @@ WB_pipe WB_pipe
 	.WB_pc,
 	/*other signals*/
 	.clk,
-	.load,
+	.load(WB_load),
 	.reset(1'b0)
 );
 
@@ -328,5 +347,22 @@ WB_stage WB_stage
 	.WB_in
 );
 
+/*WB_MEM_EX_forwarding*/
+
+WB_MEM_EX_forwarding WB_MEM_EX_forwarding
+(
+	.EX_rs1(EX_ctrl_word.rs1),
+	.EX_rs2(EX_ctrl_word.rs2),
+	.MEM_rd(MEM_ctrl_word.rd),
+	.WB_rd(WB_ctrl_word.rd),
+	.MEM_regfilemux_sel(MEM_ctrl_word.regfilemux_sel),
+	.forwarding_sel1(EX_forwarding_sel1),
+	.forwarding_sel2(EX_forwarding_sel2),
+	.MEM_EX_rdata_hazard,
+	.MEM_writeback(MEM_ctrl_word.load_regfile),
+	.WB_writeback(WB_ctrl_word.load_regfile),
+	.rs1_sel(EX_ctrl_word.alumux1_sel),
+	.rs2_sel(EX_ctrl_word.alumux2_sel)
+);
 
 endmodule : mp3_cpu
