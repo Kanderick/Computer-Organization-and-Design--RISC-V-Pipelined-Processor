@@ -5,6 +5,7 @@ module MEM_stage
 	input [4:0] MEM_rs2,
 	input [4:0] WB_rd,
 	input [31:0] WB_in,
+	input WB_writeback,
 	output logic [31:0] MEM_addr,
 	output logic [31:0] MEM_data,
 	/*forwarding use signals*/
@@ -18,7 +19,7 @@ logic sel;
 logic [31:0] pc_plus_4;
 assign pc_plus_4 = pc+4;
 assign MEM_addr = MEM_alu_out;
-assign sel= (MEM_rs2==WB_rd);
+assign sel= (MEM_rs2==WB_rd && WB_writeback);
 mux2 #(.width(32)) MEM_select
 (
 		.a(MEM_rs2_out),
