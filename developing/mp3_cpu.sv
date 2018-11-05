@@ -43,6 +43,7 @@ rv32i_word EX_jmp_pc;
 rv32i_word EX_rs1_forwarded_WB, EX_rs2_forwarded_WB;
 rv32i_word EX_rs1_forwarded_MEM, EX_rs2_forwarded_MEM, forwarded_MEM;    
 rv32i_word EX_alu_out;
+rv32i_word fowarding_mux2_out;
 logic EX_cmp_out;
 logic [1:0] EX_forwarding_sel1;
 logic [1:0] EX_forwarding_sel2;
@@ -226,6 +227,7 @@ EX_stage EX_stage
     /*output data*/
     .EX_alu_out,
     .EX_cmp_out,
+	 .fowarding_mux2_out,
     /*to do*/
     .EX_forwarding_sel1,
     .EX_forwarding_sel2
@@ -248,7 +250,7 @@ MEM_pipe MEM_pipe
 	
 	.EX_pc,
 	.EX_alu_out,
-	.EX_rs2_out,
+	.EX_rs2_out(fowarding_mux2_out),
 	.EX_cmp_out,
 	
 	.MEM_pc,
@@ -325,9 +327,7 @@ WB_MEM_EX_forwarding WB_MEM_EX_forwarding
 	.forwarding_sel2(EX_forwarding_sel2),
 	.MEM_EX_rdata_hazard,
 	.MEM_writeback(MEM_ctrl_word.load_regfile),
-	.WB_writeback(WB_ctrl_word.load_regfile),
-	.rs1_sel(EX_ctrl_word.alumux1_sel),
-	.rs2_sel(EX_ctrl_word.alumux2_sel)
+	.WB_writeback(WB_ctrl_word.load_regfile)
 );
 
 endmodule : mp3_cpu

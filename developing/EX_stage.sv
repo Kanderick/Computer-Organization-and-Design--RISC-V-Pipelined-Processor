@@ -17,16 +17,17 @@ module EX_stage
     /*output data*/
     output rv32i_word EX_alu_out,
     output logic EX_cmp_out,
+	 output rv32i_word fowarding_mux2_out,
     /*to do*/
     input [1:0] EX_forwarding_sel1,
     input [1:0] EX_forwarding_sel2
 );
-
+rv32i_word fowarding_mux1_out;
 rv32i_word alumux1_out, alumux2_out, cmpmux_out;
 mux2 almux1
 (
     .sel(EX_alumux1_sel),
-    .a(EX_rs1_out),
+    .a(fowarding_mux1_out),
     .b(EX_pc),
     .f(alumux1_out)
 );
@@ -38,7 +39,7 @@ mux8 almux2
     .b(EX_u_imm),
     .c(EX_b_imm),
     .d(EX_s_imm),
-    .e(EX_rs2_out),
+    .e(fowarding_mux2_out),
     .f(EX_j_imm),
     .g(0),
     .h(0),
@@ -48,16 +49,16 @@ mux8 almux2
 mux2 cmpmux
 (
     .sel(EX_cmpmux_sel),
-    .a(EX_rs2_out),
+    .a(fowarding_mux2_out),
     .b(EX_i_imm),
     .f(cmpmux_out)
 );
 
-rv32i_word fowarding_mux1_out, fowarding_mux2_out;
+
 mux4 fowarding_mux1
 (
     .sel(EX_forwarding_sel1),
-    .a(alumux1_out),
+    .a(EX_rs1_out),
     .c(EX_rs1_forwarded_WB),
     .b(EX_rs1_forwarded_MEM), 
     .d(0),
@@ -67,7 +68,7 @@ mux4 fowarding_mux1
 mux4 fowarding_mux2
 (
     .sel(EX_forwarding_sel2),
-    .a(alumux2_out),
+    .a(EX_rs2_out),
     .c(EX_rs2_forwarded_WB),
     .b(EX_rs2_forwarded_MEM),
     .d(0),
@@ -77,8 +78,8 @@ mux4 fowarding_mux2
 alu alu_inst
 (
     .aluop(EX_aluop),
-    .a(fowarding_mux1_out),
-    .b(fowarding_mux2_out),
+    .a(alumux1_out),
+    .b(alumux2_out),
     .f(EX_alu_out)
 );
 
