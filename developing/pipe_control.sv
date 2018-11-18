@@ -30,16 +30,18 @@ always_comb begin
 		EX_load=1'b0;
 		MEM_flush=1'b1;
 	 end
-	 if(read_intr_stall|mem_access_stall)
+    IF_ID_flush = flush;
+	 MEM_flush = MEM_flush|flush;
+	 	 if(read_intr_stall|mem_access_stall)
 	 begin
 		pc_load=1'b0;
 		ID_load=1'b0;
 		EX_load=1'b0;
 		MEM_load=1'b0;
 		WB_load=1'b0;
+		IF_ID_flush=0;
+		MEM_flush=0;
 	 end
-    IF_ID_flush = flush;
-	 MEM_flush = MEM_flush|flush;
 end
 
 
