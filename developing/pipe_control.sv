@@ -39,6 +39,7 @@ always_comb begin
 		WB_load=1'b0;
 	 end
     IF_ID_flush = flush;
+	 MEM_flush = MEM_flush|flush;
 end
 
 

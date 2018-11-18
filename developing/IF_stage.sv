@@ -1,7 +1,7 @@
 module IF_stage
 (
 		input clk,
-		input [31:0] EX_jmp_pc,
+		input [31:0] MEM_jmp_pc,
 		input pcmux_sel,
 		input pc_load,
 		output logic [31:0] IF_addr
@@ -22,7 +22,7 @@ pc_register IF_pc
 mux2 #(.width(32)) ID_pc_mux
 (
 	.a(ID_p4_pc),
-	.b({EX_jmp_pc[31:1], 1'b0}),
+	.b({MEM_jmp_pc[31:1], 1'b0}),
 	.sel(pcmux_sel),
 	.f(ID_pc_mux_out)
 );

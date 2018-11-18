@@ -18,12 +18,56 @@ module EX_stage
     output rv32i_word EX_alu_out,
     output logic EX_cmp_out,
 	 output rv32i_word fowarding_mux2_out,
+	 /*dependency resolver*/
+	 input [1:0] jb_sel,
+	 input [31:0] ID_b_imm,
+	 input [31:0] ID_j_imm,
+	 input [31:0] ID_i_imm,
+	 output logic [31:0] EX_jmp_pc,
+	 output logic EX_pc_mux_sel,
+	 output logic flush,
+	 //output logic [31:0] ID_rs1_out,
+	 //output logic [31:0] ID_rs2_out,
     /*to do*/
     input [1:0] EX_forwarding_sel1,
     input [1:0] EX_forwarding_sel2
 );
 rv32i_word fowarding_mux1_out;
 rv32i_word alumux1_out, alumux2_out, cmpmux_out;
+/*dependency resolver*/
+logic [31:0] imm;
+logic [31:0] pc_rs1_add_rst;
+
+assign EX_jmp_pc = imm + pc_rs1_add_rst;
+
+mux4 imm_mux(
+	.sel(jb_sel),
+	.a(0),
+	.b(ID_j_imm),
+	.c(ID_i_imm),
+	.d(ID_b_imm),
+	.f(imm)
+);
+
+mux2 pc_rs1_mux(
+	.sel(jb_sel[0]),
+	.a(fowarding_mux1_out),
+	.b(EX_pc),
+	.f(pc_rs1_add_rst)
+);
+
+JB_hazard_detection_unit ID_JB_unit
+(
+	.jb_sel,
+	.cmpop(EX_cmpop),
+	.rs1_out(fowarding_mux1_out),
+	.rs2_out(fowarding_mux2_out),
+	.pcmux_sel(EX_pc_mux_sel),
+	.flush
+);
+
+
+
 mux2 almux1
 (
     .sel(EX_alumux1_sel),
