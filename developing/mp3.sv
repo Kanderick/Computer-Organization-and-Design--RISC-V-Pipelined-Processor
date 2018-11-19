@@ -26,6 +26,13 @@ logic [31:0] wdata_b;
 logic resp_b;
 logic [31:0] rdata_b;
 
+logic [31:0] address_l2;
+logic read_l2;
+logic write_l2;
+logic [255:0] rdata_l2;
+logic [255:0] wdata_l2;
+logic resp_l2;
+
 //input of cache from arbitor
 logic read_I, read_D;
 logic write_I, write_D;
@@ -106,14 +113,30 @@ arbitor #(.width(256)) arbitor
     .dcache_resp(resp_D),
 
     //L2 cache signal
-    .L2cache_read(read),
-    .L2cache_write(write),
-    .L2cache_address(address),
-    .L2cache_wdata(wdata),
+    .L2cache_read(read_l2),
+    .L2cache_write(write_l2),
+    .L2cache_address(address_l2),
+    .L2cache_wdata(wdata_l2),
     .L2cache_byte_enable(),
-    .L2cache_rdata(rdata),
-    .L2cache_resp(resp)        
+    .L2cache_rdata(rdata_l2),
+    .L2cache_resp(resp_l2)        
 );
 
+L2cache L2cache
+(
+	.clk,
+	.arbi_l2_address(address_l2),
+	.arbi_l2_wdata(wdata_l2),
+	.arbi_l2_read(read_l2),
+	.arbi_l2_write(write_l2),
+	.arbi_l2_rdata(rdata_l2),
+	.arbi_l2_resp(resp_l2),
+	.l2_pmem_address(address),
+	.l2_pmem_wdata(wdata),
+	.l2_pmem_read(read),
+	.l2_pmem_write(write),
+	.l2_pmem_rdata(rdata),
+	.l2_pmem_resp(resp)
+);
 
 endmodule : mp3
