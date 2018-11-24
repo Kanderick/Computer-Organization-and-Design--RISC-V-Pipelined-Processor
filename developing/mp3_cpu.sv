@@ -20,7 +20,11 @@ module mp3_cpu
     output logic [31:0] address_b,
     output logic [31:0] wdata_b,
     input resp_b,
-    input [31:0] rdata_b
+    input [31:0] rdata_b,
+	 /*performance tracking*/
+	 output logic jb_sel,
+	 output logic flush,
+	 output logic if_stall
 );
 
 /*IF_stage signal*/
@@ -84,7 +88,6 @@ rv32i_word MEM_rdata;
 
 
 /*pipe control signal*/
-logic flush;
 logic IF_ID_flush;
 logic read_intr_stall;
 logic mem_access_stall;
@@ -108,6 +111,9 @@ assign EX_rs2_forwarded_WB=WB_in;
 assign EX_rs1_forwarded_MEM=forwarded_MEM;
 assign EX_rs2_forwarded_MEM=forwarded_MEM;
 
+/*performance tracking*/
+assign jb_sel=MEM_ctrl_word.jb_sel;
+assign if_stall=!MEM_load;
 mem_access_proxy icache_access_proxy
 (
     .clk,

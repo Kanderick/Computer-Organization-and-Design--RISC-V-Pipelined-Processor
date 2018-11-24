@@ -13,7 +13,9 @@ module L1Icache_control
 	output logic ld_lru,
 	output logic ld_tag,
 	output logic ld_valid,
-	output logic ld_data
+	output logic ld_data,
+	/*performance tracking*/
+	output logic l1i_miss_sig
 );
 
 enum int unsigned {
@@ -60,20 +62,24 @@ begin : next_state_logic
     /* Next state information and conditions (if any)
      * for transitioning between states */
 	next_state = state;
-	
+	l1i_miss_sig=0;
 	case(state)
 		default: next_state = idle;
 		
 		idle:
 		begin
 			if (cpu_l1i_read && (!hit))
+			begin
 				next_state = fetch_from_arbitor;
+				l1i_miss_sig=1'b1;
+			end
 			else
 				next_state = idle;
 		end
 		
 		fetch_from_arbitor:
 		begin
+			
 			if (l1i_arbi_resp)
 				next_state = idle;
 			else

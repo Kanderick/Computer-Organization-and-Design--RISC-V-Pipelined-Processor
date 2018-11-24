@@ -41,7 +41,14 @@ logic [31:0] address_I, address_D;
 logic [255:0] wdata_D;
 logic resp_I, resp_D;
 logic [255:0] rdata_I, rdata_D;
-    
+   
+//performance unit
+logic flush;
+logic jb_sel;
+logic l1i_miss_sig;
+logic l1d_miss_sig;
+logic l2_miss_sig;
+logic if_stall;
 mp3_cpu mp3_cpu
 (
     .clk,
@@ -58,7 +65,10 @@ mp3_cpu mp3_cpu
     .address_b,
     .wdata_b,
     .resp_b,
-    .rdata_b
+    .rdata_b,
+	 .flush,
+	 .jb_sel,
+	 .if_stall
 );
 
 L1Icache instruction_cache
@@ -72,7 +82,9 @@ L1Icache instruction_cache
 	.l1i_arbi_address(address_I),
 	.l1i_arbi_rdata(rdata_I),
 	.l1i_arbi_read(read_I),
-	.l1i_arbi_resp(resp_I)
+	.l1i_arbi_resp(resp_I),
+	
+	.l1i_miss_sig
 );
 
 L1Dcache data_cache
@@ -91,7 +103,9 @@ L1Dcache data_cache
 	.l1d_arbi_address(address_D),
 	.l1d_arbi_wdata(wdata_D),
 	.l1d_arbi_read(read_D),
-	.l1d_arbi_write(write_D)
+	.l1d_arbi_write(write_D),
+	
+	.l1d_miss_sig
 );
 
 arbitor #(.width(256)) arbitor  
@@ -105,7 +119,7 @@ arbitor #(.width(256)) arbitor
     
     // data cache signal
     .dcache_read(read_D),
-    .dcache_write(write_D),    
+    .dcache_write(write_D),
     .dcache_address(address_D),
     .dcache_wdata(wdata_D),
     .dcache_byte_enable(),
@@ -136,7 +150,33 @@ L2cache L2cache
 	.l2_pmem_read(read),
 	.l2_pmem_write(write),
 	.l2_pmem_rdata(rdata),
-	.l2_pmem_resp(resp)
+	.l2_pmem_resp(resp),
+	.l2_miss_sig
 );
 
+performance_unit performance_unit
+(
+	.clk,
+	.reset(0),
+	.if_stall,
+	.resp_l2,
+	/*br*/
+	.flush,
+	.jb_sel,
+	/*l1i*/
+	.read_a,
+	.l1i_miss_sig,
+	/*l1d*/
+	.read_b,
+	.write_b,
+	.l1d_miss_sig,
+	/*l2*/
+	.write_l2,
+	.read_l2,
+	.l2_miss_sig,
+	/*arbitor conflict*/
+	.read_I,
+	.read_D,
+	.write_D
+);
 endmodule : mp3

@@ -16,7 +16,8 @@ module L2cache
 	output logic [31:0] l2_pmem_address,
 	output logic [255:0] l2_pmem_wdata,
 	output logic l2_pmem_read,
-	output logic l2_pmem_write
+	output logic l2_pmem_write,
+	output logic l2_miss_sig
 );
 
 /*Internal Signals*/

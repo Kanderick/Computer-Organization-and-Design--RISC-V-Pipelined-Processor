@@ -17,7 +17,8 @@ module L1Dcache
 	output logic [31:0] l1d_arbi_address,
 	output logic [255:0] l1d_arbi_wdata,
 	output logic l1d_arbi_read,
-	output logic l1d_arbi_write
+	output logic l1d_arbi_write,
+	output logic l1d_miss_sig
 );
 
 /*Internal Signals*/

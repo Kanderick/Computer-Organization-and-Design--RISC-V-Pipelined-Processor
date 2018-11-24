@@ -10,7 +10,8 @@ module L1Icache
 	output logic [31:0] l1i_arbi_address,
 	input [255:0] l1i_arbi_rdata,
 	output logic l1i_arbi_read,
-	input l1i_arbi_resp
+	input l1i_arbi_resp,
+	output logic l1i_miss_sig
 );
 
 /*Internal Signals*/

@@ -22,7 +22,9 @@ module L1Dcache_control
 	output logic load_valid,
 	output logic data_in_sel,
 	output logic set_dirty,
-	output logic clr_dirty
+	output logic clr_dirty,
+	/*performance tracking*/
+	output logic l1d_miss_sig
 );
 
 enum int unsigned {
@@ -106,6 +108,7 @@ begin : next_state_logic
     /* Next state information and conditions (if any)
      * for transitioning between states */
 	next_state = state;
+	l1d_miss_sig=0;
 	case(state)
 		default:	next_state = idle;
 		idle:
@@ -113,7 +116,10 @@ begin : next_state_logic
 			if ((mem_read || mem_write) && (!hit) && (dirty))
 				next_state = write_to_pmem;
 			else if ((mem_read || mem_write) && (!hit) && (!dirty))
+			begin
+				l1d_miss_sig=1'b1;
 				next_state = pmem_to_cache;
+			end
 			else
 				next_state = idle;
 		end
@@ -121,7 +127,10 @@ begin : next_state_logic
 		write_to_pmem:
 		begin
 			if (pmem_resp)
+			begin
+				l1d_miss_sig=1'b1;
 				next_state = pmem_to_cache;
+			end
 			else
 				next_state = write_to_pmem;
 		end
