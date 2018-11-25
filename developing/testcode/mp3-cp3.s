@@ -7,11 +7,11 @@ _start:
 # From the MP3 doc:
 # 	By checkpoint 3, your pipeline should be able to do hazard detection and forwarding.
 # 	Note that you should not stall or forward for dependencies on register x0 or when an
-# 	instruction does not use one of the source registers (such as rs2 for immediate instructions). 
+# 	instruction does not use one of the source registers (such as rs2 for immediate instructions).
 # 	Furthermore, your L2 cache should be completed and integrated into your cache hierarchy.
 
 # Mispredict taken branch flushing tests
-	#addi x8, x0, %lo(DataSeg) #add x8, x0, x0 # 
+	#addi x8, x0, %lo(DataSeg) #add x8, x0, x0 #
 taken_branches:
 	beq x0, x0, forward_br
 	lw x7, BAD
@@ -84,6 +84,24 @@ forwarding_tests:
 	beq x3, x2, oof
 
 	lw x7, GOOD
+	add x2, x0, 0 #br_miss
+	lw x1, 0(x2)
+	add x2, x2, 1 #br_total
+	lw x1, 0(x2)
+	add x2, x2, 1 #l1i_miss
+	lw x1, 0(x2)
+	add x2, x2, 1 #l1i_total
+	lw x1, 0(x2)
+	add x2, x2, 1 #l1d_miss
+	lw x1, 0(x2)
+	add x2, x2, 1 #l1d_total
+	lw x1, 0(x2)
+	add x2, x2, 1 #l2_miss
+	lw x1, 0(x2)
+	add x2, x2, 1 #l2_total
+	lw x1, 0(x2)
+	add x2, x2, 1 #arbitor conflict
+
 
 halt:
 	beq x0, x0, halt
