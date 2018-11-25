@@ -1,4 +1,4 @@
-import rv32i_types::*; /* Import types defined in rv32i_types.sv */
+//import rv32i_types::*; /* Import types defined in rv32i_types.sv */
 module performance_unit
 (
 	input clk,

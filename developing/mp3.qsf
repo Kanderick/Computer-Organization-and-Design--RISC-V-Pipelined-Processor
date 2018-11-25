@@ -62,6 +62,8 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE mp3_tb.sv -section_id mp3_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE mp3.sv -section_id mp3_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE physical_memory.sv -section_id mp3_tb
+set_global_assignment -name SYSTEMVERILOG_FILE eviction_write_buffer.sv
+set_global_assignment -name SYSTEMVERILOG_FILE performance_unit.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rdata_out_logic.sv
 set_global_assignment -name SDC_FILE mp3_160MHz.out.sdc
 set_global_assignment -name SDC_FILE mp3_130MHz.out.sdc
