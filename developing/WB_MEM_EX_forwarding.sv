@@ -25,7 +25,7 @@ begin
 		forwarding_sel1=2'b01;
 	if(MEM_rd==EX_rs2 && MEM_writeback && MEM_rd!=0)
 		forwarding_sel2=2'b01;
-	if(((MEM_rd==EX_rs1) || (MEM_rd==EX_rs2)) && WB_writeback && WB_rd!=0 && (MEM_regfilemux_sel==3'b011))
+	if(((MEM_rd==EX_rs1) || (MEM_rd==EX_rs2)) && MEM_writeback && MEM_rd!=0 && (MEM_regfilemux_sel==3'b011))
 		MEM_EX_rdata_hazard=1'b1;
 end
 

@@ -17,22 +17,18 @@ module pipe_control
 );
 
 always_comb begin
-	 pc_load=1'b1;
-	 ID_load=1'b1;
-	 EX_load=1'b1;
-	 MEM_load=1'b1;
-	 WB_load=1'b1;
-	 MEM_flush=0;
-	 if(MEM_EX_rdata_hazard)
+
+	 if(MEM_EX_rdata_hazard&&!(read_intr_stall|mem_access_stall))
 	 begin
 		pc_load=1'b0;
 		ID_load=1'b0;
 		EX_load=1'b0;
+		MEM_load=1'b1;
+		WB_load=1'b1;
+		IF_ID_flush = flush;
 		MEM_flush=1'b1;
 	 end
-    IF_ID_flush = flush;
-	 MEM_flush = MEM_flush|flush;
-	 	 if(read_intr_stall|mem_access_stall)
+	 else if(read_intr_stall|mem_access_stall)
 	 begin
 		pc_load=1'b0;
 		ID_load=1'b0;
@@ -41,6 +37,17 @@ always_comb begin
 		WB_load=1'b0;
 		IF_ID_flush=0;
 		MEM_flush=0;
+	 end
+	 else
+	 begin
+		pc_load=1'b1;
+		ID_load=1'b1;
+		EX_load=1'b1;
+		MEM_load=1'b1;
+		WB_load=1'b1;
+		MEM_flush=0;
+		IF_ID_flush = flush;
+		MEM_flush = flush;
 	 end
 end
 
