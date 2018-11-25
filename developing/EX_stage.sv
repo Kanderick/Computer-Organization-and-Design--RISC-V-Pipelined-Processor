@@ -131,7 +131,7 @@ logic br_en;
 CMP CMP
 (
     .cmpop(EX_cmpop),
-    .a(EX_rs1_out),
+    .a(fowarding_mux1_out),
     .b(cmpmux_out),
     .br_en(br_en)
 );

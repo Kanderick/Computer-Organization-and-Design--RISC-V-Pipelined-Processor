@@ -22,7 +22,7 @@ module mp3_cpu
     input resp_b,
     input [31:0] rdata_b,
 	 /*performance tracking*/
-	 output logic jb_sel,
+	 output [1:0] jb_sel,
 	 output logic flush,
 	 output logic if_stall
 );

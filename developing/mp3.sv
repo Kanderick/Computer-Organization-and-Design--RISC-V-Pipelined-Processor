@@ -44,11 +44,17 @@ logic [255:0] rdata_I, rdata_D;
    
 //performance unit
 logic flush;
-logic jb_sel;
+logic [1:0] jb_sel;
 logic l1i_miss_sig;
 logic l1d_miss_sig;
 logic l2_miss_sig;
 logic if_stall;
+logic cpu_l1d_read;
+logic [31:0] cpu_l1d_address;
+logic [31:0] cpu_l1d_rdata;
+logic cpu_l1d_resp;
+
+
 mp3_cpu mp3_cpu
 (
     .clk,
@@ -90,16 +96,16 @@ L1Icache instruction_cache
 L1Dcache data_cache
 (
 	.clk,
-    .cpu_l1d_address(address_b),
+   .cpu_l1d_address,
 	.cpu_l1d_wdata(wdata_b),
-	.cpu_l1d_read(read_b),
+	.cpu_l1d_read,
 	.cpu_l1d_write(write_b),
 	.cpu_l1d_byte_enable(wmask_b),
 	
 	.l1d_arbi_rdata(rdata_D),
 	.l1d_arbi_resp(resp_D),
-	.cpu_l1d_rdata(rdata_b),
-	.cpu_l1d_resp(resp_b),
+	.cpu_l1d_rdata,
+	.cpu_l1d_resp,
 	.l1d_arbi_address(address_D),
 	.l1d_arbi_wdata(wdata_D),
 	.l1d_arbi_read(read_D),
@@ -177,6 +183,14 @@ performance_unit performance_unit
 	/*arbitor conflict*/
 	.read_I,
 	.read_D,
-	.write_D
+	.write_D,
+	/*user read ports*/
+	.cpu_l1d_read,
+	.address_b,
+	.cpu_l1d_address,
+	.cpu_l1d_rdata,
+	.rdata_b,
+	.resp_b,
+	.cpu_l1d_resp
 );
 endmodule : mp3
