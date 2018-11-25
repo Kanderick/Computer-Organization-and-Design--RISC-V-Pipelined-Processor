@@ -49,6 +49,10 @@ logic l1i_miss_sig;
 logic l1d_miss_sig;
 logic l2_miss_sig;
 logic if_stall;
+logic [31:0] cpu_l1d_address;
+logic [31:0] cpu_l1d_rdata;
+logic cpu_l1d_read;
+logic cpu_l1d_resp;
 
 //eviction write buffer
 logic [31:0] l2_evict_address;
@@ -145,7 +149,7 @@ arbitor #(.width(256)) arbitor
     .L2cache_rdata(rdata_l2),
     .L2cache_resp(resp_l2)
 );
-/*
+
 //l2 top level without eviction_write_buffer
 L2cache L2cache
 (
@@ -164,8 +168,8 @@ L2cache L2cache
 	.l2_pmem_resp(resp),
 	.l2_miss_sig
 );
-*/
 
+/*
 L2cache L2cache
 (
 	.clk,
@@ -200,7 +204,7 @@ eviction_write_buffer eviction_write_buffer
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 );
-
+*/
 performance_unit performance_unit
 (
 	.clk,

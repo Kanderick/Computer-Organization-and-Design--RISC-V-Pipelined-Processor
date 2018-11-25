@@ -8,7 +8,7 @@ logic halt;
 
 /* Clock generator */
 initial clk = 0;
-always #5 clk = ~clk;
+always #10 clk = ~clk;
 
 
 assign halt = ((mp3.mp3_cpu.rdata_a == 32'h00000063) | (mp3.mp3_cpu.rdata_a == 32'h0000006F));
