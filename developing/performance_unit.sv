@@ -1,3 +1,4 @@
+//import rv32i_types::*; /* Import types defined in rv32i_types.sv */
 module performance_unit
 (
 	input clk,
@@ -48,7 +49,7 @@ logic read_b_sig;
 
 assign read_b_sig=(read_b&(address_b>32'h8));
 
-initial 
+initial
 begin
 	flush_buff=0;
 	br_miss=0;
@@ -114,9 +115,9 @@ begin
 		cpu_l1d_read=read_b;
 		cpu_l1d_address=address_b;
 		rdata_b=cpu_l1d_rdata;
-		resp_b=cpu_l1d_resp; 
+		resp_b=cpu_l1d_resp;
 	end
-	
+
 end
 always_ff @(posedge clk)
 begin
