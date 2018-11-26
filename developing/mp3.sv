@@ -62,6 +62,13 @@ logic [255:0] l2_evict_rdata;
 logic [255:0] l2_evict_wdata;
 logic l2_evict_resp;
 
+//eviction write buffer_L1
+logic [31:0] l1_evict_address;
+logic l1_evict_read;
+logic l1_evict_write;
+logic [255:0] l1_evict_rdata;
+logic [255:0] l1_evict_wdata;
+logic l1_evict_resp;
 
 mp3_cpu mp3_cpu
 (
@@ -101,6 +108,8 @@ L1Icache instruction_cache
 	.l1i_miss_sig
 );
 
+//L1 dcache without eviction_write_buffer
+/*
 L1Dcache data_cache
 (
 	.clk,
@@ -121,6 +130,45 @@ L1Dcache data_cache
 
 	.l1d_miss_sig
 );
+*/
+L1Dcache data_cache
+(
+	.clk,
+   .cpu_l1d_address,
+	.cpu_l1d_wdata(wdata_b),
+	.cpu_l1d_read,
+	.cpu_l1d_write(write_b),
+	.cpu_l1d_byte_enable(wmask_b),
+
+	.l1d_arbi_rdata(l1_evict_rdata),
+	.l1d_arbi_resp(l1_evict_resp),
+	.cpu_l1d_rdata,
+	.cpu_l1d_resp,
+	.l1d_arbi_address(l1_evict_address),
+	.l1d_arbi_wdata(l1_evict_wdata),
+	.l1d_arbi_read(l1_evict_read),
+	.l1d_arbi_write(l1_evict_write),
+
+	.l1d_miss_sig
+);
+
+eviction_write_buffer eviction_write_buffer_L1D
+(
+	.clk,
+	.address(l1_evict_address),
+	.read(l1_evict_read),
+	.write(l1_evict_write),
+	.rdata(l1_evict_rdata),
+	.wdata(l1_evict_wdata),
+	.resp(l1_evict_resp),
+	.pmem_address(address_D),
+	.pmem_read(read_D),
+	.pmem_write(write_D),
+	.pmem_rdata(rdata_D),
+	.pmem_wdata(wdata_D),
+	.pmem_resp(resp_D)
+);
+
 
 arbitor #(.width(256)) arbitor
 (
@@ -150,7 +198,39 @@ arbitor #(.width(256)) arbitor
     .L2cache_resp(resp_l2)
 );
 
+//arbitor without victim cache
+/*
+arbitor #(.width(256)) arbitor
+(
+    .clk,
+    // instruction cache signal
+    .icache_read(read_I),
+    .icache_address(address_I),
+    .icache_rdata(rdata_I),
+    .icache_resp(resp_I),
+
+    // data cache signal
+    .dcache_read(read_D),
+    .dcache_write(write_D),
+    .dcache_address(address_D),
+    .dcache_wdata(wdata_D),
+    .dcache_byte_enable(),
+    .dcache_rdata(rdata_D),
+    .dcache_resp(resp_D),
+
+    //L2 cache signal
+    .L2cache_read(read_l2),
+    .L2cache_write(write_l2),
+    .L2cache_address(address_l2),
+    .L2cache_wdata(wdata_l2),
+    .L2cache_byte_enable(),
+    .L2cache_rdata(rdata_l2),
+    .L2cache_resp(resp_l2)
+);
+*/
+
 //l2 top level without eviction_write_buffer
+/*
 L2cache L2cache
 (
 	.clk,
@@ -168,8 +248,8 @@ L2cache L2cache
 	.l2_pmem_resp(resp),
 	.l2_miss_sig
 );
+*/
 
-/*
 L2cache L2cache
 (
 	.clk,
@@ -188,7 +268,7 @@ L2cache L2cache
 	.l2_miss_sig
 );
 
-eviction_write_buffer eviction_write_buffer
+eviction_write_buffer eviction_write_buffer_L2
 (
 	.clk,
 	.address(l2_evict_address),
@@ -204,7 +284,7 @@ eviction_write_buffer eviction_write_buffer
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 );
-*/
+
 performance_unit performance_unit
 (
 	.clk,
