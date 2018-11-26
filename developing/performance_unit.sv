@@ -42,6 +42,7 @@ reg [31:0] l1d_total; /*l1d_arbi_address==32'h5*/
 reg [31:0] l2_miss;   /*l1d_arbi_address==32'h6*/
 reg [31:0] l2_total;  /*l1d_arbi_address==32'h7*/
 reg [31:0] ID_conf;	 /*l1d_arbi_address==32'h8*/
+reg [31:0] total_stall;	 /*l1d_arbi_address==32'h9*/
 /*edge detection buffer*/
 reg flush_buff;
 /*real read detection*/
@@ -61,10 +62,11 @@ begin
 	l2_miss=0;
 	l2_total=0;
 	ID_conf=0;
+	total_stall=0;
 end
 always_comb
 begin
-	if(read_b&&address_b<=32'h8)
+	if(read_b&&address_b<=32'h9)
 	begin
 		resp_b=1'b1;
 		cpu_l1d_read=0;
@@ -105,6 +107,10 @@ begin
 		begin
 			rdata_b=ID_conf;
 		end
+		else if(address_b==32'h9)
+		begin
+			rdata_b=total_stall;
+		end
 		else
 		begin
 			rdata_b=ID_conf;
@@ -117,7 +123,6 @@ begin
 		rdata_b=cpu_l1d_rdata;
 		resp_b=cpu_l1d_resp;
 	end
-
 end
 always_ff @(posedge clk)
 begin
@@ -133,6 +138,7 @@ begin
 		l2_miss<=0;
 		l2_total<=0;
 		ID_conf<=0;
+		total_stall<=0;
 	end
 	else
 	begin
@@ -167,6 +173,8 @@ begin
 		/*Icache Dcache conflict*/
 		if((read_I&&read_D)||(read_I&&write_D))
 			ID_conf<=ID_conf+1;
+		if(if_stall)
+			total_stall<=total_stall+1;
 		flush_buff<=flush;
 	end
 end
