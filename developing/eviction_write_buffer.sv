@@ -1,4 +1,4 @@
-module eviction_write_buffer #(parameter hold_time = 3)
+module eviction_write_buffer #(parameter hold_time = 2)
 (
 	input clk,
 	
@@ -117,7 +117,7 @@ begin : next_state_logic
 		begin
 			if (read && (address[31:5] == address_evicted[31:5])) 
                 nextstate = buffer_unoccupied;
-			else if (!read && (delay_time == hold_time)) nextstate = writing;
+			else if ((!read && (delay_time >= hold_time))| write) nextstate = writing;
 		end
         
         writing:
@@ -137,7 +137,10 @@ begin : next_state_assignment
         delay_time <= 0;       
     end
     if (state == buffer_occupied) 
-        delay_time <= delay_time + 1;
+        if (read)
+            delay_time <= 0;
+        else 
+            delay_time <= delay_time + 1;
 end
 
 
