@@ -101,8 +101,10 @@ forwarding_tests:
 	add x2, x2, 1 #l2_total
 	lw x1, 0(x2)
 	add x2, x2, 1 #arbitor conflict
-
-
+	lw x1, 0(x2)
+	add x2, x2, 1 #total stalls
+	lw x1, 0(x2)
+	
 halt:
 	beq x0, x0, halt
 	lw x7, BAD
