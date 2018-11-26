@@ -233,6 +233,12 @@ EX_pipe EX_pipe
 	//.ID_jmp_pc,
 	//.ID_pc_mux_sel,
 	//.ID_flush,
+	.MEM_EX_rdata_hazard,
+	.EX_rs1(EX_ctrl_word.rs1),
+	.EX_rs2(EX_ctrl_word.rs2),
+	.WB_rd(WB_ctrl_word.rd),
+	.WB_writeback(WB_ctrl_word.load_regfile),
+	.WB_in,
 	
 	.EX_pc,
 	.EX_rs1_out,
