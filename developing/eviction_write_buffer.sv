@@ -1,4 +1,4 @@
-module eviction_write_buffer
+module eviction_write_buffer #(parameter hold_time = 3)
 (
 	input clk,
 	
@@ -23,6 +23,7 @@ module eviction_write_buffer
 //logic occupied;
 logic [31:0] address_evicted;
 logic [255:0] data_evicted;
+logic [31:0] delay_time;
 
 /*Initial clear*/
 initial
@@ -36,21 +37,22 @@ end
 enum int unsigned {
 	/*list of states*/
 	buffer_unoccupied,
-	stall1,
-	stall2,
-	buffer_occupied
+	buffer_occupied,
+    writing
 } state, nextstate;
 
-always_ff @(posedge clk)
+
+//always_ff @(posedge clk)
+always_comb
 begin : state_actions
 
 /*default actions*/
 	rdata = pmem_rdata;
-	resp = pmem_resp;
+    resp = 1'b0;
 	pmem_address = address;
-	pmem_read = read;
-	pmem_write = 0;
-	pmem_wdata = 0;
+    pmem_wdata = wdata;
+    pmem_read = 1'b0;
+	pmem_write = 1'b0;
 	
 /*Actions per state*/
 
@@ -61,30 +63,14 @@ begin : state_actions
 		begin
 			if (write)
 			begin
-				address_evicted = address;
-				data_evicted = wdata;
+				//address_evicted = address;
+				//data_evicted = wdata;
 				resp = 1'b1;
 			end
+            else begin
+                pmem_read = read;
+            end 
 		end
-		
-		stall1:
-		begin
-			if (read && (address[31:5] == address_evicted[31:5]))
-			begin
-				rdata = data_evicted;
-				resp = 1'b1;
-			end
-		end
-		
-		stall2:
-		begin
-			if (read && (address[31:5] == address_evicted[31:5]))
-			begin
-				rdata = data_evicted;
-				resp = 1'b1;
-			end
-		end
-		
 		
 		buffer_occupied:
 		begin
@@ -93,16 +79,24 @@ begin : state_actions
 				rdata = data_evicted;
 				resp = 1'b1;
 			end
-			
-			else if (!read)
+			else if (read)
 			begin
-				resp = 1'b0;
-				pmem_write = 1'b1;
-				pmem_address = address_evicted;
-				pmem_wdata = data_evicted;
+				resp = pmem_resp;
+				pmem_read = read;
 			end
 		end
 		
+        writing:
+        begin
+            pmem_write = 1'b1;
+            pmem_wdata = data_evicted;
+            pmem_address = address_evicted;
+            if (read && (address[31:5] == address_evicted[31:5]))
+            begin
+				rdata = data_evicted;
+				resp = 1'b1;
+			end
+        end
 	endcase
 
 end
@@ -116,25 +110,19 @@ begin : next_state_logic
 		
 		buffer_unoccupied:
 		begin
-			if (write) nextstate = stall1;
-			else nextstate = buffer_unoccupied;
+			if (write) nextstate = buffer_occupied;
 		end
-		
-		stall1:
-		begin
-			nextstate = stall2;
-		end
-		
-		stall2:
-		begin
-			nextstate = buffer_occupied;
-		end
-		
 		buffer_occupied:
 		begin
-			if (!read && pmem_resp) nextstate = buffer_unoccupied;
-			else nextstate = buffer_occupied;
+			if (read && (address[31:5] == address_evicted[31:5])) 
+                nextstate = buffer_unoccupied;
+			else if (!read && (delay_time == hold_time)) nextstate = writing;
 		end
+        
+        writing:
+        begin
+            if (pmem_resp) nextstate = buffer_unoccupied;
+        end
 	endcase
 
 end
@@ -142,6 +130,13 @@ end
 always_ff @(posedge clk)
 begin : next_state_assignment
 	state <= nextstate;
+    if (state == buffer_unoccupied)begin
+        address_evicted <= address;
+        data_evicted <= wdata;
+        delay_time <= 0;       
+    end
+    if (state == buffer_occupied) 
+        delay_time <= delay_time + 1;
 end
 
 
