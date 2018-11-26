@@ -69,6 +69,7 @@ begin : state_actions
 			end
             else begin
                 pmem_read = read;
+                resp = pmem_resp;
             end 
 		end
 		
