@@ -134,16 +134,16 @@ L1Dcache data_cache
 L1Dcache data_cache
 (
 	.clk,
-   .cpu_l1d_address,
+   .cpu_l1d_address(address_b),
 	.cpu_l1d_wdata(wdata_b),
-	.cpu_l1d_read,
+	.cpu_l1d_read(read_b),
 	.cpu_l1d_write(write_b),
 	.cpu_l1d_byte_enable(wmask_b),
 
 	.l1d_arbi_rdata(l1_evict_rdata),
 	.l1d_arbi_resp(l1_evict_resp),
-	.cpu_l1d_rdata,
-	.cpu_l1d_resp,
+	.cpu_l1d_rdata(rdata_b),
+	.cpu_l1d_resp(resp_b),
 	.l1d_arbi_address(l1_evict_address),
 	.l1d_arbi_wdata(l1_evict_wdata),
 	.l1d_arbi_read(l1_evict_read),
@@ -308,14 +308,6 @@ performance_unit performance_unit
 	/*arbitor conflict*/
 	.read_I,
 	.read_D,
-	.write_D,
-	/*user read ports*/
-	.cpu_l1d_read,
-	.address_b,
-	.cpu_l1d_address,
-	.cpu_l1d_rdata,
-	.rdata_b,
-	.resp_b,
-	.cpu_l1d_resp
+	.write_D
 );
 endmodule : mp3

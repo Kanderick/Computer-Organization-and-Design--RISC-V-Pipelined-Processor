@@ -55,9 +55,9 @@ module L1Dcache_datapath
 	
 	logic data_load_0;
 	logic data_load_1;
+	logic [31:0] data0_load_array;
+	logic [31:0] data1_load_array;
 	logic [255:0] data_datain;
-	logic [255:0] data_0;
-	logic [255:0] data_1;
 	
 	logic cmp_rst;
 	
@@ -71,9 +71,9 @@ module L1Dcache_datapath
 	logic [7:0] data1 [32];
 	logic [31:0] data_read0;
 	logic [31:0] data_read1;
-	logic [7:0] data_in0 [32];
-	logic [7:0] data_in1 [32];
 	
+	/*internal signals*/
+	logic [7:0] adjust_mem_data [4];
 	
 /*Assignments*/
 	assign signal_high = 1'b1;
@@ -82,6 +82,28 @@ module L1Dcache_datapath
 	
 
 /*module instantiation*/
+load_bits_generator load_bits_generator0
+(
+	.offset(index),
+	.data_in_sel,
+	.load_sig(data_load_0),
+	.byte_enable(mem_byte_enable),
+	.load_bits(data0_load_array)
+);
+load_bits_generator load_bits_generator1
+(
+	.offset(index),
+	.data_in_sel,
+	.load_sig(data_load_1),
+	.byte_enable(mem_byte_enable),
+	.load_bits(data1_load_array)
+);
+mem_data_adjust mem_data_adjust
+(
+	.byte_en(mem_byte_enable),
+	.mem_data(mem_wdata),
+	.adjust_data(adjust_mem_data)
+);
 cache_address_decoder cache_address_decoder
 (
 	.*
@@ -155,24 +177,6 @@ array #(.width(1)) valid_array1
 	.dataout(valid_1)
 );
 
-//array #(.width(256)) data_array0
-//(
-//	.clk,
-//	.write(data_load_0),
-//	.index(set),
-//	.datain(data_datain),
-//	.dataout(data_0)
-//);
-//
-//array #(.width(256)) data_array1
-//(
-//	.clk,
-//	.write(data_load_1),
-//	.index(set),
-//	.datain(data_datain),
-//	.dataout(data_1)
-//);
-
 genvar i;
 genvar j;
 
@@ -180,7 +184,7 @@ generate
     for (i=0; i<=31; i=i+1) begin : generate_data_array0
     array #(.width(8)) data_array0 (
         .clk(clk),
-        .write(data_load_0),
+        .write(data0_load_array[i]),
         .index(set),
         .datain(datamux0[i]),
         .dataout(data0[i])
@@ -192,7 +196,7 @@ generate
     for (j=0; j<=31; j=j+1) begin : generate_data_array1
     array #(.width(8)) data_array1 (
         .clk(clk),
-        .write(data_load_1),
+        .write(data1_load_array[j]),
         .index(set),
         .datain(datamux1[j]),
         .dataout(data1[j])
@@ -205,7 +209,7 @@ generate
     mux2 #(.width(8)) datain_mux0 (
         .sel(data_in_sel),
 		  .a(pmem_rdata[8*i+7: 8*i]),
-		  .b(data_in0[i]),
+		  .b(adjust_mem_data[i%4]),
 		  .f(datamux0[i])
     );
 end 
@@ -216,17 +220,17 @@ generate
     mux2 #(.width(8)) datain_mux1 (
         .sel(data_in_sel),
 		  .a(pmem_rdata[8*j+7: 8*j]),
-		  .b(data_in1[j]),
+		  .b(adjust_mem_data[j%4]),
 		  .f(datamux1[j])
     );
 end 
 endgenerate
-
+/*
 L1Dcache_write_data_assembler L1Dcache_write_data_assembler
 (
 	.*
 );
-
+*/
 L1Dcache_data_assembler L1Dcache_data_assembler0
 (
 	.datain(data0),
