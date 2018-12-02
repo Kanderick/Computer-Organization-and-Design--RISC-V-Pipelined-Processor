@@ -94,7 +94,7 @@ enum int unsigned {
     serving_icache,
     serving_dcache
 } state, next_state;
-
+/*
 always_comb begin
     next_state = state;
     case(state)
@@ -117,6 +117,7 @@ always_comb begin
         default: ;
     endcase
 end
+*/
 
 always_comb begin
     cache_sel = 0;
@@ -125,10 +126,27 @@ always_comb begin
             cache_sel = icache_read? 1'b0 : 1'b1;
         serving_dcache:
             cache_sel = 1;
+		  serving_icache:
+				cache_sel = 0;
         default: ;
     endcase 
 end
-
+always_comb begin
+    next_state = state;
+    case(state)
+        idle: if (icache_read &!L2cache_resp) 
+                next_state = serving_icache;
+				  else if ((dcache_read|dcache_write) &!L2cache_resp)	
+					next_state = serving_dcache;
+        serving_icache: 
+              if (L2cache_resp) 
+                next_state = idle;
+        serving_dcache:
+              if (L2cache_resp) 
+                next_state = idle;
+        default: ;
+    endcase
+end
 always_ff @ (posedge clk) begin
     state <= next_state;     
 end

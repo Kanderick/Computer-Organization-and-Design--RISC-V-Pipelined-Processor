@@ -93,7 +93,7 @@ mp3_cpu mp3_cpu
 	 .flush,
 	 .jb_sel,
 	 .if_stall,
-	 
+
 	 .MEM_PC
 );
 
@@ -207,7 +207,7 @@ arbitor #(.width(256)) arbitor
 );
 `endif
 
-`ifndef USE_EWB 
+`ifndef USE_EWB
 //arbitor without victim cache
 
 arbitor #(.width(256)) arbitor
@@ -258,9 +258,9 @@ L2cache L2cache
 	.l2_miss_sig
 );
 
-`endif 
+`endif
 
-`ifdef USE_EWB 
+`ifdef USE_EWB
 L2cache L2cache
 (
 	.clk,
@@ -295,7 +295,7 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 );
-`endif 
+`endif
 
 performance_unit performance_unit
 (
@@ -340,12 +340,12 @@ cache instruction_cache
 	.mem_rdata(rdata_a),
 	.mem_read(read_a),
 	.mem_resp(resp_a),
-	.mem_write(0),	
-	
+	.mem_write(0),
+
 	.pmem_address(address_I),
 	.pmem_rdata(rdata_I),
 	.pmem_read(read_I),
-	.pmem_resp(resp_I) 
+	.pmem_resp(resp_I)
 );
 logic if_MEM_datamiss;
 cache data_cache
@@ -358,14 +358,14 @@ cache data_cache
 	.mem_byte_enable(wmask_b),
 	.mem_rdata(rdata_b),
 	.mem_resp(resp_b),
-	
+
 	.pmem_rdata(rdata_D),
 	.pmem_resp(resp_D),
 	.pmem_address(address_D),
 	.pmem_wdata(wdata_D),
 	.pmem_read(read_D),
 	.pmem_write(write_D),
-	
+
 	.if_miss(if_MEM_datamiss)
 );
 
@@ -417,13 +417,40 @@ arbitor #(.width(256)) arbitor
     .dcache_resp(resp_D),
 
     //L2 cache signal
-    .L2cache_read(l2_evict_read),
-    .L2cache_write(l2_evict_write),
-    .L2cache_address(l2_evict_address),
-    .L2cache_wdata(l2_evict_wdata),
+    .L2cache_read(read_l2),
+    .L2cache_write(write_l2),
+    .L2cache_address(address_l2),
+    .L2cache_wdata(wdata_l2),
     .L2cache_byte_enable(),
-    .L2cache_rdata(l2_evict_rdata),
-    .L2cache_resp(l2_evict_resp)
+    .L2cache_rdata(rdata_l2),
+    .L2cache_resp(resp_l2)
+);
+
+ L2cache L2cache
+(
+	.mem_read(read_l2),
+   .mem_write(write_l2),
+   .mem_address(address_l2),
+	.mem_wdata(wdata_l2),
+   .mem_resp(resp_l2),
+   .mem_rdata(rdata_l2),
+
+
+
+	.pmem_resp(l2_evict_resp),
+	.pmem_rdata(l2_evict_rdata),
+	.pmem_read(l2_evict_read),
+	.pmem_write(l2_evict_write),
+	.pmem_address(l2_evict_address),
+	.pmem_wdata(l2_evict_wdata),
+
+	//.pmem_resp(resp),
+	//.pmem_rdata(rdata),
+	//.pmem_read(read),
+	//.pmem_write(write),
+	//.pmem_address(address),
+	//.pmem_wdata(wdata),
+	.clk
 );
 
 	logic [31:0] L2_req_address;
@@ -432,7 +459,7 @@ arbitor #(.width(256)) arbitor
 	logic [255:0] L2_req_wdata;
 	logic [255:0] L2_req_rdata;
 	logic L2_req_resp;
-	
+
 eviction_write_buffer eviction_write_buffer_L2
 (
 	.clk,
@@ -473,7 +500,7 @@ RPT RPT
 	.MEM_addr(address_b),
 	.if_MEM_datamiss,
 	.MEM_PC
-	
+
 );
 
 prefetcher prefetcher
@@ -498,6 +525,6 @@ prefetcher prefetcher
 );
 
 
-`endif 
+`endif
 `endif
 endmodule : mp3
