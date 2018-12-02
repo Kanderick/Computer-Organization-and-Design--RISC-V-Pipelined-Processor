@@ -29,7 +29,13 @@ module MEM_pipe(
 	input [3:0] EX_pattern_used,
 	output logic [3:0] MEM_pattern_used,    
 	input EX_is_jal,
-	output logic MEM_is_jal
+	output logic MEM_is_jal,
+	
+	input EX_local_prediction,
+	output logic MEM_local_prediction,
+	input EX_global_prediction,
+	output logic MEM_global_prediction
+	
 );
 
 initial
@@ -45,6 +51,8 @@ begin
     MEM_replace_BHT = 0;
 	 MEM_pattern_used = 0;
 	 MEM_is_jal = 0;
+	 MEM_local_prediction = 0;
+	 MEM_global_prediction = 0;
 end
 always_ff @ (posedge clk)
 begin
@@ -57,10 +65,12 @@ begin
 		MEM_jmp_pc<=0;
 		MEM_pc_mux_sel<=0;
 		flush<=0;
-        MEM_update_BHT <= 0;
-        MEM_replace_BHT <= 0;
-		  MEM_pattern_used <= 0;
-		  MEM_is_jal <= 0;
+      MEM_update_BHT <= 0;
+      MEM_replace_BHT <= 0;
+		MEM_pattern_used <= 0;
+		MEM_is_jal <= 0;
+		MEM_local_prediction <= 0;
+	   MEM_global_prediction <= 0;  
 	end
 	
 	else if(load)
@@ -72,10 +82,12 @@ begin
 		MEM_jmp_pc<=EX_jmp_pc;
 		MEM_pc_mux_sel<=EX_pc_mux_sel;
 		flush<=EX_flush;
-        MEM_update_BHT <= EX_update_BHT;
-        MEM_replace_BHT <= EX_replace_BHT;
-		  MEM_pattern_used <= EX_pattern_used;
-		  MEM_is_jal <= EX_is_jal;
+      MEM_update_BHT <= EX_update_BHT;
+      MEM_replace_BHT <= EX_replace_BHT;
+		MEM_pattern_used <= EX_pattern_used;
+		MEM_is_jal <= EX_is_jal;
+		MEM_local_prediction <= EX_local_prediction;
+	   MEM_global_prediction <= EX_global_prediction;  
 	end
 end
 

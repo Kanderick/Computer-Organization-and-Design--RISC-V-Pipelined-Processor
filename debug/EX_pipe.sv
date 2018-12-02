@@ -26,7 +26,13 @@ module EX_pipe
 	
 	//GHT
 	input [3:0] ID_pattern_used,
-	output logic [3:0] EX_pattern_used
+	output logic [3:0] EX_pattern_used,
+	
+	input ID_local_prediction,
+	output logic EX_local_prediction,
+	input ID_global_prediction,
+	output logic EX_global_prediction
+	
 );
 initial
 begin
@@ -39,6 +45,9 @@ begin
 	//EX_pc_mux_sel=0;
 	//flush=0;
 	EX_pattern_used = 0;
+	EX_local_prediction = 0;
+	EX_global_prediction = 0;
+	
 end
 
 always_ff @ (posedge clk) begin
@@ -49,9 +58,11 @@ always_ff @ (posedge clk) begin
 	//EX_jmp_pc<=0;
 	//EX_pc_mux_sel<=0;
 	//flush<=0;
-    EX_BTB_hit = 0;
-    EX_prediction = 0;
-	 EX_pattern_used = 0;
+    EX_BTB_hit <= 0;
+    EX_prediction <= 0;
+	 EX_pattern_used <= 0;
+	 EX_local_prediction <= 0;
+	EX_global_prediction <= 0;
 	end
 	else if(load) begin
 	EX_pc<=ID_pc;
@@ -63,6 +74,8 @@ always_ff @ (posedge clk) begin
     EX_BTB_hit <= ID_BTB_hit;
     EX_prediction <= ID_prediction;
 	 EX_pattern_used <= ID_pattern_used;
+	 EX_local_prediction <= ID_local_prediction;
+	 EX_global_prediction <= ID_global_prediction;
 	end
 	else if(MEM_EX_rdata_hazard)
 	begin

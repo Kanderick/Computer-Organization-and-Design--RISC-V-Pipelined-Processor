@@ -121,6 +121,12 @@ logic IF_is_jal;
 logic EX_is_jal;
 logic MEM_is_jal;
 logic GHT_prediction;
+logic MEM_global_prediction;
+logic MEM_local_prediction;
+logic EX_global_prediction;
+logic EX_local_prediction;
+logic ID_global_prediction;
+logic ID_local_prediction;
 
 assign read_intr_stall = 1'b1 &(!instr_resp);
 assign mem_access_stall = (MEM_ctrl_word.mem_read|MEM_ctrl_word.mem_write)&(!MEM_resp);
@@ -213,11 +219,16 @@ global_branch_predictor  #(.pattern_bits(4)) global_branch_predictor// history n
 
 tournament_predictor  tournament_predictor// history num = 2 ^ history_bits
 (
-    .global_prediction(GHT_prediction),
+	 .clk, 
+	 .global_prediction(GHT_prediction),
     .local_prediction(BHT_prediction),
     .hit(IF_BTB_hit),
     .prediction(IF_prediction), // 1 = take
-	 .IF_is_jal
+	 .IF_is_jal,
+	 .MEM_global_prediction,
+	 .MEM_local_prediction,
+	 .branch_result(MEM_cmp_out),
+	 .update(MEM_update_BHT)
 );
 
 IF_stage IF_stage
@@ -227,8 +238,8 @@ IF_stage IF_stage
 		.MEM_jmp_pc,
 		.pcmux_sel,
 		.IF_addr,
-        .BTB_target,
-        .IF_prediction
+      .BTB_target,
+      .IF_prediction
 );
 
 control_memory control_memory
@@ -258,7 +269,11 @@ ID_pipe ID_pipe
     .ID_BTB_hit,
     .ID_prediction,
 	 .IF_pattern_used,
-	 .ID_pattern_used
+	 .ID_pattern_used,
+	 .IF_local_prediction(BHT_prediction),
+	 .ID_local_prediction,
+	 .IF_global_prediction(GHT_prediction),
+	 .ID_global_prediction
 );
 
 ID_stage ID_stage
@@ -322,9 +337,12 @@ EX_pipe EX_pipe
     .EX_prediction,
 	 
 	 .ID_pattern_used,
-	 .EX_pattern_used
+	 .EX_pattern_used,
 
-	
+	 .ID_local_prediction,
+	 .EX_local_prediction,
+	 .ID_global_prediction,
+	 .EX_global_prediction
 );
 
 EX_stage EX_stage
@@ -415,9 +433,13 @@ MEM_pipe MEM_pipe
 	 .EX_pattern_used,
 	 .MEM_pattern_used,
 	 
-	.EX_is_jal,
-	.MEM_is_jal
+	 .EX_is_jal,
+	 .MEM_is_jal,
     
+	 .EX_local_prediction,
+	 .MEM_local_prediction,
+	 .EX_global_prediction,
+	 .MEM_global_prediction
 );
 
 MEM_stage MEM_stage

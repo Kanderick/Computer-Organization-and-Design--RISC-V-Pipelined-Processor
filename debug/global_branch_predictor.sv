@@ -30,7 +30,7 @@ generate
             .clk,
             .branch_result,
             .update(update && (MEM_pattern_used == j)),
-            .flush(0),
+            .flush(1'b0),
             .prediction(PHT_prediction[j])  
         );
    end     
