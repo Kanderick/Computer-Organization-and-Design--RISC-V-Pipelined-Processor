@@ -22,15 +22,7 @@ module performance_unit
 	/*arbitor conflict*/
 	input read_I,
 	input read_D,
-	input write_D,
-	/*user interface*/
-	output logic cpu_l1d_read,
-	input [31:0] address_b,
-	output logic [31:0] cpu_l1d_address,
-	input [31:0] cpu_l1d_rdata,
-	output logic [31:0] rdata_b,
-	output logic resp_b,
-	input cpu_l1d_resp
+	input write_D
 );
 /*attention to overflow*/
 reg [31:0] br_miss;   /*l1d_arbi_address==32'h0*/
@@ -45,11 +37,6 @@ reg [31:0] ID_conf;	 /*l1d_arbi_address==32'h8*/
 reg [31:0] total_stall;	 /*l1d_arbi_address==32'h9*/
 /*edge detection buffer*/
 reg flush_buff;
-/*real read detection*/
-logic read_b_sig;
-
-assign read_b_sig=(read_b&(address_b>32'h8));
-
 initial
 begin
 	flush_buff=0;
@@ -64,66 +51,7 @@ begin
 	ID_conf=0;
 	total_stall=0;
 end
-always_comb
-begin
-	if(read_b&&address_b<=32'h9)
-	begin
-		resp_b=1'b1;
-		cpu_l1d_read=0;
-		cpu_l1d_address=0;
-		if(address_b==32'h0)
-		begin
-			rdata_b=br_miss;
-		end
-		else if(address_b==32'h1)
-		begin
-			rdata_b=br_total;
-		end
-		else if(address_b==32'h2)
-		begin
-			rdata_b=l1i_miss;
-		end
-		else if(address_b==32'h3)
-		begin
-			rdata_b=l1i_total;
-		end
-		else if(address_b==32'h4)
-		begin
-			rdata_b=l1d_miss;
-		end
-		else if(address_b==32'h5)
-		begin
-			rdata_b=l1d_total;
-		end
-		else if(address_b==32'h6)
-		begin
-			rdata_b=l2_miss;
-		end
-		else if(address_b==32'h7)
-		begin
-			rdata_b=l2_total;
-		end
-		else if(address_b==32'h8)
-		begin
-			rdata_b=ID_conf;
-		end
-		else if(address_b==32'h9)
-		begin
-			rdata_b=total_stall;
-		end
-		else
-		begin
-			rdata_b=ID_conf;
-		end
-	end
-	else
-	begin
-		cpu_l1d_read=read_b;
-		cpu_l1d_address=address_b;
-		rdata_b=cpu_l1d_rdata;
-		resp_b=cpu_l1d_resp;
-	end
-end
+
 always_ff @(posedge clk)
 begin
 	if(reset)
@@ -161,7 +89,7 @@ begin
 			l1d_miss<=l1d_miss+1;
 		else if(l1d_miss_sig&&l1d_miss>l1d_total)
 			l1d_miss<=1;
-		if((read_b_sig|write_b)==1'b1&&!if_stall)
+		if((read_b|write_b)==1'b1&&!if_stall)
 			l1d_total<=l1d_total+1;
 		/*L2 miss*/
 		if(l2_miss_sig&&l2_miss<=l2_total+1)
