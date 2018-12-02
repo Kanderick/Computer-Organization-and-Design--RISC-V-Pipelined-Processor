@@ -2,8 +2,8 @@ module RPT // reference predition table
 (
 	input clk,
 	// read & generate prefetching
-	input [31:0] IF_PC,
-	input new_instr,
+	input [31:0] IF_PC,  //address_a
+	input new_instr,		//read_a&(!if_stall)
 	output logic [31:0] ORB, // outstanding request buffer
 	output logic prefetch_en,
 	// modify & update RPT on L2 data missing
@@ -32,15 +32,6 @@ logic [31:0] prev_addr_in;
 logic [31:0] stride_in;
 logic control_load;
 logic if_predict_right;
-
-initial
-begin
-	update_enable=0;
-	hit=0;
-	load=0;
-	if_predict_right=0;
-end
-
 
 always_comb
 begin
@@ -150,10 +141,6 @@ always_ff @(posedge clk)
 begin: next_state_assignment
     /* Assignment of next state on clock edge */
 	 state <= next_state;
-end
-initial
-begin
-	next_state=check_IF_PC;
 end
 /*state transition*/
 always_comb

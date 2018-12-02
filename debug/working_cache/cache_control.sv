@@ -23,7 +23,10 @@ module cache_control
 	output logic mem_resp,
 	
 	/*other signals*/
-	input clk
+	input clk,
+	
+	/*report miss*/
+	output logic if_miss
 );
 enum {idle, write_to_pmem, read_from_pmem} state, next_state;
 initial
@@ -45,6 +48,7 @@ begin : state_implementation
 	pmem_addr_select=0;
 	pmem_write=0;
 	pmem_read=0;
+	if_miss=0;
 	/*state implementation*/
 	case(state)
 	idle:
@@ -62,6 +66,7 @@ begin : state_implementation
 		pmem_addr_select=1'b1;
 		clr_dirty=1'b1;
 		pmem_write=1'b1;
+		if_miss=1'b1;
 	end
 	read_from_pmem:
 	begin
@@ -70,6 +75,7 @@ begin : state_implementation
 		pmem_read=1'b1;
 		load_tag=pmem_resp;
 		set_valid=1'b1;
+		if_miss=1'b1;
 	end
 	default
 	begin

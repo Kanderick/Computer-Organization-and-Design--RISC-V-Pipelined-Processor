@@ -72,7 +72,7 @@ logic l1_evict_write;
 logic [255:0] l1_evict_rdata;
 logic [255:0] l1_evict_wdata;
 logic l1_evict_resp;
-
+logic [31:0] MEM_PC;
 mp3_cpu mp3_cpu
 (
     .clk,
@@ -92,7 +92,9 @@ mp3_cpu mp3_cpu
     .rdata_b,
 	 .flush,
 	 .jb_sel,
-	 .if_stall
+	 .if_stall,
+	 
+	 .MEM_PC
 );
 
 `ifndef CACHE_REPLACED
@@ -345,7 +347,7 @@ cache instruction_cache
 	.pmem_read(read_I),
 	.pmem_resp(resp_I) 
 );
-
+logic if_MEM_datamiss;
 cache data_cache
 (
 	.clk,
@@ -362,7 +364,9 @@ cache data_cache
 	.pmem_address(address_D),
 	.pmem_wdata(wdata_D),
 	.pmem_read(read_D),
-	.pmem_write(write_D) 
+	.pmem_write(write_D),
+	
+	.if_miss(if_MEM_datamiss)
 );
 
 `ifndef USE_EWB
@@ -422,6 +426,13 @@ arbitor #(.width(256)) arbitor
     .L2cache_resp(l2_evict_resp)
 );
 
+	logic [31:0] L2_req_address;
+	logic L2_req_read;
+	logic L2_req_write;
+	logic [255:0] L2_req_wdata;
+	logic [255:0] L2_req_rdata;
+	logic L2_req_resp;
+	
 eviction_write_buffer eviction_write_buffer_L2
 (
 	.clk,
@@ -431,6 +442,53 @@ eviction_write_buffer eviction_write_buffer_L2
 	.rdata(l2_evict_rdata),
 	.wdata(l2_evict_wdata),
 	.resp(l2_evict_resp),
+	/*
+	.pmem_address(address),
+	.pmem_read(read),
+	.pmem_write(write),
+	.pmem_rdata(rdata),
+	.pmem_wdata(wdata),
+	.pmem_resp(resp)
+	*/
+	.pmem_address(L2_req_address),
+	.pmem_read(L2_req_read),
+	.pmem_write(L2_req_write),
+	.pmem_rdata(L2_req_rdata),
+	.pmem_wdata(L2_req_wdata),
+	.pmem_resp(L2_req_resp)
+
+);
+
+logic [31:0] ORB;
+logic prefetch_en;
+RPT RPT
+(
+	.clk,
+	// read & generate prefetching
+	.IF_PC(address_a),  //address_a
+	.new_instr(read_a&(!if_stall)),		//read_a&(!if_stall)
+	.ORB, // outstanding request buffer
+	.prefetch_en,
+	// modify & update RPT on L2 data missing
+	.MEM_addr(address_b),
+	.if_MEM_datamiss,
+	.MEM_PC
+	
+);
+
+prefetcher prefetcher
+(
+	.clk,
+	.ORB,
+	.prefetch_en,
+	// L2 cache
+	.L2_req_address,
+	.L2_req_read,
+	.L2_req_write,
+	.L2_req_wdata,
+	.L2_req_rdata,
+	.L2_req_resp,
+	// pmem
 	.pmem_address(address),
 	.pmem_read(read),
 	.pmem_write(write),
@@ -438,6 +496,8 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 );
+
+
 `endif 
 `endif
 endmodule : mp3

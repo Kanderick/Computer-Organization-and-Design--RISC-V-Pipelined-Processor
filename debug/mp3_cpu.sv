@@ -23,7 +23,9 @@ module mp3_cpu
 	 /*performance tracking*/
 	 output [1:0] jb_sel,
 	 output logic flush,
-	 output logic if_stall
+	 output logic if_stall,
+	 /*prefetcher*/
+	 output logic [31:0] MEM_PC
 );
 
 /*IF_stage signal*/
@@ -59,7 +61,7 @@ rv32i_word MEM_jmp_pc;
 rv32i_word MEM_alu_out;
 rv32i_word MEM_pc;
 rv32i_word MEM_rs2_out;
-
+assign MEM_PC=MEM_pc;
 
 /*WB_stage signal*/
 logic WB_cmp_out;

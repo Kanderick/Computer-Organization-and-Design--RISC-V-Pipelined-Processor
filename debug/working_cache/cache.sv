@@ -19,7 +19,10 @@ module cache
 	output logic [255:0] pmem_wdata,
 	
 	/*other signals*/
-	input clk
+	input clk,
+	
+	/*report miss*/
+	output logic if_miss
 );
 logic hit;
 logic dirty;
@@ -54,7 +57,8 @@ cache_control control
 	.mem_read,
 	.mem_write,
 	.mem_resp,
-	.clk
+	.clk,
+	.if_miss
 );
 
 cache_datapath datapath
