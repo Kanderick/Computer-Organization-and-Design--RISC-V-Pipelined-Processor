@@ -413,13 +413,40 @@ arbitor #(.width(256)) arbitor
     .dcache_resp(resp_D),
 
     //L2 cache signal
-    .L2cache_read(l2_evict_read),
-    .L2cache_write(l2_evict_write),
-    .L2cache_address(l2_evict_address),
-    .L2cache_wdata(l2_evict_wdata),
+    .L2cache_read(read_l2),
+    .L2cache_write(write_l2),
+    .L2cache_address(address_l2),
+    .L2cache_wdata(wdata_l2),
     .L2cache_byte_enable(),
-    .L2cache_rdata(l2_evict_rdata),
-    .L2cache_resp(l2_evict_resp)
+    .L2cache_rdata(rdata_l2),
+    .L2cache_resp(resp_l2)
+);
+
+ L2cache L2cache
+(
+	.mem_read(read_l2),
+   .mem_write(write_l2),
+   .mem_address(address_l2),
+	.mem_wdata(wdata_l2),
+   .mem_resp(resp_l2),
+   .mem_rdata(rdata_l2),
+
+	
+	
+	.pmem_resp(l2_evict_resp),
+	.pmem_rdata(l2_evict_rdata),
+	.pmem_read(l2_evict_read),
+	.pmem_write(l2_evict_write),
+	.pmem_address(l2_evict_address),
+	.pmem_wdata(l2_evict_wdata),
+	
+	//.pmem_resp(resp),
+	//.pmem_rdata(rdata),
+	//.pmem_read(read),
+	//.pmem_write(write),
+	//.pmem_address(address),
+	//.pmem_wdata(wdata),	
+	.clk
 );
 
 eviction_write_buffer eviction_write_buffer_L2
@@ -437,7 +464,7 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_rdata(rdata),
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
-);
+); 
 `endif 
 `endif
 endmodule : mp3

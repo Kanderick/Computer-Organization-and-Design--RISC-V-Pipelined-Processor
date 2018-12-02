@@ -63,16 +63,13 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE mp3_tb.sv -section_id mp3_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE mp3.sv -section_id mp3_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE physical_memory.sv -section_id mp3_tb
+set_global_assignment -name SYSTEMVERILOG_FILE my_cache/L2cache_datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE my_cache/L2cache.sv
+set_global_assignment -name SYSTEMVERILOG_FILE my_cache/cache_datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE my_cache/cache_control.sv
+set_global_assignment -name SYSTEMVERILOG_FILE my_cache/cache.sv
+set_global_assignment -name SYSTEMVERILOG_FILE my_cache/misaligned_access.sv
 set_global_assignment -name SYSTEMVERILOG_FILE tournament_predictor.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/datain_logic.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/data_load_logic.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/simple_load_logic.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/pmem_addr_logic.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/hit_checker.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/dirty_load_module.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/cache_datapath.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/cache_control.sv
-set_global_assignment -name SYSTEMVERILOG_FILE working_cache/cache.sv
 set_global_assignment -name SYSTEMVERILOG_FILE mem_data_adjust.sv
 set_global_assignment -name SYSTEMVERILOG_FILE load_bits_generator.sv
 set_global_assignment -name SYSTEMVERILOG_FILE performance_unit_user_enable.sv
