@@ -9,91 +9,91 @@
 # ** Warning: Copied /software/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
 #          Updated modelsim.ini.
 # 
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_stage.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/WB_stage.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module WB_stage
 # 
 # Top level modules:
 # 	WB_stage
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/WB_pipe.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/WB_pipe.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module WB_pipe
 # 
 # Top level modules:
 # 	WB_pipe
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rv32i_types.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/rv32i_types.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package rv32i_types
 # 
 # Top level modules:
 # 	--none--
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/regfile.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/regfile.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module regfile
 # 
 # Top level modules:
 # 	regfile
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pipe_control.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/pipe_control.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module pipe_control
 # 
 # Top level modules:
 # 	pipe_control
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/pc_reg.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/pc_reg.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module pc_register
 # 
 # Top level modules:
 # 	pc_register
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux8.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/mux8.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module mux8
 # 
 # Top level modules:
 # 	mux8
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux4.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/mux4.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module mux4
 # 
 # Top level modules:
 # 	mux4
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mux2.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/mux2.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module mux2
 # 
 # Top level modules:
 # 	mux2
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_stage.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/MEM_stage.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module MEM_stage
 # 
 # Top level modules:
 # 	MEM_stage
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/MEM_pipe.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/MEM_pipe.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module MEM_pipe
 # 
 # Top level modules:
 # 	MEM_pipe
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_pipe.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/ID_pipe.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module ID_pipe
 # 
 # Top level modules:
 # 	ID_pipe
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_pipe.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/EX_pipe.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module EX_pipe
 # 
 # Top level modules:
 # 	EX_pipe
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/add4.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/add4.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module add4
 # 
 # Top level modules:
 # 	add4
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/rdata_out_logic.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/rdata_out_logic.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package rdata_out_logic_sv_unit
 # -- Importing package rv32i_types
@@ -101,13 +101,13 @@
 # 
 # Top level modules:
 # 	rdata_out_logic
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/IF_stage.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/IF_stage.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module IF_stage
 # 
 # Top level modules:
 # 	IF_stage
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/EX_stage.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/EX_stage.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package EX_stage_sv_unit
 # -- Importing package rv32i_types
@@ -115,7 +115,7 @@
 # 
 # Top level modules:
 # 	EX_stage
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_word_reg.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/control_word_reg.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package control_word_reg_sv_unit
 # -- Importing package rv32i_types
@@ -123,7 +123,7 @@
 # 
 # Top level modules:
 # 	control_word_reg
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/control_memory.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/control_memory.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package control_memory_sv_unit
 # -- Importing package rv32i_types
@@ -131,7 +131,7 @@
 # 
 # Top level modules:
 # 	control_memory
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/CMP.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/CMP.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package CMP_sv_unit
 # -- Importing package rv32i_types
@@ -139,7 +139,7 @@
 # 
 # Top level modules:
 # 	CMP
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/alu.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/alu.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package alu_sv_unit
 # -- Importing package rv32i_types
@@ -147,7 +147,7 @@
 # 
 # Top level modules:
 # 	alu
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/JB_hazard_detection_unit.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/JB_hazard_detection_unit.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package JB_hazard_detection_unit_sv_unit
 # -- Importing package rv32i_types
@@ -155,7 +155,7 @@
 # 
 # Top level modules:
 # 	JB_hazard_detection_unit
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/ID_stage.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/ID_stage.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package ID_stage_sv_unit
 # -- Importing package rv32i_types
@@ -163,7 +163,7 @@
 # 
 # Top level modules:
 # 	ID_stage
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_cpu.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/mp3_cpu.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling package mp3_cpu_sv_unit
 # -- Importing package rv32i_types
@@ -172,13 +172,13 @@
 # Top level modules:
 # 	mp3_cpu
 # 
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/mp3_tb.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/mp3_tb.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module mp3_tb
 # 
 # Top level modules:
 # 	mp3_tb
-# vlog -sv -work work +incdir+/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code {/home/yuanm2/yuanm2/zerotoone/cp1/system-verilog-code/magic_memory_dual_port.sv}
+# vlog -sv -work work +incdir+/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code {/home/haiyang3/ece411/zerotoone/cp1/system-verilog-code/magic_memory_dual_port.sv}
 # Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
 # -- Compiling module magic_memory_dp
 # 
@@ -230,5 +230,6 @@
 # view signals
 # .main_pane.objects.interior.cs.body.tree
 # run 0 sec
-do wave.do
-run 5000ns
+add wave -position end  sim:/mp3_tb/mp3_cpu/ID_stage/ID_regfile/data
+run 2000ns
+# FATAL ERROR: Unable to read lock file necessary for use of uncounted nodelocked license. Exiting.

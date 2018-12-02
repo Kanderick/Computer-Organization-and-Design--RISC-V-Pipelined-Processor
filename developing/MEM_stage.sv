@@ -14,6 +14,7 @@ module MEM_stage
 	input [31:0] pc,
 	input [2:0] regfilemux_sel,
 	output logic [31:0] forwarding_out
+
 );	
 logic sel;
 logic [31:0] pc_plus_4;

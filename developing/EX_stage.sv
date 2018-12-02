@@ -28,9 +28,13 @@ module EX_stage
 	 output logic flush,
 	 //output logic [31:0] ID_rs1_out,
 	 //output logic [31:0] ID_rs2_out,
-    /*to do*/
     input [1:0] EX_forwarding_sel1,
-    input [1:0] EX_forwarding_sel2
+    input [1:0] EX_forwarding_sel2,
+ 
+    input EX_prediction,
+    input EX_BTB_hit, 
+    output logic update_BHT,
+    output logic replace_BHT
 );
 rv32i_word fowarding_mux1_out;
 rv32i_word alumux1_out, alumux2_out, cmpmux_out;
@@ -38,7 +42,7 @@ rv32i_word alumux1_out, alumux2_out, cmpmux_out;
 logic [31:0] imm;
 logic [31:0] pc_rs1_add_rst;
 
-assign EX_jmp_pc = imm + pc_rs1_add_rst;
+assign EX_jmp_pc = (EX_prediction == 0)? imm + pc_rs1_add_rst : EX_pc + 4 ;
 
 mux4 imm_mux(
 	.sel(jb_sel),
@@ -62,8 +66,12 @@ JB_hazard_detection_unit ID_JB_unit
 	.cmpop(EX_cmpop),
 	.rs1_out(fowarding_mux1_out),
 	.rs2_out(fowarding_mux2_out),
+    .EX_prediction,
+    .EX_BTB_hit,
 	.pcmux_sel(EX_pc_mux_sel),
-	.flush
+	.flush,
+    .update_BHT,
+    .replace_BHT    
 );
 
 

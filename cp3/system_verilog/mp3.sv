@@ -60,7 +60,7 @@ mp3_cpu mp3_cpu
     .resp_b,
     .rdata_b
 );
-
+ 
 L1Icache instruction_cache
 (
 	.clk,
@@ -92,7 +92,7 @@ L1Dcache data_cache
 	.l1d_arbi_wdata(wdata_D),
 	.l1d_arbi_read(read_D),
 	.l1d_arbi_write(write_D)
-);
+); 
 
 arbitor #(.width(256)) arbitor  
 (
@@ -121,6 +121,7 @@ arbitor #(.width(256)) arbitor
     .L2cache_rdata(rdata_l2),
     .L2cache_resp(resp_l2)        
 );
+
 
 L2cache L2cache
 (
