@@ -1,3 +1,6 @@
+`define USER_ENABLE
+`define HW_PREFETCHER_EN
+//`define USE_L2
 module mp3
 (
 	/*other signals*/
@@ -9,6 +12,7 @@ module mp3
     input logic resp,
     input logic [255:0] rdata
 );
+
 
 // output of cache
 logic read_a;
@@ -69,6 +73,7 @@ logic l1_evict_write;
 logic [255:0] l1_evict_rdata;
 logic [255:0] l1_evict_wdata;
 logic l1_evict_resp;
+
 
 mp3_cpu mp3_cpu
 (
@@ -131,27 +136,8 @@ L1Dcache data_cache
 	.l1d_miss_sig
 );
 */
-L1Dcache data_cache
-(
-	.clk,
-   .cpu_l1d_address(address_b),
-	.cpu_l1d_wdata(wdata_b),
-	.cpu_l1d_read(read_b),
-	.cpu_l1d_write(write_b),
-	.cpu_l1d_byte_enable(wmask_b),
-
-	.l1d_arbi_rdata(l1_evict_rdata),
-	.l1d_arbi_resp(l1_evict_resp),
-	.cpu_l1d_rdata(rdata_b),
-	.cpu_l1d_resp(resp_b),
-	.l1d_arbi_address(l1_evict_address),
-	.l1d_arbi_wdata(l1_evict_wdata),
-	.l1d_arbi_read(l1_evict_read),
-	.l1d_arbi_write(l1_evict_write),
-
-	.l1d_miss_sig
-);
-
+// data_cache has been moved to macromodule at the end of this page
+`ifdef USE_L2
 eviction_write_buffer eviction_write_buffer_L1D
 (
 	.clk,
@@ -168,6 +154,7 @@ eviction_write_buffer eviction_write_buffer_L1D
 	.pmem_wdata(wdata_D),
 	.pmem_resp(resp_D)
 );
+`endif
 
 
 arbitor #(.width(256)) arbitor
@@ -187,7 +174,7 @@ arbitor #(.width(256)) arbitor
     .dcache_byte_enable(),
     .dcache_rdata(rdata_D),
     .dcache_resp(resp_D),
-
+`ifdef USE_L2
     //L2 cache signal
     .L2cache_read(read_l2),
     .L2cache_write(write_l2),
@@ -196,6 +183,16 @@ arbitor #(.width(256)) arbitor
     .L2cache_byte_enable(),
     .L2cache_rdata(rdata_l2),
     .L2cache_resp(resp_l2)
+`else
+	 //PMEM signal
+	 .L2cache_read(read),
+    .L2cache_write(write),
+    .L2cache_address(address),
+    .L2cache_wdata(wdata),
+    .L2cache_byte_enable(),
+    .L2cache_rdata(rdata),
+    .L2cache_resp(resp)
+`endif
 );
 
 //arbitor without victim cache
@@ -249,7 +246,7 @@ L2cache L2cache
 	.l2_miss_sig
 );
 */
-
+`ifdef USE_L2
 L2cache L2cache
 (
 	.clk,
@@ -284,7 +281,106 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 );
+`endif
 
+
+`ifdef USER_ENABLE
+performance_unit_user_enable performance_unit_user_enable
+(
+	.clk,
+	.reset(0),
+	.if_stall,
+	.resp_l2,
+	/*br*/
+	.flush,
+	.jb_sel,
+	/*l1i*/
+	.read_a,
+	.l1i_miss_sig,
+	/*l1d*/
+	.read_b,
+	.write_b,
+	.l1d_miss_sig,
+	/*l2*/
+	.write_l2,
+	.read_l2,
+	.l2_miss_sig,
+	/*arbitor conflict*/
+	.read_I,
+	.read_D,
+	.write_D,
+	/*user read ports*/
+	.cpu_l1d_read,
+	.address_b,
+	.cpu_l1d_address,
+	.cpu_l1d_rdata,
+	.rdata_b,
+	.resp_b,
+	.cpu_l1d_resp
+);
+L1Dcache data_cache
+(
+	.clk,
+   .cpu_l1d_address,
+	.cpu_l1d_wdata(wdata_b),
+	.cpu_l1d_read,
+	.cpu_l1d_write(write_b),
+	.cpu_l1d_byte_enable(wmask_b),
+
+`ifdef USE_L2
+	.l1d_arbi_rdata(l1_evict_rdata),
+	.l1d_arbi_resp(l1_evict_resp),
+	.cpu_l1d_rdata,
+	.cpu_l1d_resp,
+	.l1d_arbi_address(l1_evict_address),
+	.l1d_arbi_wdata(l1_evict_wdata),
+	.l1d_arbi_read(l1_evict_read),
+	.l1d_arbi_write(l1_evict_write),
+`else
+	.l1d_arbi_rdata(rdata_D),
+	.l1d_arbi_resp(resp_D),
+	.cpu_l1d_rdata,
+	.cpu_l1d_resp,
+	.l1d_arbi_address(address_D),
+	.l1d_arbi_wdata(wdata_D),
+	.l1d_arbi_read(read_D),
+	.l1d_arbi_write(write_D),
+`endif
+	.l1d_miss_sig
+);
+
+`else
+L1Dcache data_cache
+(
+	.clk,
+   .cpu_l1d_address(address_b),
+	.cpu_l1d_wdata(wdata_b),
+	.cpu_l1d_read(read_b),
+	.cpu_l1d_write(write_b),
+	.cpu_l1d_byte_enable(wmask_b),
+
+`ifdef USE_L2
+	.l1d_arbi_rdata(l1_evict_rdata),
+	.l1d_arbi_resp(l1_evict_resp),
+	.cpu_l1d_rdata,
+	.cpu_l1d_resp,
+	.l1d_arbi_address(l1_evict_address),
+	.l1d_arbi_wdata(l1_evict_wdata),
+	.l1d_arbi_read(l1_evict_read),
+	.l1d_arbi_write(l1_evict_write),
+`else
+	.l1d_arbi_rdata(rdata_D),
+	.l1d_arbi_resp(resp_D),
+	.cpu_l1d_rdata,
+	.cpu_l1d_resp,
+	.l1d_arbi_address(address_D),
+	.l1d_arbi_wdata(wdata_D),
+	.l1d_arbi_read(read_D),
+	.l1d_arbi_write(write_D),
+`endif
+
+	.l1d_miss_sig
+);
 performance_unit performance_unit
 (
 	.clk,
@@ -310,4 +406,7 @@ performance_unit performance_unit
 	.read_D,
 	.write_D
 );
+`endif
+
+
 endmodule : mp3

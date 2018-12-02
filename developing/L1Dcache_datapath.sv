@@ -38,9 +38,12 @@ module L1Dcache_datapath
 	logic tag_load_1;
 	logic [23:0] tag_0;
 	logic [23:0] tag_1;
+	reg [23:0] tag_0_ready;
+	reg [23:0] tag_1_ready;
 	
 	logic lru_datain;
 	logic lru;
+	reg lru_ready;
 	
 	logic dirty_load_0;
 	logic dirty_load_1;
@@ -69,6 +72,8 @@ module L1Dcache_datapath
 	logic [7:0] datamux1 [32];
 	logic [7:0] data0 [32];
 	logic [7:0] data1 [32];
+	logic [255:0] data0_ready;
+	logic [255:0] data1_ready;
 	logic [31:0] data_read0;
 	logic [31:0] data_read1;
 	
@@ -111,6 +116,8 @@ cache_address_decoder cache_address_decoder
 
 pmem_address_logic pmem_address_logic
 (
+	.tag_0(tag_0_ready),
+	.tag_1(tag_1_ready),
 	.*
 );
 
@@ -247,9 +254,9 @@ L1Dcache_data_assembler L1Dcache_data_assembler1
 
 mux2 #(.width(256)) eviction_mux
 (
-	.sel(lru),
-	.a({data0[31], data0[30], data0[29], data0[28], data0[27], data0[26], data0[25], data0[24], data0[23], data0[22], data0[21], data0[20], data0[19], data0[18], data0[17], data0[16], data0[15], data0[14], data0[13], data0[12], data0[11], data0[10], data0[9], data0[8], data0[7], data0[6], data0[5], data0[4], data0[3], data0[2], data0[1], data0[0]}),
-	.b({data1[31], data1[30], data1[29], data1[28], data1[27], data1[26], data1[25], data1[24], data1[23], data1[22], data1[21], data1[20], data1[19], data1[18], data1[17], data1[16], data1[15], data1[14], data1[13], data1[12], data1[11], data1[10], data1[9], data1[8], data1[7], data1[6], data1[5], data1[4], data1[3], data1[2], data1[1], data1[0]}),
+	.sel(lru_ready),
+	.a(data0_ready),
+	.b(data1_ready),
 	.f(pmem_wdata)
 );
 
@@ -301,5 +308,12 @@ data_load_logic data_load_logic
 (
 	.*
 );
-
+always_ff @(posedge clk)
+begin
+	data0_ready<={data0[31], data0[30], data0[29], data0[28], data0[27], data0[26], data0[25], data0[24], data0[23], data0[22], data0[21], data0[20], data0[19], data0[18], data0[17], data0[16], data0[15], data0[14], data0[13], data0[12], data0[11], data0[10], data0[9], data0[8], data0[7], data0[6], data0[5], data0[4], data0[3], data0[2], data0[1], data0[0]};
+	data1_ready<={data1[31], data1[30], data1[29], data1[28], data1[27], data1[26], data1[25], data1[24], data1[23], data1[22], data1[21], data1[20], data1[19], data1[18], data1[17], data1[16], data1[15], data1[14], data1[13], data1[12], data1[11], data1[10], data1[9], data1[8], data1[7], data1[6], data1[5], data1[4], data1[3], data1[2], data1[1], data1[0]};
+	tag_0_ready<=tag_0;
+	tag_1_ready<=tag_1;
+	lru_ready<=lru;
+end
 endmodule : L1Dcache_datapath

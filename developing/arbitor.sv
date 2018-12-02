@@ -132,4 +132,4 @@ end
 always_ff @ (posedge clk) begin
     state <= next_state;     
 end
-endmodule
+endmodule : arbitor_controller

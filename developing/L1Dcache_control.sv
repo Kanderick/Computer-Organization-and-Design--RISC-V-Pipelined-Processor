@@ -31,7 +31,9 @@ enum int unsigned {
     /* List of states */
 	 idle,
 	 write_to_pmem,
-	 pmem_to_cache
+	 pmem_to_cache,
+	 write_to_pmem_ready,
+	 pmem_to_cache_ready
 } state, next_state;
 
 always_comb
@@ -83,13 +85,25 @@ begin : state_actions
 			end
 		end
 		
+		write_to_pmem_ready:
+		begin
+			pmem_addr_sel = 1;
+			pmem_write = 1;
+			clr_dirty = 1;
+		end
 		write_to_pmem:
 		begin
 			pmem_addr_sel = 1;
 			pmem_write = 1;
 			clr_dirty = 1;
 		end
-		
+		pmem_to_cache_ready:
+		begin
+			pmem_addr_sel = 0;
+			data_in_sel = 0;
+			load_valid = 1;
+			clr_dirty = 1;
+		end
 		pmem_to_cache:
 		begin
 			pmem_addr_sel = 0;
@@ -97,8 +111,6 @@ begin : state_actions
 			data_in_sel = 0;
 			load_tag = pmem_resp;
 			load_data = pmem_resp;
-			load_valid = 1;
-			clr_dirty = 1;
 		end
 	endcase
 end
@@ -114,27 +126,33 @@ begin : next_state_logic
 		idle:
 		begin
 			if ((mem_read || mem_write) && (!hit) && (dirty))
-				next_state = write_to_pmem;
+				next_state = write_to_pmem_ready;
 			else if ((mem_read || mem_write) && (!hit) && (!dirty))
 			begin
 				l1d_miss_sig=1'b1;
-				next_state = pmem_to_cache;
+				next_state = pmem_to_cache_ready;
 			end
 			else
 				next_state = idle;
 		end
-		
+		write_to_pmem_ready:
+		begin
+			next_state = write_to_pmem;
+		end
 		write_to_pmem:
 		begin
 			if (pmem_resp)
 			begin
 				l1d_miss_sig=1'b1;
-				next_state = pmem_to_cache;
+				next_state = pmem_to_cache_ready;
 			end
 			else
 				next_state = write_to_pmem;
 		end
-		
+		pmem_to_cache_ready:
+		begin
+			next_state = pmem_to_cache;
+		end
 		pmem_to_cache:
 		begin
 			if (pmem_resp)

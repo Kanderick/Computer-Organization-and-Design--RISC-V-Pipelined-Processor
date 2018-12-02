@@ -11,6 +11,7 @@ initial clk = 0;
 always #5 clk = ~clk;
 
 
+
 assign halt = ((mp3.mp3_cpu.rdata_a == 32'h00000063) | (mp3.mp3_cpu.rdata_a == 32'h0000006F));
 
 logic read;
@@ -19,7 +20,7 @@ logic [31:0] address;
 logic [255:0] wdata;
 logic resp;
 logic [255:0] rdata;
-     
+logic clk_by_2;
 mp3 mp3
 (
     .clk,
