@@ -61,8 +61,9 @@ set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_RO
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
 set_global_assignment -name EDA_TEST_BENCH_FILE mp3_tb.sv -section_id mp3_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE mp3.sv -section_id mp3_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE physical_memory.sv -section_id mp3_tb
+set_global_assignment -name SYSTEMVERILOG_FILE prefetcher.sv
+set_global_assignment -name SYSTEMVERILOG_FILE RPT.sv
 set_global_assignment -name SYSTEMVERILOG_FILE tournament_predictor.sv
 set_global_assignment -name SYSTEMVERILOG_FILE working_cache/datain_logic.sv
 set_global_assignment -name SYSTEMVERILOG_FILE working_cache/data_load_logic.sv

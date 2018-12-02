@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Settings
-DEFAULT_TARGET=./developing/simulation/modelsim/memory.lst
+DEFAULT_TARGET=./debug/simulation/modelsim/memory.lst
 ASSEMBLER=/class/ece411/software/riscv-tools/bin/riscv32-unknown-elf-gcc
 OBJCOPY=/class/ece411/software/riscv-tools/bin/riscv32-unknown-elf-objcopy
 OBJDUMP=/class/ece411/software/riscv-tools/bin/riscv32-unknown-elf-objdump
