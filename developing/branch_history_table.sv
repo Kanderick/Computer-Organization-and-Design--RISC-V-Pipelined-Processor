@@ -13,6 +13,9 @@ logic signed [history_bits:0] branch_hist_min;
 assign branch_hist_max = 1'b1 << (history_bits-1'b1) - 1'b1;
 assign branch_hist_min = -(1'b1 << (history_bits-1'b1));
 
+initial begin
+    branch_history = 0;
+end
 always_ff @ (posedge clk) begin
     if (flush)
         branch_history = 0;

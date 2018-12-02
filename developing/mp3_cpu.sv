@@ -100,6 +100,19 @@ logic WB_load;
 logic pcmux_sel;
 logic MEM_EX_rdata_hazard;
 
+//BTB_BHT signal
+logic IF_BTB_hit;
+logic IF_prediction;
+rv32i_word BTB_target;
+logic ID_BTB_hit;
+logic ID_prediction;
+logic EX_BTB_hit;
+logic EX_prediction;
+logic EX_update_BHT;
+logic EX_replace_BHT;
+logic MEM_update_BHT;
+logic MEM_replace_BHT;
+
 assign read_intr_stall = 1'b1 &(!instr_resp);
 assign mem_access_stall = (MEM_ctrl_word.mem_read|MEM_ctrl_word.mem_write)&(!MEM_resp);
 assign wdata_a=32'b0;
@@ -162,13 +175,30 @@ pipe_control pipe_control
 	.clk
 );
 
+BTB_BHT BTB_BHT 
+(
+	.clk,
+    .IF_PC(IF_addr),
+	.MEM_PC(MEM_pc),    
+	.target_in(MEM_jmp_pc), //from MEM, input to the data array during a miss
+	.replace(MEM_replace_BHT), // from MEM, add input to a array during a miss
+	.branch_result(MEM_cmp_out), //from MEM, addr to jump to calculated by ALU
+	.update(MEM_update_BHT), //from MEM
+  
+	.target_out(BTB_target), // to IF, addr to jump to 
+    .hit(IF_BTB_hit), // to IF, if it is a jmp/br
+    .prediction(IF_prediction) // to IF
+);
+
 IF_stage IF_stage
 (
 		.clk,
 		.pc_load,
 		.MEM_jmp_pc,
 		.pcmux_sel,
-		.IF_addr
+		.IF_addr,
+        .BTB_target,
+        .IF_prediction
 );
 
 control_memory control_memory
@@ -192,7 +222,11 @@ ID_pipe ID_pipe
 	.ID_pc,
 	.clk,
    .load(ID_load),
-	.reset(IF_ID_flush)
+	.reset(IF_ID_flush),
+    .IF_BTB_hit,
+    .IF_prediction,
+    .ID_BTB_hit,
+    .ID_prediction
 );
 
 ID_stage ID_stage
@@ -248,7 +282,12 @@ EX_pipe EX_pipe
 	//.flush,
 	.load(EX_load),
 	.clk,
-	.reset(IF_ID_flush)
+	.reset(IF_ID_flush),
+    
+    .ID_BTB_hit,
+    .ID_prediction,
+    .EX_BTB_hit,
+    .EX_prediction
 );
 
 EX_stage EX_stage
@@ -285,9 +324,16 @@ EX_stage EX_stage
 	 .EX_jmp_pc,
 	 .EX_pc_mux_sel,
 	 .flush(EX_flush),
-    /*to do*/
+     
+     .EX_BTB_hit,
+     .EX_prediction,
+     .update_BHT(EX_update_BHT),
+     .replace_BHT(EX_replace_BHT),
+     
     .EX_forwarding_sel1,
     .EX_forwarding_sel2
+    
+    
 );
 
 control_word_reg MEM_ctrl
@@ -321,7 +367,13 @@ MEM_pipe MEM_pipe
 	
 	.MEM_pc_mux_sel(pcmux_sel),
 	.MEM_jmp_pc,
-	.flush
+	.flush,
+    
+    .EX_update_BHT,
+    .EX_replace_BHT,
+    .MEM_update_BHT,
+    .MEM_replace_BHT
+    
 );
 
 MEM_stage MEM_stage

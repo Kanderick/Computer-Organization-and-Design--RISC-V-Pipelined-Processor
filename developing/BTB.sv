@@ -1,7 +1,7 @@
 import rv32i_types::*;
 
 // branch target buffer and branch history table combined
-module BTB #(parameter num_entry_bits = 6)
+module BTB_BHT #(parameter num_entry_bits = 6)
 (
 	input clk,
 
@@ -22,23 +22,32 @@ typedef struct packed {
   rv32i_word tag;
   logic valid;
   rv32i_word data;
-  logic prediction;
+  //logic prediction;
 } array_signals;
 
 array_signals btb_bht_array[num_entries];
+logic [num_entry_bits-1:0] replace_ptr;
+
+initial begin
+    for (int i = 0; i < num_entries;  i = i + 1) begin
+       btb_bht_array[i] <= 0;
+       replace_ptr <= 0;
+    end    
+end
 logic IF_PC_hit[num_entries];
 logic MEM_PC_hit[num_entries];
+logic BHT_prediction[num_entries];
 
-logic [num_entry_bits-1:0] replace_ptr;
 always_ff @ (posedge clk) begin
-    if (replace)
+    if (replace) begin
         replace_ptr <= replace_ptr + 1'b1;
-    for (int i = 0; i < num_entries;  i = i + 1) begin
-        if (i == replace_ptr) begin
-            btb_bht_array[i].tag <= MEM_PC;
-            btb_bht_array[i].valid <= 1;
-            btb_bht_array[i].data <= target_in;
-        end
+        for (int i = 0; i < num_entries;  i = i + 1) begin
+            if (i == replace_ptr) begin
+                btb_bht_array[i].tag <= MEM_PC;
+                btb_bht_array[i].valid <= 1;
+                btb_bht_array[i].data <= target_in;
+            end
+        end    
     end        
 end
 
@@ -49,8 +58,8 @@ always_comb begin
     for (int i = 0; i < num_entries;  i = i + 1) begin
         IF_PC_hit[i] = (btb_bht_array[i].tag == IF_PC) && btb_bht_array[i].valid;
         MEM_PC_hit[i] = (btb_bht_array[i].tag == MEM_PC) && btb_bht_array[i].valid;        
-        prediction |= btb_bht_array[i].prediction;
-        target_out |= btb_bht_array[i].data;
+        prediction = IF_PC_hit[i] ? BHT_prediction[i] : prediction;
+        target_out = IF_PC_hit[i] ? btb_bht_array[i].data : target_out;
         hit |= IF_PC_hit[i];
     end
 end
@@ -63,7 +72,7 @@ generate
             .branch_result,
             .update(update && MEM_PC_hit[j]),
             .flush(replace && (replace_ptr == j)),
-            .prediction(btb_bht_array[j].prediction)  
+            .prediction(BHT_prediction[j])  
         );
    end     
 endgenerate

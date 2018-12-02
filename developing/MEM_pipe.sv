@@ -18,7 +18,14 @@ module MEM_pipe(
 	input EX_flush,
 	output logic [31:0] MEM_jmp_pc,
 	output logic MEM_pc_mux_sel,
-	output logic flush
+	output logic flush,
+    
+        
+    input EX_update_BHT,
+    input EX_replace_BHT,
+    output logic MEM_update_BHT,
+    output logic MEM_replace_BHT
+    
 );
 
 initial
@@ -30,6 +37,8 @@ begin
 	MEM_jmp_pc=0;
 	MEM_pc_mux_sel=0;
 	flush=0;
+    MEM_update_BHT = 0;
+    MEM_replace_BHT = 0;
 end
 always_ff @ (posedge clk)
 begin
@@ -42,6 +51,8 @@ begin
 		MEM_jmp_pc<=0;
 		MEM_pc_mux_sel<=0;
 		flush<=0;
+        MEM_update_BHT <= 0;
+        MEM_replace_BHT <= 0;
 	end
 	
 	else if(load)
@@ -53,6 +64,8 @@ begin
 		MEM_jmp_pc<=EX_jmp_pc;
 		MEM_pc_mux_sel<=EX_pc_mux_sel;
 		flush<=EX_flush;
+        MEM_update_BHT <= EX_update_BHT;
+        MEM_replace_BHT <= EX_replace_BHT;
 	end
 end
 
