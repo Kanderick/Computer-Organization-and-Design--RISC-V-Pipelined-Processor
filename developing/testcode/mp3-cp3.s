@@ -84,27 +84,8 @@ forwarding_tests:
 	beq x3, x2, oof
 
 	lw x7, GOOD
-	add x2, x0, 0 #br_miss
-	lw x1, 0(x2)
-	add x2, x2, 1 #br_total
-	lw x1, 0(x2)
-	add x2, x2, 1 #l1i_miss
-	lw x1, 0(x2)
-	add x2, x2, 1 #l1i_total
-	lw x1, 0(x2)
-	add x2, x2, 1 #l1d_miss
-	lw x1, 0(x2)
-	add x2, x2, 1 #l1d_total
-	lw x1, 0(x2)
-	add x2, x2, 1 #l2_miss
-	lw x1, 0(x2)
-	add x2, x2, 1 #l2_total
-	lw x1, 0(x2)
-	add x2, x2, 1 #arbitor conflict
-	lw x1, 0(x2)
-	add x2, x2, 1 #total stalls
-	lw x1, 0(x2)
-	
+
+
 halt:
 	beq x0, x0, halt
 	lw x7, BAD

@@ -82,7 +82,8 @@ bne x5, x9, badend
 addi x7, x7, 1
 #TEST CASE NINE: byte-align load byte
 la x1, R0S6W7
-slli x9, x8, 24srli x9, x9, 24
+slli x9, x8, 24
+srli x9, x9, 24
 sb x8, 3(x1)
 lbu x5, 3(x1) # cache hit; expected value=0xFFFFFFF0
 bne x5, x9, badend
@@ -126,7 +127,8 @@ R1S3W7: .word 0x600D1307
 R1S6W0: .word 0xF0F0F0F0
 R1S6W1: .word 0xF0F0F0F0
 R1S6W2: .word 0xF0F0F0F0
-R1S6W3: .word 0xF0F0F0F0R1S6W4: .word 0xF0F0F0F0
+R1S6W3: .word 0xF0F0F0F0
+R1S6W4: .word 0xF0F0F0F0
 R1S6W5: .word 0xF0F0F0F0
 R1S6W6: .word 0xF0F0F0F0
 R1S6W7: .word 0xF0F0F0F0
