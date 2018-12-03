@@ -1,4 +1,4 @@
-module L2cache
+module L2cache #(parameter set_bits = 4)
 (
 // cache interface
     input clk,
@@ -55,7 +55,7 @@ logic address_sel;
     
 );
 
-L2cache_datapath datapath
+L2cache_datapath #(.set_bits(set_bits)) datapath 
 (
     .clk,
     .mem_address,
