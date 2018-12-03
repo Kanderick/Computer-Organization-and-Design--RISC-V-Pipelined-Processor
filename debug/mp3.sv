@@ -1,3 +1,4 @@
+`define USE_PERFORM_UNIT
 module mp3
 (
 	/*other signals*/
@@ -116,7 +117,7 @@ logic if_L2_miss;
 assign if_MEM_datamiss=if_L2_miss;
 
 `ifdef USE_PERFORM_UNIT
-performance_unit_user_enable
+performance_unit_user_enable performance_unit_user_enable
 (
 	.clk,
 	.reset(),
@@ -139,27 +140,27 @@ performance_unit_user_enable
 	/*arbitor conflict*/
 	.read_I,
 	.read_D,
-	.write_D
+	.write_D,
 	/*user interface*/
-	//output logic cpu_l1d_read,
-	//input [31:0] address_b,
-	//output logic [31:0] cpu_l1d_address,
-	//input [31:0] cpu_l1d_rdata,
-	//output logic [31:0] rdata_b,
-	//output logic resp_b,
-	//input cpu_l1d_resp
+	.cpu_l1d_read,
+	.address_b,
+	.cpu_l1d_address,
+	.cpu_l1d_rdata,
+	.rdata_b,
+	.resp_b,
+	.cpu_l1d_resp
 );
 `endif
 cache data_cache
 (
 	.clk,
-   .mem_address(address_b),
+   .mem_address(cpu_l1d_address),
 	.mem_wdata(wdata_b),
-	.mem_read(read_b),
+	.mem_read(cpu_l1d_read),
 	.mem_write(write_b),
 	.mem_byte_enable(wmask_b),
-	.mem_rdata(rdata_b),
-	.mem_resp(resp_b),
+	.mem_rdata(cpu_l1d_rdata),
+	.mem_resp(cpu_l1d_resp),
 
 	.pmem_rdata(rdata_D),
 	.pmem_resp(resp_D),
