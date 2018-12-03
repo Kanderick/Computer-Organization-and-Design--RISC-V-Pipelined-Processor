@@ -1,5 +1,3 @@
-`define CACHE_REPLACED
-`define USE_EWB
 
 module mp3
 (
@@ -56,6 +54,7 @@ logic [31:0] cpu_l1d_address;
 logic [31:0] cpu_l1d_rdata;
 logic cpu_l1d_read;
 logic cpu_l1d_resp;
+logic mis_prediction;
 
 //eviction write buffer
 logic [31:0] l2_evict_address;
@@ -92,245 +91,11 @@ mp3_cpu mp3_cpu
     .rdata_b,
 	 .flush,
 	 .jb_sel,
-	 .if_stall
+	 .if_stall,
+	 .pcmux_sel(mis_prediction)
 );
 
-`ifndef CACHE_REPLACED
-L1Icache instruction_cache
-(
-	.clk,
-	.cpu_l1i_address(address_a),
-	.cpu_l1i_rdata(rdata_a),
-	.cpu_l1i_read(read_a),
-	.cpu_l1i_resp(resp_a),
 
-	.l1i_arbi_address(address_I),
-	.l1i_arbi_rdata(rdata_I),
-	.l1i_arbi_read(read_I),
-	.l1i_arbi_resp(resp_I),
-
-	.l1i_miss_sig
-);
-
-`ifndef USE_EWB
-//L1 dcache without eviction_write_buffer
-
-L1Dcache data_cache
-(
-	.clk,
-   .cpu_l1d_address,
-	.cpu_l1d_wdata(wdata_b),
-	.cpu_l1d_read,
-	.cpu_l1d_write(write_b),
-	.cpu_l1d_byte_enable(wmask_b),
-
-	.l1d_arbi_rdata(rdata_D),
-	.l1d_arbi_resp(resp_D),
-	.cpu_l1d_rdata,
-	.cpu_l1d_resp,
-	.l1d_arbi_address(address_D),
-	.l1d_arbi_wdata(wdata_D),
-	.l1d_arbi_read(read_D),
-	.l1d_arbi_write(write_D),
-
-	.l1d_miss_sig
-);
-
-`endif
-`ifdef USE_EWB
-L1Dcache data_cache
-(
-	.clk,
-   .cpu_l1d_address,
-	.cpu_l1d_wdata(wdata_b),
-	.cpu_l1d_read,
-	.cpu_l1d_write(write_b),
-	.cpu_l1d_byte_enable(wmask_b),
-
-	.l1d_arbi_rdata(l1_evict_rdata),
-	.l1d_arbi_resp(l1_evict_resp),
-	.cpu_l1d_rdata,
-	.cpu_l1d_resp,
-	.l1d_arbi_address(l1_evict_address),
-	.l1d_arbi_wdata(l1_evict_wdata),
-	.l1d_arbi_read(l1_evict_read),
-	.l1d_arbi_write(l1_evict_write),
-
-	.l1d_miss_sig
-);
-
-eviction_write_buffer eviction_write_buffer_L1D
-(
-	.clk,
-	.address(l1_evict_address),
-	.read(l1_evict_read),
-	.write(l1_evict_write),
-	.rdata(l1_evict_rdata),
-	.wdata(l1_evict_wdata),
-	.resp(l1_evict_resp),
-	.pmem_address(address_D),
-	.pmem_read(read_D),
-	.pmem_write(write_D),
-	.pmem_rdata(rdata_D),
-	.pmem_wdata(wdata_D),
-	.pmem_resp(resp_D)
-);
-
-arbitor #(.width(256)) arbitor
-(
-    .clk,
-    // instruction cache signal
-    .icache_read(read_I),
-    .icache_address(address_I),
-    .icache_rdata(rdata_I),
-    .icache_resp(resp_I),
-
-    // data cache signal
-    .dcache_read(read_D),
-    .dcache_write(write_D),
-    .dcache_address(address_D),
-    .dcache_wdata(wdata_D),
-    .dcache_byte_enable(),
-    .dcache_rdata(rdata_D),
-    .dcache_resp(resp_D),
-
-    //L2 cache signal
-    .L2cache_read(read_l2),
-    .L2cache_write(write_l2),
-    .L2cache_address(address_l2),
-    .L2cache_wdata(wdata_l2),
-    .L2cache_byte_enable(),
-    .L2cache_rdata(rdata_l2),
-    .L2cache_resp(resp_l2)
-);
-`endif
-
-`ifndef USE_EWB 
-//arbitor without victim cache
-
-arbitor #(.width(256)) arbitor
-(
-    .clk,
-    // instruction cache signal
-    .icache_read(read_I),
-    .icache_address(address_I),
-    .icache_rdata(rdata_I),
-    .icache_resp(resp_I),
-
-    // data cache signal
-    .dcache_read(read_D),
-    .dcache_write(write_D),
-    .dcache_address(address_D),
-    .dcache_wdata(wdata_D),
-    .dcache_byte_enable(),
-    .dcache_rdata(rdata_D),
-    .dcache_resp(resp_D),
-
-    //L2 cache signal
-    .L2cache_read(read_l2),
-    .L2cache_write(write_l2),
-    .L2cache_address(address_l2),
-    .L2cache_wdata(wdata_l2),
-    .L2cache_byte_enable(),
-    .L2cache_rdata(rdata_l2),
-    .L2cache_resp(resp_l2)
-);
-
-//l2 top level without eviction_write_buffer
-
-L2cache L2cache
-(
-	.clk,
-	.arbi_l2_address(address_l2),
-	.arbi_l2_wdata(wdata_l2),
-	.arbi_l2_read(read_l2),
-	.arbi_l2_write(write_l2),
-	.arbi_l2_rdata(rdata_l2),
-	.arbi_l2_resp(resp_l2),
-	.l2_pmem_address(address),
-	.l2_pmem_wdata(wdata),
-	.l2_pmem_read(read),
-	.l2_pmem_write(write),
-	.l2_pmem_rdata(rdata),
-	.l2_pmem_resp(resp),
-	.l2_miss_sig
-);
-
-`endif 
-
-`ifdef USE_EWB 
-L2cache L2cache
-(
-	.clk,
-	.arbi_l2_address(address_l2),
-	.arbi_l2_wdata(wdata_l2),
-	.arbi_l2_read(read_l2),
-	.arbi_l2_write(write_l2),
-	.arbi_l2_rdata(rdata_l2),
-	.arbi_l2_resp(resp_l2),
-	.l2_pmem_address(l2_evict_address),
-	.l2_pmem_wdata(l2_evict_wdata),
-	.l2_pmem_read(l2_evict_read),
-	.l2_pmem_write(l2_evict_write),
-	.l2_pmem_rdata(l2_evict_rdata),
-	.l2_pmem_resp(l2_evict_resp),
-	.l2_miss_sig
-);
-
-eviction_write_buffer eviction_write_buffer_L2
-(
-	.clk,
-	.address(l2_evict_address),
-	.read(l2_evict_read),
-	.write(l2_evict_write),
-	.rdata(l2_evict_rdata),
-	.wdata(l2_evict_wdata),
-	.resp(l2_evict_resp),
-	.pmem_address(address),
-	.pmem_read(read),
-	.pmem_write(write),
-	.pmem_rdata(rdata),
-	.pmem_wdata(wdata),
-	.pmem_resp(resp)
-);
-`endif 
-
-performance_unit performance_unit
-(
-	.clk,
-	.reset(0),
-	.if_stall,
-	.resp_l2,
-	/*br*/
-	.flush,
-	.jb_sel,
-	/*l1i*/
-	.read_a,
-	.l1i_miss_sig,
-	/*l1d*/
-	.read_b,
-	.write_b,
-	.l1d_miss_sig,
-	/*l2*/
-	.write_l2,
-	.read_l2,
-	.l2_miss_sig,
-	/*arbitor conflict*/
-	.read_I,
-	.read_D,
-	.write_D,
-	/*user read ports*/
-	.cpu_l1d_read,
-	.address_b,
-	.cpu_l1d_address,
-	.cpu_l1d_rdata,
-	.rdata_b,
-	.resp_b,
-	.cpu_l1d_resp
-);
-`endif
-
-`ifdef CACHE_REPLACED
 cache instruction_cache
 (
 	.clk,
@@ -343,7 +108,8 @@ cache instruction_cache
 	.pmem_address(address_I),
 	.pmem_rdata(rdata_I),
 	.pmem_read(read_I),
-	.pmem_resp(resp_I) 
+	.pmem_resp(resp_I) ,
+	.miss_sig(l1i_miss_sig)
 );
 
 cache data_cache
@@ -362,38 +128,11 @@ cache data_cache
 	.pmem_address(address_D),
 	.pmem_wdata(wdata_D),
 	.pmem_read(read_D),
-	.pmem_write(write_D) 
+	.pmem_write(write_D) ,
+	.miss_sig(l1d_miss_sig)
 );
 
-`ifndef USE_EWB
-arbitor #(.width(256)) arbitor
-(
-    .clk,
-    // instruction cache signal
-    .icache_read(read_I),
-    .icache_address(address_I),
-    .icache_rdata(rdata_I),
-    .icache_resp(resp_I),
 
-    // data cache signal
-    .dcache_read(read_D),
-    .dcache_write(write_D),
-    .dcache_address(address_D),
-    .dcache_wdata(wdata_D),
-    .dcache_byte_enable(),
-    .dcache_rdata(rdata_D),
-    .dcache_resp(resp_D),
-
-    //L2 cache signal
-    .L2cache_read(read),
-    .L2cache_write(write),
-    .L2cache_address(address),
-    .L2cache_wdata(wdata),
-    .L2cache_byte_enable(),
-    .L2cache_rdata(rdata),
-    .L2cache_resp(resp)
-);
-`else
 arbitor #(.width(256)) arbitor
 (
     .clk,
@@ -446,7 +185,8 @@ arbitor #(.width(256)) arbitor
 	//.pmem_write(write),
 	//.pmem_address(address),
 	//.pmem_wdata(wdata),	
-	.clk
+	.clk,
+	.miss_sig(l2_miss_sig)
 );
 
 eviction_write_buffer eviction_write_buffer_L2
@@ -465,6 +205,41 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 ); 
+
+`ifdef USE_PERFORM_UNIT
+performance_unit performance_unit
+(
+	.clk,
+	.reset(0),
+	.if_stall,
+	.resp_l2,
+	/*br*/
+	.flush,
+	.jb_sel,
+	/*l1i*/
+	.read_a,
+	.l1i_miss_sig,
+	/*l1d*/
+	.read_b,
+	.write_b,
+	.l1d_miss_sig,
+	/*l2*/
+	.write_l2,
+	.read_l2,
+	.l2_miss_sig,
+	/*arbitor conflict*/
+	.read_I,
+	.read_D,
+	.write_D,
+	/*user read ports*/
+	.cpu_l1d_read,
+	.address_b,
+	.cpu_l1d_address,
+	.cpu_l1d_rdata,
+	.rdata_b,
+	.resp_b,
+	.cpu_l1d_resp
+);
 `endif 
-`endif
+
 endmodule : mp3
