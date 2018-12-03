@@ -15,9 +15,14 @@ module cache
     output logic [31:0] pmem_address,
     output logic [255:0] pmem_wdata,
     input logic pmem_resp,
+<<<<<<< HEAD
     input logic [255:0] pmem_rdata,
  // prefetcher
 	 output logic if_miss
+=======
+    input logic [255:0] pmem_rdata, 
+	 output logic miss_sig
+>>>>>>> 11a60ad49dfa47bd3f61c881fb7ee933c644d25e
 );
 logic load_wdata_reg;
 logic way_sel_method;
@@ -32,6 +37,9 @@ logic dirty;
 logic hit;
 logic valid;
 logic address_sel;
+
+assign miss_sig = pmem_read;
+
  cache_control control
 (
     .clk,

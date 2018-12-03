@@ -21,11 +21,15 @@ module mp3_cpu
     input resp_b,
     input [31:0] rdata_b,
 	 /*performance tracking*/
-	 output [1:0] jb_sel,
+	 output [1:0] jb_sel, //branch happened if != 0
 	 output logic flush,
 	 output logic if_stall,
+<<<<<<< HEAD
 	 /*prefetcher*/
 	 output logic [31:0] MEM_PC
+=======
+	 output logic pcmux_sel // != 0 if misprediction happend 
+>>>>>>> 11a60ad49dfa47bd3f61c881fb7ee933c644d25e
 );
 
 /*IF_stage signal*/
@@ -98,7 +102,7 @@ logic ID_load;
 logic EX_load;
 logic MEM_load;
 logic WB_load;
-logic pcmux_sel;
+//logic pcmux_sel;
 logic MEM_EX_rdata_hazard;
 
 //BTB_BHT signal
