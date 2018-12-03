@@ -350,7 +350,7 @@ cache instruction_cache
 logic if_MEM_datamiss;
 logic if_L1D_miss;
 logic if_L2_miss;
-assign if_MEM_datamiss=if_L1D_miss & if_L2_miss;
+assign if_MEM_datamiss=if_L2_miss;
 cache data_cache
 (
 	.clk,

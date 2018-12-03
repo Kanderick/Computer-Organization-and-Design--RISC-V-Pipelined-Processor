@@ -27,30 +27,49 @@ reg [3:0]prefetch_data_valid;
 reg [3:0]prefetch_data_ready;	
 reg [1:0] list_update_counter;
 logic data_ready_enable; // busy bit to block new data_ready when current data is process
+logic data_ready_disable;
 logic prefetch_counter_reset;
 logic prefetch_counter_accum;
 logic cmp_0;
 logic cmp_1;
 logic cmp_2;
 logic cmp_3;
+logic chk_0;
+logic chk_1;
+logic chk_2;
+logic chk_3;
 logic hit;
 logic [1:0] hit_index;
 logic load_ORB;
-logic suc;
+logic prevent_reload;
+
+
 initial
 begin
 	PREFETCH_COUNTER=0;
 	prefetch_data_ready=0;
 	prefetch_data_valid=0;
 	list_update_counter=0;
+	prefetch_addr[0]=0;
+	prefetch_addr[1]=0;
+	prefetch_addr[2]=0;
+	prefetch_addr[3]=0;
 end
 
+assign cmp_0=(prefetch_addr[0]==L2_req_address);
+assign cmp_1=(prefetch_addr[1]==L2_req_address);
+assign cmp_2=(prefetch_addr[2]==L2_req_address);
+assign cmp_3=(prefetch_addr[3]==L2_req_address);
+
+assign chk_0=(prefetch_addr[0]==ORB);
+assign chk_1=(prefetch_addr[1]==ORB);
+assign chk_2=(prefetch_addr[2]==ORB);
+assign chk_3=(prefetch_addr[3]==ORB);
+
+assign prevent_reload=chk_0|chk_1|chk_2|chk_3;
 always_comb
 begin
-	cmp_0=prefetch_addr[0]==L2_req_address;
-	cmp_1=prefetch_addr[1]==L2_req_address;
-	cmp_2=prefetch_addr[2]==L2_req_address;
-	cmp_3=prefetch_addr[3]==L2_req_address;
+
 	if(cmp_0&&prefetch_data_valid[0])
 	begin 
 		hit=1'b1;
@@ -63,12 +82,12 @@ begin
 	end
 	else if(cmp_2&&prefetch_data_valid[2])
 	begin
-		hit=1'b0;
+		hit=1'b1;
 		hit_index=2'b10;
 	end
 	else if(cmp_3&&prefetch_data_valid[3])
 	begin
-		hit=1'b0;
+		hit=1'b1;
 		hit_index=2'b11;
 	end
 	else 
@@ -95,7 +114,7 @@ begin
 	data_ready_enable=1'b0;
 	prefetch_counter_reset=1'b0;
 	prefetch_counter_accum=1'b0;
-	suc=1'b0;
+	data_ready_disable=1'b0;
 	/*
 	L2
 	input [31:0] L2_req_address,
@@ -123,7 +142,7 @@ begin
 		idle:
 		begin
 			prefetch_counter_reset=1'b1;
-			if( (L2_req_read|L2_req_write)==0 && prefetch_en)		
+			if( (L2_req_read|L2_req_write)==0 && prefetch_en && !prevent_reload)		
 				load_ORB=1'b1;
 		end
 		prefetch:
@@ -149,14 +168,14 @@ begin
 		end
 		check_hit:
 		begin
-			
+			if(hit && prefetch_data_ready[hit_index] && L2_req_write)
+				data_ready_disable=1'b1;
 		end
 		hit_shake_hand:
 		begin
 			prefetch_counter_reset=1'b1;
 			L2_req_rdata=prefetch_data[hit_index];
 			L2_req_resp=1'b1;
-			suc=1'b1;
 		end
 		default:
 		begin
@@ -175,7 +194,7 @@ begin
 			begin
 				next_state=check_hit;
 			end
-			else if(prefetch_en)
+			else if(prefetch_en && !prevent_reload)
 				next_state=prefetch;
 			else if(prefetch_data_ready[list_update_counter]==1'b0 && prefetch_data_valid[list_update_counter])
 				next_state=prefetch;
@@ -201,13 +220,13 @@ begin
 		end
 		check_hit:
 		begin
-			//// no need to fetch from pmem
-			//if(hit && prefetch_data_ready[hit_index] && !L2_req_write)
-			//begin
-			//	next_state=hit_shake_hand;
-			//end
-			//// need to fetch from pmem
-			//else 
+			// no need to fetch from pmem
+			if(hit && prefetch_data_ready[hit_index] && !L2_req_write)
+			begin
+				next_state=hit_shake_hand;
+			end
+			// need to fetch from pmem
+			else 
 				next_state=L2_miss;
 		end
 		hit_shake_hand:
@@ -239,7 +258,10 @@ begin
 		prefetch_data_ready[list_update_counter]<=1'b1;
 		prefetch_data[list_update_counter]<=pmem_rdata;
 	end
-	
+	if(data_ready_disable)
+	begin
+		prefetch_data_ready[hit_index]<=1'b0;
+	end
 	if(prefetch_counter_accum)
 		PREFETCH_COUNTER<=PREFETCH_COUNTER+1;
 	else if(prefetch_counter_reset)
