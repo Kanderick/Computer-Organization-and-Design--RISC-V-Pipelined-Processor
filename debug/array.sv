@@ -1,14 +1,15 @@
 
-module array #(parameter width = 256)
+module array #(parameter width = 256, parameter idx_bits = 3)
 (
     input clk,
     input write,
-    input [2:0] index,
+    input [idx_bits-1:0] index,
     input [width-1:0] datain,
     output logic [width-1:0] dataout
 );
 
-logic [width-1:0] data [7:0] /* synthesis ramstyle = "logic" */;
+localparam data_size = 1 << idx_bits;
+logic [width-1:0] data [data_size-1:0] /* synthesis ramstyle = "logic" */;
 
 /* Initialize array */
 initial

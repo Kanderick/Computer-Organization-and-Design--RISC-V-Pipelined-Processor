@@ -288,7 +288,7 @@ mux2 #(.width(1)) to_control_dirty
 
 //address for write_back
 logic [23:0] tag_selected;
-mux2 #(.width(32)) tag_for_write_back
+mux2 #(.width(24)) tag_for_write_back
 (
     .sel(way_select),
     .a(tagout_way0),

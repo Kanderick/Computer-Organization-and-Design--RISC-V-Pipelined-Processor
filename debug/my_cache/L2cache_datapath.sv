@@ -1,4 +1,4 @@
-module L2cache_datapath
+module L2cache_datapath #(parameter set_bits = 4)
 (
 // cache interface
     input clk,
@@ -24,19 +24,13 @@ module L2cache_datapath
     output logic hit,
     output logic valid
 );
+localparam tag_bits = 32 - 5 - set_bits;
 // parse address
-logic [23:0] tag;
-assign tag = mem_address[31:8];
-logic [2:0] idx;
-assign idx = mem_address[7:5];
-//logic [2:0] offset;
-//assign offset = mem_address[4:2];
-//logic [1:0] alignment;
-//assign alignment = mem_address[1:0];
+logic [tag_bits-1:0] tag;
+assign tag = mem_address[31:31-(tag_bits-1)];
+logic [set_bits-1:0] idx;
+assign idx = mem_address[5+set_bits-1:5];
 
-// pmem signals
-//assign pmem_address[31:5] = mem_address[31:5];
-//assign pmem_address[4:0] = 5'b0;
 logic [31:0] write_back_addr;
 
 mux2 #(.width(32)) addr_mux
@@ -77,7 +71,7 @@ mux2 #(.width(256)) line_data_in
 logic load_data_way0, load_data_way1;
 logic [255:0] datain;
 logic [255:0] dataout_way0, dataout_way1;
-array #(.width(256)) data_array0
+array #(.width(256), .idx_bits(set_bits)) data_array0
 (
     .clk,
     .write(load_data_way0),
@@ -85,7 +79,7 @@ array #(.width(256)) data_array0
     .datain(line_datain),
     .dataout(dataout_way0)
 );
-array #(.width(256)) data_array1
+array #(.width(256), .idx_bits(set_bits)) data_array1
 (
     .clk,
     .write(load_data_way1),
@@ -95,8 +89,8 @@ array #(.width(256)) data_array1
 );
 
 //tag array
-logic [23:0] tagout_way0, tagout_way1;
- array #(.width(24)) tag_array0
+logic [tag_bits-1:0] tagout_way0, tagout_way1;
+ array #(.width(tag_bits), .idx_bits(set_bits)) tag_array0
 (
     .clk,
     .write(load_data_way0),
@@ -104,7 +98,7 @@ logic [23:0] tagout_way0, tagout_way1;
     .datain(tag),
     .dataout(tagout_way0)
 );
-array #(.width(24)) tag_array1
+array #(.width(tag_bits), .idx_bits(set_bits)) tag_array1
 (
     .clk,
     .write(load_data_way1),
@@ -116,7 +110,7 @@ array #(.width(24)) tag_array1
 //valid bit array
 logic load_valid_way0, load_valid_way1;
 logic validout_way0, validout_way1;
- array #(.width(1)) valid_array0
+ array #(.width(1), .idx_bits(set_bits)) valid_array0
 (
     .clk,
     .write(load_valid_way0),
@@ -124,7 +118,7 @@ logic validout_way0, validout_way1;
     .datain(valid_in),
     .dataout(validout_way0)
 );
-array #(.width(1)) valid_array1
+array #(.width(1), .idx_bits(set_bits)) valid_array1
 (
     .clk,
     .write(load_valid_way1),
@@ -135,7 +129,7 @@ array #(.width(1)) valid_array1
 //dirty bit array
 logic load_dirty_way0, load_dirty_way1;
 logic dirtyout_way0, dirtyout_way1;
- array #(.width(1)) dirty_array0
+ array #(.width(1), .idx_bits(set_bits)) dirty_array0
 (
     .clk,
     .write(load_dirty_way0),
@@ -143,7 +137,7 @@ logic dirtyout_way0, dirtyout_way1;
     .datain(dirty_in),
     .dataout(dirtyout_way0)
 );
-array #(.width(1)) dirty_array1
+array #(.width(1), .idx_bits(set_bits)) dirty_array1
 (
     .clk,
     .write(load_dirty_way1),
@@ -182,7 +176,7 @@ mux2 #(.width(256)) LRU_line_preload
 
 
 //LRU bit array
- array #(.width(1)) LRU_array 
+ array #(.width(1), .idx_bits(set_bits)) LRU_array 
 (
     .clk,
     .write(load_LRU),
@@ -293,13 +287,14 @@ mux2 #(.width(1)) to_control_dirty
 );
 
 //address for write_back
-logic [23:0] tag_selected;
-mux2 #(.width(32)) tag_for_write_back
+logic [tag_bits-1:0] tag_selected;
+mux2 #(.width(tag_bits)) tag_for_write_back
 (
     .sel(way_select),
     .a(tagout_way0),
     .b(tagout_way1),
     .f(tag_selected)
 );
-assign write_back_addr = {tag_selected,idx,5'b0};
+//localparam zeros = 32-tag_bits-set_bits;
+assign write_back_addr = {tag_selected,idx,{(32-tag_bits-set_bits){1'b0}}};
 endmodule
