@@ -14,7 +14,9 @@ module L2cache
     output logic [31:0] pmem_address,
     output logic [255:0] pmem_wdata,
     input logic pmem_resp,
-    input logic [255:0] pmem_rdata 
+    input logic [255:0] pmem_rdata, 
+ // report cache miss
+	 output logic if_miss
 );
 logic load_wdata_reg;
 logic way_sel_method;
@@ -50,9 +52,9 @@ logic address_sel;
     .dirty,
     .hit,
     .valid,
-    .address_sel
+    .address_sel,
 
-    
+	 .if_miss
 );
 
 L2cache_datapath datapath

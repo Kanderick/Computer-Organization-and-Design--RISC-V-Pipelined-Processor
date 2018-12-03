@@ -201,13 +201,13 @@ begin
 		end
 		check_hit:
 		begin
-			// no need to fetch from pmem
-			if(hit && prefetch_data_ready[hit_index] && !L2_req_write)
-			begin
-				next_state=hit_shake_hand;
-			end
-			// need to fetch from pmem
-			else 
+			//// no need to fetch from pmem
+			//if(hit && prefetch_data_ready[hit_index] && !L2_req_write)
+			//begin
+			//	next_state=hit_shake_hand;
+			//end
+			//// need to fetch from pmem
+			//else 
 				next_state=L2_miss;
 		end
 		hit_shake_hand:

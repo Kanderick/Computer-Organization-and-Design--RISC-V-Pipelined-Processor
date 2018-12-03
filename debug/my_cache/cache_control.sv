@@ -23,8 +23,10 @@ module cache_control
     output logic address_sel,
     input dirty,
     input hit,
-    input valid
+    input valid,
     
+ // report cache miss
+	 output logic if_miss
 );
 
 /*
@@ -62,6 +64,7 @@ begin : state_actions
     dirty_in = 0;
     address_sel = 0;
     load_wdata_reg = 0;
+	 if_miss=0;
         /*
     case(state)
         idle: //do nothing
@@ -108,6 +111,7 @@ begin : state_actions
                     way_sel_method = 1; 
                     pmem_write = 1; 
                     address_sel = 1;
+						  if_miss=1;
                 end
         read_mem: begin
                     way_sel_method = 1; 
@@ -118,6 +122,7 @@ begin : state_actions
                         load_line_data = 1;
                         load_dirty = 1;
                         load_valid = 1;
+								if_miss=1;
                     end    
                 end
         default:; //nothing        

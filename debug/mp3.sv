@@ -348,6 +348,9 @@ cache instruction_cache
 	.pmem_resp(resp_I)
 );
 logic if_MEM_datamiss;
+logic if_L1D_miss;
+logic if_L2_miss;
+assign if_MEM_datamiss=if_L1D_miss & if_L2_miss;
 cache data_cache
 (
 	.clk,
@@ -366,7 +369,7 @@ cache data_cache
 	.pmem_read(read_D),
 	.pmem_write(write_D),
 
-	.if_miss(if_MEM_datamiss)
+	.if_miss(if_L1D_miss)
 );
 
 `ifndef USE_EWB
@@ -450,7 +453,8 @@ arbitor #(.width(256)) arbitor
 	//.pmem_write(write),
 	//.pmem_address(address),
 	//.pmem_wdata(wdata),
-	.clk
+	.clk,
+	.if_miss(if_L2_miss)
 );
 
 	logic [31:0] L2_req_address;
@@ -483,6 +487,7 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_rdata(L2_req_rdata),
 	.pmem_wdata(L2_req_wdata),
 	.pmem_resp(L2_req_resp)
+	
 
 );
 
