@@ -108,7 +108,7 @@ array_16 #(.width(1)) lru_array
 	.dataout(lru)
 );
 
-array_16 #(.width(1)) dirty_array0
+dirty_array_16 #(.width(1)) dirty_array0
 (
 	.clk,
 	.write(dirty_load_0),
@@ -117,7 +117,7 @@ array_16 #(.width(1)) dirty_array0
 	.dataout(dirty_0)
 );
 
-array_16 #(.width(1)) dirty_array1
+dirty_array_16 #(.width(1)) dirty_array1
 (
 	.clk,
 	.write(dirty_load_1),
