@@ -154,8 +154,8 @@ array #(.width(1)) dirty_array1
 
 //comparater
 logic hit0, hit1;
-assign hit0 = (tag == tagout_way0);
-assign hit1 = (tag == tagout_way1);
+assign hit0 = (tag == tagout_way0 && validout_way0);
+assign hit1 = (tag == tagout_way1 && validout_way1);
 assign hit = hit0 || hit1 ;
 
 //select line
