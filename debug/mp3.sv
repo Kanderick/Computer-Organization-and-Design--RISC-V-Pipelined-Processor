@@ -212,24 +212,24 @@ arbitor #(.width(256)) arbitor
 
 
 
+	//.pmem_resp(l2_evict_resp),
+	//.pmem_rdata(l2_evict_rdata),
+	//.pmem_read(l2_evict_read),
+	//.pmem_write(l2_evict_write),
+	//.pmem_address(l2_evict_address),
+	//.pmem_wdata(l2_evict_wdata),
+
 	.pmem_resp(l2_evict_resp),
 	.pmem_rdata(l2_evict_rdata),
 	.pmem_read(l2_evict_read),
 	.pmem_write(l2_evict_write),
 	.pmem_address(l2_evict_address),
 	.pmem_wdata(l2_evict_wdata),
-
-	//.pmem_resp(resp),
-	//.pmem_rdata(rdata),
-	//.pmem_read(read),
-	//.pmem_write(write),
-	//.pmem_address(address),
-	//.pmem_wdata(wdata),
 	.if_miss(if_L2_miss),
-	//.pmem_wdata(wdata),
 	.clk,
 	.miss_sig(l2_miss_sig)
 );
+
 
 	logic [31:0] L2_req_address;
 	logic L2_req_read;
@@ -238,6 +238,7 @@ arbitor #(.width(256)) arbitor
 	logic [255:0] L2_req_rdata;
 	logic L2_req_resp;
 
+	
 eviction_write_buffer eviction_write_buffer_L2
 (
 	.clk,
@@ -264,6 +265,7 @@ eviction_write_buffer eviction_write_buffer_L2
 
 
 );
+
 
 logic [31:0] ORB;
 logic prefetch_en;

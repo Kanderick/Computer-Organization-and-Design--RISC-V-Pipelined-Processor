@@ -24,7 +24,7 @@ module mp3_cpu
 	 output [1:0] jb_sel, //branch happened if != 0
 	 output logic flush,
 	 output logic if_stall,
-	 /*prefetcher*/
+	 /*prediction*/
 	 output logic [31:0] MEM_PC,
 	 output logic pcmux_sel // != 0 if misprediction happend 
 );
