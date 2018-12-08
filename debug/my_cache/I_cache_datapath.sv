@@ -1,27 +1,21 @@
-module cache_datapath
+module icache_datapath
 (
 // cache interface
     input clk,
-    input logic [3:0] mem_byte_enable,
     input logic [31:0] mem_address,
-    input logic [31:0] mem_wdata,
     output logic [31:0] mem_rdata,
  // physical memory interface
     output logic [31:0]  pmem_address,
-    output logic [255:0]  pmem_wdata,
     input logic [255:0] pmem_rdata,
  //control signal
     input way_sel_method,
     input load_line_data,
     input load_valid,
     input load_wdata_reg,
-    input load_dirty,
     input load_LRU,
     input line_datain_sel,
     input valid_in,
-    input dirty_in,
     input address_sel,
-    output logic dirty,
     output logic hit,
     output logic valid
 );
@@ -36,31 +30,8 @@ logic [1:0] alignment;
 assign alignment = mem_address[1:0];
 
 // pmem signals
-//assign pmem_address[31:5] = mem_address[31:5];
-//assign pmem_address[4:0] = 5'b0;
-logic [31:0] write_back_addr;
-
-mux2 #(.width(32)) addr_mux
-(
-.sel(address_sel),
-.a({mem_address[31:5],5'b0}),
-.b(write_back_addr),
-.f(pmem_address)
-);
-
-
-logic [255:0] wdata_reg_out;
-logic [255:0] LRU_line;
-
-register #(.width(256)) wdata_reg
-(
-    .clk,
-    .load(load_wdata_reg),
-    .in(LRU_line),
-    .out(wdata_reg_out)
-);
-
-assign pmem_wdata = wdata_reg_out;
+assign pmem_address[31:5] = mem_address[31:5];
+assign pmem_address[4:0] = 5'b0;
 
 //line data selection
 logic [255:0] line_datain;
@@ -82,7 +53,7 @@ array #(.width(256)) data_array0
     .clk,
     .write(load_data_way0),
     .index(idx),
-    .datain(line_datain),
+    .datain(pmem_rdata),
     .dataout(dataout_way0)
 );
 array #(.width(256)) data_array1

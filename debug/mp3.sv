@@ -96,7 +96,7 @@ mp3_cpu mp3_cpu
 	 .pcmux_sel(mis_prediction)
 );
 
-cache instruction_cache
+dcache instruction_cache
 (
 	.clk,
 	.mem_address(address_a),
@@ -151,7 +151,7 @@ performance_unit_user_enable performance_unit_user_enable
 	.cpu_l1d_resp
 );
 `endif
-cache data_cache
+dcache data_cache
 (
 	.clk,
    .mem_address(cpu_l1d_address),
@@ -173,7 +173,7 @@ cache data_cache
 );
 
 
-arbitor #(.width(256)) arbitor
+arbitor_with_reg #(.width(256)) arbitor
 (
     .clk,
     // instruction cache signal
@@ -220,7 +220,20 @@ arbitor #(.width(256)) arbitor
    .mem_rdata(rdata_l2),
 
 
+	//.pmem_resp(l2_evict_resp),
+	//.pmem_rdata(l2_evict_rdata),
+	//.pmem_read(l2_evict_read),
+	//.pmem_write(l2_evict_write),
+	//.pmem_address(l2_evict_address),
+	//.pmem_wdata(l2_evict_wdata),
 
+	.pmem_resp(l2_evict_resp),
+	.pmem_rdata(l2_evict_rdata),
+	.pmem_read(l2_evict_read),
+	.pmem_write(l2_evict_write),
+	.pmem_address(l2_evict_address),
+	.pmem_wdata(l2_evict_wdata),
+/*
 	.pmem_resp(l2_vc_resp),
 	.pmem_rdata(l2_vc_rdata),
 	.pmem_read(l2_vc_read),
@@ -228,7 +241,7 @@ arbitor #(.width(256)) arbitor
 	.pmem_address(l2_vc_address),
 	.pmem_wdata(l2_vc_wdata),
 	.write_back_addr(l2_vc_lru_address),
-
+*/
 	//.pmem_resp(resp),
 	//.pmem_rdata(rdata),
 	//.pmem_read(read),
@@ -236,11 +249,11 @@ arbitor #(.width(256)) arbitor
 	//.pmem_address(address),
 	//.pmem_wdata(wdata),
 	.if_miss(if_L2_miss),
-	//.pmem_wdata(wdata),
 	.clk,
 	.miss_sig(l2_miss_sig)
 );
 
+/*
 victim_cache victim_cache
 (
 	.clk,
@@ -258,7 +271,7 @@ victim_cache victim_cache
 	.vc_pmem_rdata(l2_evict_rdata),
 	.vc_pmem_resp(l2_evict_resp)
 );
-
+*/
 	logic [31:0] L2_req_address;
 	logic L2_req_read;
 	logic L2_req_write;
@@ -266,6 +279,7 @@ victim_cache victim_cache
 	logic [255:0] L2_req_rdata;
 	logic L2_req_resp;
 
+	
 eviction_write_buffer eviction_write_buffer_L2
 (
 	.clk,
@@ -292,6 +306,7 @@ eviction_write_buffer eviction_write_buffer_L2
 
 
 );
+
 
 logic [31:0] ORB;
 logic prefetch_en;
