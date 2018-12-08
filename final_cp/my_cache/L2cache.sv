@@ -15,6 +15,7 @@ module L2cache #(parameter set_bits = 4)
     output logic [255:0] pmem_wdata,
     input logic pmem_resp,
     input logic [255:0] pmem_rdata, 
+	 output logic [31:0] write_back_addr,
  // report cache miss
 	 output logic if_miss,
 	 output logic miss_sig
@@ -81,8 +82,8 @@ L2cache_datapath #(.set_bits(set_bits)) datapath
     .dirty,
     .hit,
     .valid,
-    .address_sel
-
+    .address_sel,
+	 .write_back_addr
 );
 
 endmodule

@@ -1,22 +1,17 @@
-module L2cache #(parameter set_bits = 4)
+module Icache
 (
 // cache interface
     input clk,
     input logic mem_read,
-    input logic mem_write,
     input logic [31:0] mem_address,
-    input logic [255:0] mem_wdata,
     output logic mem_resp,
-    output logic [255:0] mem_rdata,
+    output logic [31:0] mem_rdata,
  // physical memory
     output logic pmem_read,
-    output logic pmem_write,
     output logic [31:0] pmem_address,
-    output logic [255:0] pmem_wdata,
     input logic pmem_resp,
-    input logic [255:0] pmem_rdata, 
-	 output logic [31:0] write_back_addr,
- // report cache miss
+    input logic [255:0] pmem_rdata,
+ // prefetcher
 	 output logic if_miss,
 	 output logic miss_sig
 );
@@ -35,7 +30,8 @@ logic valid;
 logic address_sel;
 
 assign miss_sig = pmem_read;
- cache_control control
+
+ icache_control control
 (
     .clk,
     .mem_read,
@@ -57,18 +53,18 @@ assign miss_sig = pmem_read;
     .hit,
     .valid,
     .address_sel,
-
 	 .if_miss
+
+    
 );
 
-L2cache_datapath #(.set_bits(set_bits)) datapath 
+icache_datapath datapath
 (
     .clk,
+    .mem_byte_enable,
     .mem_address,
-    .mem_wdata,
     .mem_rdata,
     .pmem_address,
-    .pmem_wdata,
     .pmem_rdata,
     .way_sel_method,
     .load_line_data,
@@ -82,8 +78,8 @@ L2cache_datapath #(.set_bits(set_bits)) datapath
     .dirty,
     .hit,
     .valid,
-    .address_sel,
-	 .write_back_addr
+    .address_sel
+
 );
 
 endmodule

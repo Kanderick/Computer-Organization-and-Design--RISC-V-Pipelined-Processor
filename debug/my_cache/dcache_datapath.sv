@@ -1,4 +1,4 @@
-module cache_datapath
+module dcache_datapath #(set_bits = 3)
 (
 // cache interface
     input clk,
@@ -35,6 +35,7 @@ assign offset = mem_address[4:2];
 logic [1:0] alignment;
 assign alignment = mem_address[1:0];
 
+
 // pmem signals
 //assign pmem_address[31:5] = mem_address[31:5];
 //assign pmem_address[4:0] = 5'b0;
@@ -48,52 +49,68 @@ mux2 #(.width(32)) addr_mux
 .f(pmem_address)
 );
 
+genvar j;
 
-logic [255:0] wdata_reg_out;
-logic [255:0] LRU_line;
+logic [7:0] wdata_reg_out[32];
+logic [7:0] LRU_line [32];
+generate  
+	for (j = 0; j < 32; j = j + 1) begin : generate_wdata_reg
+		register #(.width(8)) wdata_reg
+		(
+			 .clk,
+			 .load(load_wdata_reg),
+			 .in(LRU_line[j]),
+			 .out(wdata_reg_out[j])
+		);
+	end
+endgenerate
 
-register #(.width(256)) wdata_reg
-(
-    .clk,
-    .load(load_wdata_reg),
-    .in(LRU_line),
-    .out(wdata_reg_out)
-);
-
-assign pmem_wdata = wdata_reg_out;
+always_comb begin
+	for (int i = 0; i < 32; i = i + 1) 
+		 pmem_wdata[i*8+:8] = wdata_reg_out[i];
+end
 
 //line data selection
-logic [255:0] line_datain;
-logic [255:0] modified_line; //modified by wdata
+logic [7:0] line_datain[32];
+logic [7:0] modified_line[32]; //modified by wdata
 
-mux2 #(.width(256)) line_data_in
-(
-    .sel(line_datain_sel),
-    .a(pmem_rdata),
-    .b(modified_line),
-    .f(line_datain)
-);
+generate  
+	for (j = 0; j < 32; j = j + 1) begin : generate_line_datain
+		mux2 #(.width(8)) line_data_in
+		(
+			 .sel(line_datain_sel),
+			 .a(pmem_rdata[j*8+:8]),
+			 .b(modified_line[j]),
+			 .f(line_datain[j])
+		);
+	end
+endgenerate
+
 // data array
 logic load_data_way0, load_data_way1;
-logic [255:0] datain;
-logic [255:0] dataout_way0, dataout_way1;
-array #(.width(256)) data_array0
-(
-    .clk,
-    .write(load_data_way0),
-    .index(idx),
-    .datain(line_datain),
-    .dataout(dataout_way0)
-);
-array #(.width(256)) data_array1
-(
-    .clk,
-    .write(load_data_way1),
-    .index(idx),
-    .datain(line_datain),
-    .dataout(dataout_way1)
-);
-
+logic [7:0] dataout_way0 [32];
+logic [7:0] dataout_way1 [32];
+generate  
+	for (j = 0; j < 32; j++) begin : generate_dataarray
+		array #(.width(8), .idx_bits(set_bits)) data_array0
+		(
+		 .clk,
+		 .write(load_data_way0),
+		 .index(idx),
+		 .datain(line_datain[j]),
+		 .dataout(dataout_way0[j])
+		);
+		
+		array #(.width(8), .idx_bits(set_bits)) data_array1
+		(
+		 .clk,
+		 .write(load_data_way1),
+		 .index(idx),
+		 .datain(line_datain[j]),
+		 .dataout(dataout_way1[j])
+		);
+	end
+endgenerate
 //tag array
 logic [23:0] tagout_way0, tagout_way1;
  array #(.width(24)) tag_array0
@@ -154,30 +171,36 @@ array #(.width(1)) dirty_array1
 
 //comparater
 logic hit0, hit1;
-assign hit0 = (tag == tagout_way0 && validout_way0);
-assign hit1 = (tag == tagout_way1 && validout_way1);
+assign hit0 = (tag == tagout_way0 && validout_way0 == 1);
+assign hit1 = (tag == tagout_way1 && validout_way1 == 1);
 assign hit = hit0 || hit1 ;
 
 //select line
-logic [255:0] selected_line;
+logic [7:0] selected_line [32];
 logic way_select;
-mux2 #(.width(256)) line_select
-(
-    .sel(way_select),
-    .a(dataout_way0),
-    .b(dataout_way1),
-    .f(selected_line)
-);
-
+generate  
+	for (j = 0; j < 32; j++) begin  : generate_selected_line
+		mux2 #(.width(8)) line_select
+		(
+			 .sel(way_select),
+			 .a(dataout_way0[j]),
+			 .b(dataout_way1[j]),
+			 .f(selected_line[j])
+		);
+	end
+endgenerate	
 logic LRUout;
-mux2 #(.width(256)) LRU_line_preload
-(
-    .sel(LRUout),
-    .a(dataout_way0),
-    .b(dataout_way1),
-    .f(LRU_line)
-);
-
+generate  
+	for (j = 0; j < 32; j = j + 1) begin : generate_LRU_line
+		mux2 #(.width(8)) LRU_line_preload
+		(
+			 .sel(LRUout),
+			 .a(dataout_way0[j]),
+			 .b(dataout_way1[j]),
+			 .f(LRU_line[j])
+		);
+	end
+endgenerate
 
 //LRU bit array
  array #(.width(1)) LRU_array 
@@ -199,50 +222,56 @@ mux2 #(.width(1)) selection_method
 
 
 
-//unpack cache line
-logic [31:0] unpacked_32[8];
-int i;
-always_comb begin
-    for (i = 0; i < 8; i = i + 1) begin
-        unpacked_32[i] = selected_line[32*i+:32];
-    end    
-end
 // select word
-logic [31:0] selected_word;
-mux8 #(.width(32)) word_select
-(
-.sel(offset),
-.a(unpacked_32[0]),
-.b(unpacked_32[1]),
-.c(unpacked_32[2]),
-.d(unpacked_32[3]),
-.e(unpacked_32[4]),
-.f(unpacked_32[5]),
-.g(unpacked_32[6]),
-.h(unpacked_32[7]),
-.o(selected_word)
-);
+logic [7:0] selected_word [4];
+generate  
+	for (j = 0; j < 4; j = j + 1) begin : generate_selected_word
+		mux8 #(.width(8)) word_select
+		(
+		.sel(offset),
+		.a(selected_line[j+0]),
+		.b(selected_line[j+4]),
+		.c(selected_line[j+8]),
+		.d(selected_line[j+12]),
+		.e(selected_line[j+16]),
+		.f(selected_line[j+20]),
+		.g(selected_line[j+24]),
+		.h(selected_line[j+28]),
+		.o(selected_word[j])
+		);
+	end
+endgenerate
 
-misaligned_read adjust_alignment
+misaligned_read_8 adjust_alignment 
 (
-.word_32(selected_word),
+.byte_0(selected_word[0]),
+.byte_1(selected_word[1]),
+.byte_2(selected_word[2]),
+.byte_3(selected_word[3]),
+
 .alignment,
 .word_out(mem_rdata)
 );
 
 // modified cache line
-logic [31:0] modified_word;
-misaligned_write construxt_new_word(
-    .original_word_32(selected_word),
+logic [7:0] modified_word[4];
+misaligned_write_8 construxt_new_word(
+	.byte_0(selected_word[0]),
+	.byte_1(selected_word[1]),
+	.byte_2(selected_word[2]),
+	.byte_3(selected_word[3]),
     .write_word(mem_wdata),
     .alignment,
     .mem_byte_enable,
-    .word_out(modified_word)
+	 .modified_out0(modified_word[0]),
+	 .modified_out1(modified_word[1]),
+	 .modified_out2(modified_word[2]),
+	 .modified_out3(modified_word[3])
 );
-int j;
+
 always_comb begin
-    for (j = 0; j < 8; j = j + 1) begin
-        modified_line[32*j+:32] = (j == offset)? modified_word:selected_line[32*j+:32];
+    for ( int i = 0; i < 32; i = i + 1) begin
+        modified_line[i] = (i/4 == offset)? modified_word[i%4]:selected_line[i];
     end    
 end
 

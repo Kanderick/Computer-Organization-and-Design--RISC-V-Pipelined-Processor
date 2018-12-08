@@ -9,6 +9,7 @@ module L2cache_datapath #(parameter set_bits = 4)
     output logic [31:0]  pmem_address,
     output logic [255:0]  pmem_wdata,
     input logic [255:0] pmem_rdata,
+	 output logic [31:0] write_back_addr,
  //control signal
     input way_sel_method,
     input load_line_data,
@@ -31,7 +32,7 @@ assign tag = mem_address[31:31-(tag_bits-1)];
 logic [set_bits-1:0] idx;
 assign idx = mem_address[5+set_bits-1:5];
 
-logic [31:0] write_back_addr;
+//logic [31:0] write_back_addr;
 
 mux2 #(.width(32)) addr_mux
 (

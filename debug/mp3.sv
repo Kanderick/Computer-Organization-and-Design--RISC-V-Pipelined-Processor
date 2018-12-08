@@ -96,7 +96,7 @@ mp3_cpu mp3_cpu
 	 .pcmux_sel(mis_prediction)
 );
 
-cache instruction_cache
+dcache instruction_cache
 (
 	.clk,
 	.mem_address(address_a),
@@ -151,7 +151,7 @@ performance_unit_user_enable performance_unit_user_enable
 	.cpu_l1d_resp
 );
 `endif
-cache data_cache
+dcache data_cache
 (
 	.clk,
    .mem_address(cpu_l1d_address),
@@ -173,7 +173,7 @@ cache data_cache
 );
 
 
-arbitor #(.width(256)) arbitor
+arbitor_with_reg #(.width(256)) arbitor
 (
     .clk,
     // instruction cache signal
@@ -201,6 +201,15 @@ arbitor #(.width(256)) arbitor
     .L2cache_resp(resp_l2)
 );
 
+
+	logic [31:0] l2_vc_lru_address;
+	logic [31:0] l2_vc_address;
+	logic l2_vc_read;
+	logic l2_vc_write;
+	logic [255:0] l2_vc_wdata;
+	logic [255:0] l2_vc_rdata;
+	logic l2_vc_resp;
+	
  L2cache L2cache
 (
 	.mem_read(read_l2),
@@ -209,7 +218,6 @@ arbitor #(.width(256)) arbitor
 	.mem_wdata(wdata_l2),
    .mem_resp(resp_l2),
    .mem_rdata(rdata_l2),
-
 
 
 	//.pmem_resp(l2_evict_resp),
@@ -225,12 +233,45 @@ arbitor #(.width(256)) arbitor
 	.pmem_write(l2_evict_write),
 	.pmem_address(l2_evict_address),
 	.pmem_wdata(l2_evict_wdata),
+/*
+	.pmem_resp(l2_vc_resp),
+	.pmem_rdata(l2_vc_rdata),
+	.pmem_read(l2_vc_read),
+	.pmem_write(l2_vc_write),
+	.pmem_address(l2_vc_address),
+	.pmem_wdata(l2_vc_wdata),
+	.write_back_addr(l2_vc_lru_address),
+*/
+	//.pmem_resp(resp),
+	//.pmem_rdata(rdata),
+	//.pmem_read(read),
+	//.pmem_write(write),
+	//.pmem_address(address),
+	//.pmem_wdata(wdata),
 	.if_miss(if_L2_miss),
 	.clk,
 	.miss_sig(l2_miss_sig)
 );
 
-
+/*
+victim_cache victim_cache
+(
+	.clk,
+	.l2_vc_address(l2_vc_address),
+	.l2_vc_lru_address(l2_vc_lru_address),
+	.l2_vc_read(l2_vc_read),
+	.l2_vc_write(l2_vc_write),
+	.l2_vc_wdata(l2_vc_wdata),
+	.l2_vc_rdata(l2_vc_rdata),
+	.l2_vc_resp(l2_vc_resp),
+	.vc_pmem_address(l2_evict_address),
+	.vc_pmem_read(l2_evict_read),
+	.vc_pmem_write(l2_evict_write),
+	.vc_pmem_wdata(l2_evict_wdata),
+	.vc_pmem_rdata(l2_evict_rdata),
+	.vc_pmem_resp(l2_evict_resp)
+);
+*/
 	logic [31:0] L2_req_address;
 	logic L2_req_read;
 	logic L2_req_write;

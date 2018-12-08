@@ -37,7 +37,7 @@ branch_history_table predictor_selector
     .clk,
     .branch_result(LHT_correct),
     .update(update && (GHT_correct != LHT_correct)),
-    .flush(0),
+    .flush(1'b0),
     .prediction(select_local) // 1 = take local_prediction
 );
 endmodule
