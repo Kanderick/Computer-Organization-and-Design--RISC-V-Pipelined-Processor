@@ -209,6 +209,7 @@ arbitor #(.width(256)) arbitor
 	logic [255:0] l2_vc_wdata;
 	logic [255:0] l2_vc_rdata;
 	logic l2_vc_resp;
+	logic l2_vc_valid_lru_way;
 	
  L2cache L2cache
 (
@@ -228,6 +229,7 @@ arbitor #(.width(256)) arbitor
 	.pmem_address(l2_vc_address),
 	.pmem_wdata(l2_vc_wdata),
 	.write_back_addr(l2_vc_lru_address),
+	.valid_lru_way(l2_vc_valid_lru_way),
 
 	//.pmem_resp(resp),
 	//.pmem_rdata(rdata),
@@ -256,7 +258,8 @@ victim_cache victim_cache
 	.vc_pmem_write(l2_evict_write),
 	.vc_pmem_wdata(l2_evict_wdata),
 	.vc_pmem_rdata(l2_evict_rdata),
-	.vc_pmem_resp(l2_evict_resp)
+	.vc_pmem_resp(l2_evict_resp),
+	.valid_lru_way(l2_vc_valid_lru_way)
 );
 
 	logic [31:0] L2_req_address;
@@ -275,21 +278,22 @@ eviction_write_buffer eviction_write_buffer_L2
 	.rdata(l2_evict_rdata),
 	.wdata(l2_evict_wdata),
 	.resp(l2_evict_resp),
-	/*
+
 	.pmem_address(address),
 	.pmem_read(read),
 	.pmem_write(write),
 	.pmem_rdata(rdata),
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
-	*/
+
+		/*
 	.pmem_address(L2_req_address),
 	.pmem_read(L2_req_read),
 	.pmem_write(L2_req_write),
 	.pmem_rdata(L2_req_rdata),
 	.pmem_wdata(L2_req_wdata),
 	.pmem_resp(L2_req_resp)
-
+	*/
 
 );
 
@@ -309,7 +313,7 @@ RPT RPT
 	.MEM_PC
 
 );
-
+/*
 prefetcher prefetcher
 (
 	.clk,
@@ -331,7 +335,7 @@ prefetcher prefetcher
 	.pmem_resp(resp)
 );
 
-
+*/
 
 
 endmodule : mp3

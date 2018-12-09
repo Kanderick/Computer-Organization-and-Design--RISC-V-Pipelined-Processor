@@ -10,6 +10,7 @@ module L2cache_datapath #(parameter set_bits = 4)
     output logic [255:0]  pmem_wdata,
     input logic [255:0] pmem_rdata,
 	 output logic [31:0] write_back_addr,
+	 output logic valid_lru_way,
  //control signal
     input way_sel_method,
     input load_line_data,
@@ -128,6 +129,15 @@ array #(.width(1), .idx_bits(set_bits)) valid_array1
     .datain(valid_in),
     .dataout(validout_way1)
 );
+
+logic LRUout;
+mux2 #(.width(1)) valid_select
+(
+	.sel(LRUout),
+	.a(validout_way0),
+	.b(validout_way1),
+	.f(valid_lru_way)
+);
 //dirty bit array
 logic load_dirty_way0, load_dirty_way1;
 logic dirtyout_way0, dirtyout_way1;
@@ -167,7 +177,6 @@ mux2 #(.width(256)) line_select
     .f(selected_line)
 );
 
-logic LRUout;
 mux2 #(.width(256)) LRU_line_preload
 (
     .sel(LRUout),
