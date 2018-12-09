@@ -56,13 +56,6 @@ logic cpu_l1d_read;
 logic cpu_l1d_resp;
 logic mis_prediction;
 
-//eviction write buffer
-logic [31:0] l2_evict_address;
-logic l2_evict_read;
-logic l2_evict_write;
-logic [255:0] l2_evict_rdata;
-logic [255:0] l2_evict_wdata;
-logic l2_evict_resp;
 
 //eviction write buffer_L1
 logic [31:0] l1_evict_address;
@@ -200,6 +193,13 @@ arbitor_with_reg #(.width(256)) arbitor
     .L2cache_rdata(rdata_l2),
     .L2cache_resp(resp_l2)
 );
+	//eviction write buffer
+	logic [31:0] l2_evict_address;
+	logic l2_evict_read;
+	logic l2_evict_write;
+	logic [255:0] l2_evict_rdata;
+	logic [255:0] l2_evict_wdata;
+	logic l2_evict_resp;
 
 
 	logic [31:0] l2_vc_lru_address;
@@ -209,7 +209,7 @@ arbitor_with_reg #(.width(256)) arbitor
 	logic [255:0] l2_vc_wdata;
 	logic [255:0] l2_vc_rdata;
 	logic l2_vc_resp;
-	
+
  L2cache L2cache
 (
 	.mem_read(read_l2),
@@ -220,20 +220,15 @@ arbitor_with_reg #(.width(256)) arbitor
    .mem_rdata(rdata_l2),
 
 
-	//.pmem_resp(l2_evict_resp),
-	//.pmem_rdata(l2_evict_rdata),
-	//.pmem_read(l2_evict_read),
-	//.pmem_write(l2_evict_write),
-	//.pmem_address(l2_evict_address),
-	//.pmem_wdata(l2_evict_wdata),
-
 	.pmem_resp(l2_evict_resp),
 	.pmem_rdata(l2_evict_rdata),
 	.pmem_read(l2_evict_read),
 	.pmem_write(l2_evict_write),
 	.pmem_address(l2_evict_address),
 	.pmem_wdata(l2_evict_wdata),
-/*
+	.write_back_addr(),
+
+	/*
 	.pmem_resp(l2_vc_resp),
 	.pmem_rdata(l2_vc_rdata),
 	.pmem_read(l2_vc_read),
@@ -241,7 +236,8 @@ arbitor_with_reg #(.width(256)) arbitor
 	.pmem_address(l2_vc_address),
 	.pmem_wdata(l2_vc_wdata),
 	.write_back_addr(l2_vc_lru_address),
-*/
+	*/
+	
 	//.pmem_resp(resp),
 	//.pmem_rdata(rdata),
 	//.pmem_read(read),
@@ -272,6 +268,7 @@ victim_cache victim_cache
 	.vc_pmem_resp(l2_evict_resp)
 );
 */
+
 	logic [31:0] L2_req_address;
 	logic L2_req_read;
 	logic L2_req_write;
@@ -279,7 +276,7 @@ victim_cache victim_cache
 	logic [255:0] L2_req_rdata;
 	logic L2_req_resp;
 
-	
+
 eviction_write_buffer eviction_write_buffer_L2
 (
 	.clk,

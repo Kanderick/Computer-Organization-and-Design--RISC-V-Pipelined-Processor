@@ -15,7 +15,9 @@ module victim_cache
 	output logic vc_pmem_write,
 	output logic [255:0] vc_pmem_wdata,
 	input [255:0] vc_pmem_rdata,
-	input vc_pmem_resp
+	input vc_pmem_resp,
+	
+	input valid_lru_way
 );
 
 	logic hit;
