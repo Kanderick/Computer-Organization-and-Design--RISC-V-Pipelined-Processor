@@ -268,3 +268,69 @@ begin
 		PREFETCH_COUNTER<=0;
 end
 endmodule : prefetcher
+
+//-------------------------------------------------------------------
+module prefetcher_withreg 
+(
+	input clk,
+	input [31:0] ORB,
+	input prefetch_en,
+	// L2 cache
+	input [31:0] L2_req_address,
+	input L2_req_read,
+	input L2_req_write,
+	input [255:0] L2_req_wdata,
+	output logic [255:0] L2_req_rdata,
+	output logic L2_req_resp,
+	// pmem
+	output logic [31:0] pmem_address,
+	output logic pmem_read,
+	output logic pmem_write,
+	input logic [255:0] pmem_rdata,
+	output logic  [255:0] pmem_wdata,
+	input logic pmem_resp
+);
+logic [31:0] ORB_internal;
+logic prefetch_en_internal;
+logic [31:0] L2_req_address_internal;
+logic L2_req_read_internal;
+logic L2_req_write_internal;
+logic [255:0] L2_req_wdata_internal;
+logic [255:0] pmem_rdata_internal;
+logic pmem_resp_internal;
+
+always_ff @(posedge clk)
+begin
+ORB_internal<=ORB;
+prefetch_en_internal<=prefetch_en;
+L2_req_address_internal<=L2_req_address;
+L2_req_read_internal<=L2_req_read;
+L2_req_write_internal<=L2_req_write;
+L2_req_wdata_internal<=L2_req_wdata;
+pmem_rdata_internal<=pmem_rdata;
+pmem_resp_internal<=pmem_resp;
+end
+prefetcher prefetcher
+(
+	.clk,
+	.ORB(ORB_internal),
+	.prefetch_en(prefetch_en_internal),
+	// L2 cache
+	.L2_req_address(L2_req_address_internal),
+	.L2_req_read(L2_req_read_internal),
+	.L2_req_write(L2_req_write_internal),
+	.L2_req_wdata(L2_req_wdata_internal),
+	.L2_req_rdata,
+	.L2_req_resp,
+	// pmem
+	.pmem_address,
+	.pmem_read,
+	.pmem_write,
+	.pmem_rdata(pmem_rdata_internal),
+	.pmem_wdata,
+	.pmem_resp(pmem_resp_internal)
+
+);
+
+
+endmodule : prefetcher_withreg

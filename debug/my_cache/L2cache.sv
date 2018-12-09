@@ -1,4 +1,4 @@
-module L2cache #(parameter set_bits = 4)
+module L2cache #(parameter set_bits = 5)
 (
 // cache interface
     input clk,

@@ -322,7 +322,7 @@ RPT RPT
 
 );
 
-prefetcher prefetcher
+prefetcher_withreg prefetcher
 (
 	.clk,
 	.ORB,

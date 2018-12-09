@@ -118,11 +118,11 @@ begin : state_actions
                     pmem_read = 1;                    
                     //dirty_in = 0;
                     valid_in = 1;
+						  if_miss=1;
                     if (pmem_resp) begin 
                         load_line_data = 1;
                         load_dirty = 1;
                         load_valid = 1;
-								if_miss=1;
                     end    
                 end
         default:; //nothing        

@@ -40,7 +40,7 @@ begin
 	ORB=prev_addr_out[offset]+stride_out[offset];
 	tag_in=MEM_PC[31:8];
 	prev_addr_in=MEM_addr;
-	stride_in=MEM_addr-prev_addr_out[offset];
+	stride_in=(!prev_addr_out[offset])?0:(MEM_addr-prev_addr_out[offset]);
 	if_predict_right=(MEM_addr==ORB);
 	load=update_enable<<offset;
 	// 00    01     10      11
