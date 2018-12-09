@@ -24,10 +24,12 @@ assign LHT_correct = (MEM_local_prediction == branch_result);
 /*need more logic*/
 always_comb begin
 	prediction = 1'b0;
+	
 	if (IF_is_jal)
 		prediction = 1;
 	else if (hit) 
 		prediction = select_local ? local_prediction : global_prediction;
+	
 end	
 
 branch_history_table predictor_selector 
@@ -35,7 +37,7 @@ branch_history_table predictor_selector
     .clk,
     .branch_result(LHT_correct),
     .update(update && (GHT_correct != LHT_correct)),
-    .flush(0),
+    .flush(1'b0),
     .prediction(select_local) // 1 = take local_prediction
 );
 endmodule

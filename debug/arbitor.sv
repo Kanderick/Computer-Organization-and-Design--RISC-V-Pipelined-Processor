@@ -78,6 +78,7 @@ arbitor_controller arbitor_controller
 
 
 endmodule
+//--------------------------------------------------------------------
 
 module arbitor_controller  
 (
@@ -151,3 +152,157 @@ always_ff @ (posedge clk) begin
     state <= next_state;     
 end
 endmodule : arbitor_controller
+//--------------------------------------------------------------------
+
+module arbitor_L2_regslice  #(parameter width = 32)
+(
+    input clk,
+
+    //L2 cache signal from l1
+    input  L2cache_read,
+    input  L2cache_write,
+    input rv32i_word L2cache_address,
+    input [width-1:0] L2cache_wdata,
+    input [3:0] L2cache_byte_enable, //remember to comment it out
+    output logic [width-1:0] L2cache_rdata_reg,
+    output logic L2cache_resp_reg,      
+
+    //signal to L2 cach 
+    output logic L2cache_read_reg,
+    output logic L2cache_write_reg,
+    output  rv32i_word L2cache_address_reg,
+    output logic [width-1:0] L2cache_wdata_reg,
+    output logic [3:0] L2cache_byte_enable_reg, //remember to comment it out
+    input [width-1:0] L2cache_rdata,
+    input L2cache_resp   
+	 
+);
+initial begin
+
+    L2cache_read_reg = 0;
+    L2cache_write_reg = 0;
+    L2cache_address_reg = 0;
+    L2cache_wdata_reg = 0;
+    L2cache_byte_enable_reg = 0;
+    L2cache_rdata_reg = 0;
+    L2cache_resp_reg = 0;
+	 
+end
+
+always_ff @ (posedge clk) begin
+	if (L2cache_resp) begin
+		 L2cache_read_reg <= 0;
+		 L2cache_write_reg <= 0;
+		 L2cache_address_reg <= 0;
+		 L2cache_wdata_reg <= 0;
+		 L2cache_byte_enable_reg <= 0;
+		 L2cache_rdata_reg <= L2cache_rdata;
+		 L2cache_resp_reg <= 1;	
+	 end	 
+	 else	 begin
+		 L2cache_read_reg <= L2cache_read;
+		 L2cache_write_reg <= L2cache_write;
+		 L2cache_address_reg <= L2cache_address;
+		 L2cache_wdata_reg <= L2cache_wdata;
+		 L2cache_byte_enable_reg <= L2cache_byte_enable;
+		 L2cache_rdata_reg <= 0;
+		 L2cache_resp_reg <= 0;
+	 end 	 
+end
+
+endmodule
+
+//--------------------------------------------------------------------
+module arbitor_with_reg  #(parameter width = 32)
+(
+    input clk,
+    // instruction cache signal
+    input icache_read,
+    input rv32i_word icache_address,
+    output [width-1:0] icache_rdata,
+    output logic icache_resp,
+    
+    // data cache signal
+    input dcache_read,
+    input dcache_write,    
+    input rv32i_word dcache_address,
+    input [width-1:0] dcache_wdata,
+    input [3:0] dcache_byte_enable, //remember to comment it out
+    output [width-1:0] dcache_rdata,
+    output logic dcache_resp,
+
+    //L2 cache signal
+    output logic L2cache_read,
+    output logic L2cache_write,
+    output rv32i_word L2cache_address,
+    output [width-1:0] L2cache_wdata,
+    output logic [3:0] L2cache_byte_enable, //remember to comment it out
+    input [width-1:0] L2cache_rdata,
+    input logic L2cache_resp    
+);
+
+    logic internal_L2cache_read;
+    logic internal_L2cache_write;
+    rv32i_word internal_L2cache_address;
+    logic [width-1:0] internal_L2cache_wdata;
+    logic [3:0] internal_L2cache_byte_enable; //remember to comment it out
+    logic [width-1:0] internal_L2cache_rdata;
+    logic internal_L2cache_resp;    
+
+	arbitor  #(.width(width)) arbitor
+	(
+		 .clk,
+		 // instruction cache signal
+		 .icache_read,
+		 .icache_address,
+		 .icache_rdata,
+		 .icache_resp,
+		 
+		 // data cache signal
+		 .dcache_read,
+		 .dcache_write,    
+		 .dcache_address,
+		 .dcache_wdata,
+		 .dcache_byte_enable, //remember to comment it out
+		 .dcache_rdata,
+		 .dcache_resp,
+
+		 //L2 cache signal
+		 .L2cache_read(internal_L2cache_read),
+		 .L2cache_write(internal_L2cache_write),
+		 .L2cache_address(internal_L2cache_address),
+		 .L2cache_wdata(internal_L2cache_wdata),
+		 .L2cache_byte_enable(internal_L2cache_byte_enable), //remember to comment it out
+		 .L2cache_rdata(L2cache_rdata), // connect directly for now
+		 .L2cache_resp(L2cache_resp)   // connect directly for now     
+	);
+
+	arbitor_L2_regslice  #(.width(width)) arbitor_L2_regslice
+	(
+		 .clk,
+
+		 //L2 cache signal
+		 .L2cache_read(internal_L2cache_read),
+		 .L2cache_write(internal_L2cache_write),
+		 .L2cache_address(internal_L2cache_address),
+		 .L2cache_wdata(internal_L2cache_wdata),
+		 .L2cache_byte_enable(internal_L2cache_byte_enable), //remember to comment it out
+		 .L2cache_rdata_reg(internal_L2cache_rdata),
+		 .L2cache_resp_reg(internal_L2cache_resp),      
+
+		 //L2 cache signalreg
+		 .L2cache_read_reg(L2cache_read),
+		 .L2cache_write_reg(L2cache_write),
+		 .L2cache_address_reg(L2cache_address),
+		 .L2cache_wdata_reg(L2cache_wdata),
+		 .L2cache_byte_enable_reg(L2cache_byte_enable), //remember to comment it out
+		 .L2cache_rdata(L2cache_rdata),
+		 .L2cache_resp(L2cache_resp)   
+		 
+	);
+		 
+endmodule
+
+ 
+	 
+

@@ -37,7 +37,7 @@ pc_register IF_pc
 (
 	.clk,
 	.load(pc_load),
-	.in(ID_pc_mux_out),
+	.in({ID_pc_mux_out[31:1],1'b0}),
 	.out(IF_addr)
 	
 );
