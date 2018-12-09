@@ -1,4 +1,4 @@
-module L2cache_datapath #(parameter set_bits = 4)
+module L2cache_datapath #(parameter set_bits = 5, parameter way_bits = 2)
 (
 // cache interface
     input clk,
@@ -26,12 +26,15 @@ module L2cache_datapath #(parameter set_bits = 4)
     output logic valid
 );
 localparam tag_bits = 32 - 5 - set_bits;
+localparam num_sets = 1 << set_bits;
+localparam num_ways = 1 << way_bits;
 // parse address
 logic [tag_bits-1:0] tag;
 assign tag = mem_address[31:31-(tag_bits-1)];
 logic [set_bits-1:0] idx;
 assign idx = mem_address[5+set_bits-1:5];
 
+genvar j;
 //logic [31:0] write_back_addr;
 
 mux2 #(.width(32)) addr_mux
@@ -69,115 +72,81 @@ mux2 #(.width(256)) line_data_in
     .f(line_datain)
 );
 // data array
-logic load_data_way0, load_data_way1;
+logic load_data_way[num_ways];
 logic [255:0] datain;
-logic [255:0] dataout_way0, dataout_way1;
-array #(.width(256), .idx_bits(set_bits)) data_array0
-(
-    .clk,
-    .write(load_data_way0),
-    .index(idx),
-    .datain(line_datain),
-    .dataout(dataout_way0)
-);
-array #(.width(256), .idx_bits(set_bits)) data_array1
-(
-    .clk,
-    .write(load_data_way1),
-    .index(idx),
-    .datain(line_datain),
-    .dataout(dataout_way1)
-);
-
+logic [255:0] dataout_way[num_ways];
 //tag array
-logic [tag_bits-1:0] tagout_way0, tagout_way1;
- array #(.width(tag_bits), .idx_bits(set_bits)) tag_array0
-(
-    .clk,
-    .write(load_data_way0),
-    .index(idx),
-    .datain(tag),
-    .dataout(tagout_way0)
-);
-array #(.width(tag_bits), .idx_bits(set_bits)) tag_array1
-(
-    .clk,
-    .write(load_data_way1),
-    .index(idx),
-    .datain(tag),
-    .dataout(tagout_way1)
-);
-
+logic [tag_bits-1:0] tagout_way[num_ways];
 //valid bit array
-logic load_valid_way0, load_valid_way1;
-logic validout_way0, validout_way1;
- array #(.width(1), .idx_bits(set_bits)) valid_array0
-(
-    .clk,
-    .write(load_valid_way0),
-    .index(idx),
-    .datain(valid_in),
-    .dataout(validout_way0)
-);
-array #(.width(1), .idx_bits(set_bits)) valid_array1
-(
-    .clk,
-    .write(load_valid_way1),
-    .index(idx),
-    .datain(valid_in),
-    .dataout(validout_way1)
-);
+logic load_valid_way[num_ways];
+logic validout_way[num_ways];
 //dirty bit array
-logic load_dirty_way0, load_dirty_way1;
-logic dirtyout_way0, dirtyout_way1;
- array #(.width(1), .idx_bits(set_bits)) dirty_array0
-(
-    .clk,
-    .write(load_dirty_way0),
-    .index(idx),
-    .datain(dirty_in),
-    .dataout(dirtyout_way0)
-);
-array #(.width(1), .idx_bits(set_bits)) dirty_array1
-(
-    .clk,
-    .write(load_dirty_way1),
-    .index(idx),
-    .datain(dirty_in),
-    .dataout(dirtyout_way1)
-);
+logic load_dirty_way[num_ways];
+logic dirtyout_way[num_ways];
+generate 
+	for (j = 0; j < num_ways; j = j+1) begin: generate_arrays
+		array #(.width(256), .idx_bits(set_bits)) data_array
+		(
+			 .clk,
+			 .write(load_data_way[j]),
+			 .index(idx),
+			 .datain(line_datain),
+			 .dataout(dataout_way[j])
+		);
+		
+		 array #(.width(tag_bits), .idx_bits(set_bits)) tag_array
+		(
+			 .clk,
+			 .write(load_data_way[j]),
+			 .index(idx),
+			 .datain(tag),
+			 .dataout(tagout_way[j])
+		);
+		
+		 array #(.width(1), .idx_bits(set_bits)) valid_array
+		(
+			 .clk,
+			 .write(load_valid_way[j]),
+			 .index(idx),
+			 .datain(valid_in),
+			 .dataout(validout_way[j])
+		);
+		 array #(.width(1), .idx_bits(set_bits)) dirty_array
+		(
+			 .clk,
+			 .write(load_dirty_way[j]),
+			 .index(idx),
+			 .datain(dirty_in),
+			 .dataout(dirtyout_way[j])
+		);
+	end
+endgenerate
+
 
 //comparater
-logic hit0, hit1;
-assign hit0 = (tag == tagout_way0 && validout_way0 == 1);
-assign hit1 = (tag == tagout_way1 && validout_way1 == 1);
-assign hit = hit0 || hit1 ;
-
+logic [way_bits-1:0] hit_idx;
+always_comb begin
+	hit = 0;
+	hit_idx = 0;
+	for (int i = 0; i < num_ways; i = i + 1) begin
+		if(tag == tagout_way[i] && validout_way[i]== 1) begin
+			hit_idx = i[way_bits-1:0];
+			hit = 1;
+		end	
+	end
+end
 //select line
 logic [255:0] selected_line;
-logic way_select;
+logic [way_bits-1:0]way_select;
 assign mem_rdata = selected_line;
+logic [way_bits-1:0] LRUout;
 
-mux2 #(.width(256)) line_select
-(
-    .sel(way_select),
-    .a(dataout_way0),
-    .b(dataout_way1),
-    .f(selected_line)
-);
-
-logic LRUout;
-mux2 #(.width(256)) LRU_line_preload
-(
-    .sel(LRUout),
-    .a(dataout_way0),
-    .b(dataout_way1),
-    .f(LRU_line)
-);
-
+assign selected_line = dataout_way[way_select];
+assign LRU_line = dataout_way[LRUout];
 
 //LRU bit array
- array #(.width(1), .idx_bits(set_bits)) LRU_array 
+/*
+ array #(.width(1)) LRU_array 
 (
     .clk,
     .write(load_LRU),
@@ -185,117 +154,57 @@ mux2 #(.width(256)) LRU_line_preload
     .datain(!way_select),
     .dataout(LRUout)
 );
+*/
 
-mux2 #(.width(1)) selection_method
+logic [way_bits-1:0] lru_out_arr[num_sets];
+generate 
+	for (j = 0; j < num_sets; j++) begin : generate_lru_arrays
+		pseudo_lru #(.bits(way_bits)) pseudo_lru
+		(
+			.clk,
+			.load_lru(load_LRU),
+			.new_access(way_select),
+			.lru(lru_out_arr[j])
+		);
+	end
+endgenerate
+assign LRUout = lru_out_arr[idx];
+
+
+mux2 #(.width(way_bits)) selection_method
 (
     .sel(way_sel_method),
-    .a(hit1&&validout_way1),
+    .a(hit_idx),
     .b(LRUout),
     .f(way_select)
 );
 
-
-/*
-//unpack cache line
-logic [31:0] unpacked_32[8];
-int i;
-always_comb begin
-    for (i = 0; i < 8; i = i + 1) begin
-        unpacked_32[i] = selected_line[32*i+:32];
-    end    
-end
-// select word
-logic [31:0] selected_word;
-mux8 #(.width(32)) word_select
-(
-.sel(offset),
-.a(unpacked_32[0]),
-.b(unpacked_32[1]),
-.c(unpacked_32[2]),
-.d(unpacked_32[3]),
-.e(unpacked_32[4]),
-.f(unpacked_32[5]),
-.g(unpacked_32[6]),
-.h(unpacked_32[7]),
-.o(selected_word)
-);
-*/
-/*
-misaligned_read adjust_alignment
-(
-.word_32(selected_word),
-.alignment,
-.word_out(mem_rdata)
-); */
-
-// modified cache line
-/*
-logic [31:0] modified_word;
-misaligned_write construxt_new_word(
-    .original_word_32(selected_word),
-    .write_word(mem_wdata),
-    .alignment,
-    .mem_byte_enable,
-    .word_out(modified_word)
-); */
-/*
-int j;
-always_comb begin
-    for (j = 0; j < 8; j = j + 1) begin
-        modified_line[32*j+:32] = (j == offset)? modified_word:selected_line[32*j+:32];
-    end    
-end
-*/
-
 // load signals
-decoder2 load_valid_bit
-(
-    .i0(way_select),
-    .o0(load_valid_way0),
-    .o1(load_valid_way1),
-    .en(load_valid)
-);
-decoder2 load_data_signal
-(
-    .i0(way_select),
-    .o0(load_data_way0),
-    .o1(load_data_way1),
-    .en(load_line_data)
-);
 
-decoder2 load_dirty_bit
-(
-    .i0(way_select),
-    .o0(load_dirty_way0),
-    .o1(load_dirty_way1),
-    .en(load_dirty)
-);
-// output signal to control
-mux2 #(.width(1)) to_control_valid
-(
-    .sel(way_select),
-    .a(validout_way0),
-    .b(validout_way1),
-    .f(valid)
-);
+always_comb begin
+	for (int i = 0; i < num_ways; i = i + 1) begin
+		load_valid_way[i] = 0;
+		load_data_way[i] = 0;
+		load_dirty_way[i] = 0;
+		if (way_select == i) begin
+			if (load_valid) 
+				load_valid_way[i] = 1;
+			if(load_line_data)	
+				load_data_way[i] = 1;
+			if(load_dirty)	
+				load_dirty_way[i] = 1;
+		end
+	end
+end
 
-mux2 #(.width(1)) to_control_dirty
-(
-    .sel(LRUout),
-    .a(dirtyout_way0),
-    .b(dirtyout_way1),
-    .f(dirty)
-);
+
+assign valid = validout_way[way_select];
+assign dirty = dirtyout_way[LRUout];
 
 //address for write_back
 logic [tag_bits-1:0] tag_selected;
-mux2 #(.width(tag_bits)) tag_for_write_back
-(
-    .sel(way_select),
-    .a(tagout_way0),
-    .b(tagout_way1),
-    .f(tag_selected)
-);
+assign tag_selected = tagout_way[way_select];
+
 //localparam zeros = 32-tag_bits-set_bits;
 assign write_back_addr = {tag_selected,idx,{(32-tag_bits-set_bits){1'b0}}};
 endmodule
