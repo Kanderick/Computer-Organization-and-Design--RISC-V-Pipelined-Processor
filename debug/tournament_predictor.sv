@@ -29,8 +29,7 @@ always_comb begin
 		prediction = 1;
 	else if (hit) 
 		prediction = select_local ? local_prediction : global_prediction;
-	
-end	
+	end	
 
 branch_history_table predictor_selector 
 (
