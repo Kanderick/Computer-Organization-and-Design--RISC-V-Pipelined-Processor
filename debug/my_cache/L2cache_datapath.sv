@@ -141,7 +141,8 @@ logic [way_bits-1:0]way_select;
 assign mem_rdata = selected_line;
 logic [way_bits-1:0] LRUout;
 
-assign selected_line = dataout_way[way_select];
+//assign selected_line = dataout_way[way_select];
+assign selected_line = dataout_way[hit_idx];
 assign LRU_line = dataout_way[LRUout];
 
 //LRU bit array

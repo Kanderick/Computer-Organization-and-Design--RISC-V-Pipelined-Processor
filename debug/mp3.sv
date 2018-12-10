@@ -286,25 +286,26 @@ eviction_write_buffer eviction_write_buffer_L2
 	.rdata(l2_evict_rdata),
 	.wdata(l2_evict_wdata),
 	.resp(l2_evict_resp),
-	/*
+	
 	.pmem_address(address),
 	.pmem_read(read),
 	.pmem_write(write),
 	.pmem_rdata(rdata),
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
-	*/
+	
+	/*
 	.pmem_address(L2_req_address),
 	.pmem_read(L2_req_read),
 	.pmem_write(L2_req_write),
 	.pmem_rdata(L2_req_rdata),
 	.pmem_wdata(L2_req_wdata),
 	.pmem_resp(L2_req_resp)
-
+	*/
 
 );
 
-
+/*
 logic [31:0] ORB;
 logic prefetch_en;
 RPT RPT
@@ -342,7 +343,7 @@ prefetcher_withreg prefetcher
 	.pmem_wdata(wdata),
 	.pmem_resp(resp)
 );
-
+*/
 
 
 
