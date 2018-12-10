@@ -10,6 +10,7 @@ module L2cache_datapath #(parameter set_bits = 5, parameter way_bits = 2)
     output logic [255:0]  pmem_wdata,
     input logic [255:0] pmem_rdata,
 	 output logic [31:0] write_back_addr,
+	 output logic valid_lru_way,
  //control signal
     input way_sel_method,
     input load_line_data,
@@ -200,6 +201,7 @@ end
 
 assign valid = validout_way[way_select];
 assign dirty = dirtyout_way[LRUout];
+assign valid_lru_way = validout_way[LRUout];
 
 //address for write_back
 logic [tag_bits-1:0] tag_selected;

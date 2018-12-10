@@ -12,7 +12,9 @@ module victim_cache_control
 	
 	input hit,
 	output logic update_victim,
-	output logic rdata_sel
+	output logic rdata_sel,
+	
+	input valid_lru_way
 );
 
 	logic [15:0] readhit_count;
@@ -82,7 +84,9 @@ begin	: next_state_logic
 		begin
 			if (l2_vc_write) next_state = write_request;
 			else if (l2_vc_read && hit) next_state = readhit;
-			else if (l2_vc_read && !hit) next_state = readmiss;
+			//else if (l2_vc_read && !hit) next_state = readmiss;
+			else if (l2_vc_read && !hit && valid_lru_way) next_state = readmiss;
+			else if (l2_vc_read && !hit && !valid_lru_way) next_state = readmiss_hold;
 		end
 		
 		write_request:

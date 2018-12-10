@@ -43,7 +43,7 @@ begin
 	else
 	begin
 		hit = 0;
-		hit_way = 0000;
+		hit_way = 4'b0000;
 	end
 end
 
