@@ -21,6 +21,7 @@ module icache_control
     output logic valid_in,
     output logic dirty_in,
     output logic address_sel,
+	 output logic rdata_sel,
     input dirty,
     input hit,
     input valid,
@@ -65,37 +66,7 @@ begin : state_actions
     address_sel = 0;
     load_wdata_reg = 0;
 	 if_miss=0;
-        /*
-    case(state)
-        idle: //do nothing
-        cmp_load: begin
-                load_wdata_reg = 1;
-                end
-        write_back: // to do
-                begin
-                end
-        read_mem: begin
-                    way_sel_method = 1; 
-                    pmem_read = 1;                    
-                    dirty_in = 0;
-                    valid_in = 1;
-                    if (pmem_resp) begin 
-                        load_line_data = 1;
-                        load_dirty = 1;
-                        load_valid = 1;
-                    end    
-                end
-        update: begin
-                load_dirty = mem_write;
-                load_line_data = mem_write;
-                line_datain_sel = 1;
-                dirty_in = 1;
-                load_LRU = 1;
-                mem_resp = 1;
-                end
-        default:; //nothing        
-    endcase   
-        */
+    rdata_sel = 0;
      case(state)
         ready: begin
                 mem_resp = hit && valid && (mem_read || mem_write);
@@ -118,11 +89,14 @@ begin : state_actions
                     pmem_read = 1;                    
                     //dirty_in = 0;
                     valid_in = 1;
+						  rdata_sel = 1;
                     if (pmem_resp) begin 
                         load_line_data = 1;
                         load_dirty = 1;
                         load_valid = 1;
 								if_miss=1;
+								load_LRU = 1;
+								mem_resp = 1;
                     end    
                 end
         default:; //nothing        

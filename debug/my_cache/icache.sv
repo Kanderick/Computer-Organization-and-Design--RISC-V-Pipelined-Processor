@@ -1,14 +1,19 @@
-module Icache
+module icache
 (
 // cache interface
     input clk,
     input logic mem_read,
+    input logic mem_write,
+    input logic [3:0] mem_byte_enable,
     input logic [31:0] mem_address,
+    input logic [31:0] mem_wdata,
     output logic mem_resp,
     output logic [31:0] mem_rdata,
  // physical memory
     output logic pmem_read,
+    output logic pmem_write,
     output logic [31:0] pmem_address,
+    output logic [255:0] pmem_wdata,
     input logic pmem_resp,
     input logic [255:0] pmem_rdata,
  // prefetcher
@@ -28,7 +33,7 @@ logic dirty;
 logic hit;
 logic valid;
 logic address_sel;
-
+logic rdata_sel;
 assign miss_sig = pmem_read;
 
  icache_control control
@@ -53,8 +58,8 @@ assign miss_sig = pmem_read;
     .hit,
     .valid,
     .address_sel,
-	 .if_miss
-
+	 .if_miss,
+	 .rdata_sel
     
 );
 
@@ -78,8 +83,8 @@ icache_datapath datapath
     .dirty,
     .hit,
     .valid,
-    .address_sel
-
+    .address_sel,
+	 .rdata_sel
 );
 
 endmodule
