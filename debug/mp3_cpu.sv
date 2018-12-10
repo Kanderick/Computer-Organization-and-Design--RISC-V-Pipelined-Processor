@@ -193,7 +193,8 @@ pipe_control pipe_control
 	.clk
 );
 
-BTB_BHT BTB_BHT 
+//BTB_BHT BTB_BHT 
+BTB_BHT_set_associative  BTB_BHT
 (
 	.clk,
     .IF_PC(IF_addr),

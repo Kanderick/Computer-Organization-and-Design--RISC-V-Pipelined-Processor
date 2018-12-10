@@ -19,15 +19,11 @@ module BTB_BHT #(parameter num_entry_bits = 6)
 );
 localparam num_entries = 1 << num_entry_bits;
 
-typedef struct packed {
-  rv32i_word tag;
-  logic valid;
-  rv32i_word data;
-  logic is_jal;
-} array_signals;
 
 array_signals btb_bht_array[num_entries];
 logic [num_entry_bits-1:0] replace_ptr;
+//logic [num_entry_bits-1:0] new_access;
+
 
 initial begin
     for (int i = 0; i < num_entries;  i = i + 1) begin
@@ -35,7 +31,16 @@ initial begin
        replace_ptr <= 0;
     end    
 end
-logic IF_PC_hit[num_entries];
+/*
+pseudo_lru #(.bits(num_entry_bits)) pseudo_lru
+(
+	.clk,
+	.load_lru(update),
+	.new_access,
+	.lru(replace_ptr)
+);
+*/
+//logic IF_PC_hit[num_entries];
 logic MEM_PC_hit[num_entries];
 logic BHT_prediction[num_entries];
 
@@ -64,13 +69,23 @@ always_comb begin
     target_out = 0;
     hit = 0;
 	 IF_is_jal = 0;
+	 //new_access = 0;
     for (int i = 0; i < num_entries;  i = i + 1) begin
-        IF_PC_hit[i] = (btb_bht_array[i].tag == IF_PC) && btb_bht_array[i].valid;
-        MEM_PC_hit[i] = (btb_bht_array[i].tag == MEM_PC) && btb_bht_array[i].valid;        
+			/*
+        IF_PC_hit[i] = (btb_bht_array[i].tag == IF_PC) && btb_bht_array[i].valid; 
         prediction = IF_PC_hit[i] ? BHT_prediction[i] : prediction;
         target_out = IF_PC_hit[i] ? btb_bht_array[i].data : target_out;
         hit |= IF_PC_hit[i];
 		  IF_is_jal = IF_PC_hit[i] ? btb_bht_array[i].is_jal : IF_is_jal;
+		  */
+		  if (btb_bht_array[i].tag == IF_PC && btb_bht_array[i].valid ) begin
+				prediction = BHT_prediction[i] ;
+				hit = 1;
+				IF_is_jal = btb_bht_array[i].is_jal;
+				target_out = btb_bht_array[i].data;
+				//new_access = i[num_entry_bits-1:0];
+		  end 
+		  MEM_PC_hit[i] = (btb_bht_array[i].tag == MEM_PC) && btb_bht_array[i].valid;       
     end
 	 
 end
