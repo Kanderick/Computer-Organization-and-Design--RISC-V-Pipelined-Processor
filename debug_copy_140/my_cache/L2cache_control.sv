@@ -105,7 +105,7 @@ begin : state_actions
                 end
 			 read_mem2: begin
                     way_sel_method = 1; 
-                    pmem_read = 1;                    
+                    //pmem_read = 1;                    
                     //dirty_in = 0;
                     valid_in = 1;		
 					     load_line_data = 1;

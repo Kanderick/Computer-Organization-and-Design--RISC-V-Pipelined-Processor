@@ -185,6 +185,7 @@ arbitor_with_reg #(.width(256)) arbitor
     .dcache_resp(resp_D),
 
     //L2 cache signal
+	 
     .L2cache_read(read_l2),
     .L2cache_write(write_l2),
     .L2cache_address(address_l2),
@@ -192,7 +193,18 @@ arbitor_with_reg #(.width(256)) arbitor
     .L2cache_byte_enable(),
     .L2cache_rdata(rdata_l2),
     .L2cache_resp(resp_l2)
+	 
+	 /*
+	 .L2cache_read(read),
+    .L2cache_write(write),
+    .L2cache_address(address),
+    .L2cache_wdata(wdata),
+    .L2cache_byte_enable(),
+    .L2cache_rdata(rdata),
+    .L2cache_resp(resp)
+	 */
 );
+
 	//eviction write buffer
 	logic [31:0] l2_evict_address;
 	logic l2_evict_read;
@@ -252,7 +264,7 @@ arbitor_with_reg #(.width(256)) arbitor
 	.if_miss(if_L2_miss),
 	.clk,
 	.miss_sig(l2_miss_sig)
-);
+); 
 	
 	mem_access_regslice  #(.width(256), .custom_sig_width(32), .custom_sig_width_2(1)) l2_victim_slice
 	(
@@ -294,7 +306,7 @@ arbitor_with_reg #(.width(256)) arbitor
 		 .L2cache_resp(l2_evict_resp),   
 		 .L2cache_byte_enable_reg(),
 		 .L2cache_byte_enable()	
-	);
+	); 
 	/*
 victim_cache victim_cache
 (
@@ -374,7 +386,7 @@ eviction_write_buffer eviction_write_buffer_L2
 	.pmem_resp(L2_req_resp)
   */
 
-);
+); 
 
 	mem_access_regslice  #(.width(256), .custom_sig_width(1), .custom_sig_width_2(1)) evic_pmem_slice
 	(
@@ -398,47 +410,5 @@ eviction_write_buffer eviction_write_buffer_L2
 		 .L2cache_byte_enable()	
 	);
 	
-
-/*
-logic [31:0] ORB;
-logic prefetch_en;
-RPT RPT
-(
-	.clk,
-	// read & generate prefetching
-	.IF_PC(address_a),  //address_a
-	.new_instr(read_a&(!if_stall)),		//read_a&(!if_stall)
-	.ORB, // outstanding request buffer
-	.prefetch_en,
-	// modify & update RPT on L2 data missing
-	.MEM_addr(address_b),
-	.if_MEM_datamiss,
-	.MEM_PC
-
-);
-
-prefetcher_withreg prefetcher
-(
-	.clk,
-	.ORB,
-	.prefetch_en,
-	// L2 cache
-	.L2_req_address,
-	.L2_req_read,
-	.L2_req_write,
-	.L2_req_wdata,
-	.L2_req_rdata,
-	.L2_req_resp,
-	// pmem
-	.pmem_address(address),
-	.pmem_read(read),
-	.pmem_write(write),
-	.pmem_rdata(rdata),
-	.pmem_wdata(wdata),
-	.pmem_resp(resp)
-);
-*/
-
-
 
 endmodule : mp3
